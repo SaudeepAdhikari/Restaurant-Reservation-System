@@ -1,0 +1,90 @@
+/* Footer.css - Modern Responsive Dark Footer */
+
+.footer-main {
+  background: #181e2c;
+  color: #f1f5f9;
+  padding: 2.5rem 1rem 1.2rem 1rem;
+  margin-top: 3rem;
+  font-size: 1.05rem;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.footer-section {
+  min-width: 200px;
+  flex: 1 1 220px;
+}
+
+.footer-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
+  color: #fff;
+}
+
+.footer-subtitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #cbd5e1;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.4rem;
+}
+
+.footer-links a {
+  color: #f1f5f9;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #60a5fa;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 1.1rem;
+  margin-top: 0.3rem;
+}
+
+.footer-social-icon {
+  color: #f1f5f9;
+  transition: color 0.2s, transform 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-social-icon:hover {
+  color: #60a5fa;
+  transform: scale(1.15);
+}
+
+.footer-bottom {
+  text-align: center;
+  color: #cbd5e1;
+  font-size: 0.98rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 700px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+}

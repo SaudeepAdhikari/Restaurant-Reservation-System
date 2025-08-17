@@ -1,0 +1,116 @@
+/* Header.css - Modern Responsive Sticky Navbar */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+/* removed extra closing brace */
+
+.navbar__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2563eb;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar__nav {
+  display: flex;
+  gap: 2rem;
+}
+
+  .navbar__link {
+    color: #222;
+    text-decoration: none;
+    font-size: 1.08rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .navbar__link:hover,
+  .navbar__link:focus {
+    color: #2563eb;
+    background: #f0f4ff;
+  }
+
+  .navbar__link--cta {
+    background: #2563eb;
+    color: #fff;
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    margin-left: 0.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+    transition: background 0.2s, color 0.2s;
+  }
+  .navbar__link--cta:hover,
+  .navbar__link--cta:focus {
+    background: #1741a6;
+    color: #fff;
+  }
+}
+
+.navbar__toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 110;
+}
+
+.navbar__hamburger {
+  width: 1.7rem;
+  height: 3px;
+  background: #222;
+  margin: 0.22rem 0;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* Mobile Styles */
+@media (max-width: 800px) {
+  .navbar__nav {
+    position: fixed;
+    top: 0;
+    right: -100vw;
+    height: 100vh;
+    width: 70vw;
+    max-width: 320px;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 5rem 2rem 2rem 2rem;
+    gap: 2rem;
+    box-shadow: -2px 0 16px rgba(0,0,0,0.08);
+    transition: right 0.3s;
+    z-index: 105;
+  }
+  .navbar__nav--open {
+    right: 0;
+  }
+  .navbar__toggle {
+    display: flex;
+  }
+}
+
+.navbar__backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
+  z-index: 104;
+}

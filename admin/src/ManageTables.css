@@ -1,0 +1,125 @@
+/* ManageTables.css - Admin Table Management Styles */
+
+.manage-tables-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  max-width: 900px;
+  margin: 0 auto 2rem auto;
+}
+
+.manage-tables-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.add-table-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1.7rem;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.add-table-btn:hover,
+.add-table-btn:focus {
+  background: #1e40af;
+  transform: translateY(-2px) scale(1.03);
+}
+
+.tables-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.tables-admin-table th, .tables-admin-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1.5px solid #e5e7eb;
+}
+
+.tables-admin-table th {
+  background: #f1f5f9;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.tables-admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.no-tables {
+  text-align: center;
+  color: #64748b;
+  font-size: 1.1rem;
+  padding: 2rem 0;
+}
+
+.table-status {
+  font-weight: 600;
+  padding: 0.2rem 0.8rem;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.table-status--available {
+  background: #e0f7e9;
+  color: #15803d;
+}
+
+.table-status--reserved {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.edit-btn, .delete-btn {
+  border: none;
+  border-radius: 5px;
+  padding: 0.45rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.edit-btn {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+
+.edit-btn:hover {
+  background: #2563eb;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+@media (max-width: 700px) {
+  .manage-tables-wrapper {
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+  }
+  .tables-admin-table th, .tables-admin-table td {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.97rem;
+  }
+}

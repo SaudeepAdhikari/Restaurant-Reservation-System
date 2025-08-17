@@ -1,0 +1,128 @@
+/* AdminLayout.css - Responsive Admin Dashboard Layout */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f7fa;
+}
+
+.admin-sidebar {
+  background: #181e2c;
+  color: #f1f5f9;
+  width: 240px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.2rem 1.2rem 1.2rem;
+  box-shadow: 2px 0 16px rgba(0,0,0,0.07);
+}
+
+.admin-logo {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+  color: #60a5fa;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(37,99,235,0.10);
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.admin-nav-link {
+  color: #f1f5f9;
+  text-decoration: none;
+  font-size: 1.08rem;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  letter-spacing: 0.5px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: block;
+}
+.admin-nav-link:disabled {
+  color: #e5e7eb !important;
+  background: #23293a !important;
+  cursor: not-allowed;
+  text-shadow: none;
+}
+
+.admin-nav-link:hover,
+.admin-nav-link:focus {
+  background: #2563eb;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.admin-nav-link--logout {
+  color: #f87171;
+  margin-top: 2rem;
+  font-weight: 600;
+}
+
+.admin-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-topbar {
+  background: #fff;
+  padding: 1.1rem 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+}
+
+.admin-welcome {
+  font-size: 1.1rem;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 2.5rem 2rem;
+  background: #f7f7fa;
+  min-height: 0;
+}
+
+@media (max-width: 900px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+  .admin-sidebar {
+    width: 100%;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .admin-nav {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  .admin-main {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-content {
+    padding: 1.2rem 0.5rem;
+  }
+  .admin-topbar {
+    padding: 0.7rem 0.7rem;
+  }
+}

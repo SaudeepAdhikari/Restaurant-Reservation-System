@@ -1,0 +1,92 @@
+/* Reports.css - Admin Reports & Statistics Styles */
+
+.reports-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto 2rem auto;
+}
+
+.reports-wrapper h2 {
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.reports-cards {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.report-card {
+  background: #f1f5f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.07);
+  padding: 1.2rem 2.2rem;
+  min-width: 200px;
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.report-card:hover {
+  box-shadow: 0 4px 24px rgba(37,99,235,0.13);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.report-card-title {
+  font-size: 1.08rem;
+  color: #2563eb;
+  font-weight: 600;
+  margin-bottom: 0.7rem;
+}
+
+.report-card-value {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.reports-charts {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.report-chart {
+  background: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.07);
+  padding: 1.2rem 1.5rem 1.5rem 1.5rem;
+  flex: 1 1 350px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.report-chart h4 {
+  margin-bottom: 1.2rem;
+  color: #2563eb;
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .reports-cards, .reports-charts {
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+  .report-card, .report-chart {
+    min-width: 0;
+    width: 100%;
+  }
+}
