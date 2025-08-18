@@ -10,10 +10,13 @@ import SearchRestaurants from './SearchRestaurants';
 import RestaurantDetails from './RestaurantDetails';
 import ReservationForm from './ReservationForm';
 import ReservationHistory from './ReservationHistory';
+import Login from './Login';
+import Signup from './Signup';
 
 function App() {
   const [tables, setTables] = useState([]);
   const [reservations, setReservations] = useState([]);
+  const [user, setUser] = useState(null);
   const [restaurants] = useState([
     { id: 1, name: 'Olive Garden', location: 'New York', cuisine: 'Italian' },
     { id: 2, name: 'Sushi Zen', location: 'San Francisco', cuisine: 'Japanese' },
@@ -81,6 +84,10 @@ function App() {
     content = <SearchRestaurants />;
   } else if (hash === '#my-reservations') {
     content = <ReservationHistory reservations={reservations} />;
+  } else if (hash === '#login') {
+    content = <Login onLogin={(u) => setUser(u)} />;
+  } else if (hash === '#signup') {
+    content = <Signup onSignup={() => (window.location.hash = '#login')} />;
   } else if (hash === '#restaurant-details') {
     // Dummy data for demonstration; replace with real data as needed
     const restaurant = {
