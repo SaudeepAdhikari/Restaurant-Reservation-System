@@ -25,10 +25,20 @@ function Login({ onLogin }) {
     if (Object.keys(v).length) return;
     setSubmitting(true);
     try {
-      // Demo: simulate API call delay
-      await new Promise((r) => setTimeout(r, 600));
-      // Simulate success; in real app, call backend and handle tokens
-      onLogin && onLogin({ email: form.email, name: form.email.split('@')[0] });
+      const res = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email, password: form.password })
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        setErrors({ api: err.error || 'Login failed' });
+        return;
+      }
+      const data = await res.json();
+      // data: { token, user: { id, name, email, isAdmin } }
+      const userObj = data.user || { email: form.email, name: form.email.split('@')[0] };
+      onLogin && onLogin({ id: userObj.id, name: userObj.name, email: userObj.email, isAdmin: userObj.isAdmin, token: data.token });
       window.location.hash = '#home';
     } finally {
       setSubmitting(false);

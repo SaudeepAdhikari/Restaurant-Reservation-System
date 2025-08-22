@@ -1,5 +1,6 @@
-/* Hero.css - Responsive Hero Section with Overlay */
+@import './theme.css';
 
+/* Hero.css - Premium hero section */
 .hero-section {
   position: relative;
   width: 100%;
@@ -11,63 +12,11 @@
   overflow: hidden;
 }
 
-.hero-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(24, 29, 44, 0.68);
-  z-index: 1;
-}
+.hero-overlay { position:absolute; inset:0; background:linear-gradient(180deg, rgba(15,23,36,0.45), rgba(15,23,36,0.2)); z-index:1; }
+.hero-content { position:relative; z-index:2; color:#fff; text-align:center; max-width:720px; margin:0 1rem; }
+.hero-title { font-family:'Poppins', Inter; font-size:clamp(2rem,4vw,2.8rem); font-weight:800; margin-bottom:.6rem; }
+.hero-subtext { font-size:clamp(1rem,1.6vw,1.25rem); margin-bottom:1.6rem; color:rgba(255,255,255,0.9); }
+.hero-cta { display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 2.2rem; border-radius:12px; font-weight:600; background:linear-gradient(90deg,var(--royal-500),var(--royal-400)); color:#fff; box-shadow:0 8px 20px rgba(42,88,214,0.16); transition:all .18s ease; }
+.hero-cta:hover{ transform:translateY(-3px); box-shadow:0 12px 30px rgba(42,88,214,0.18); }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-  color: #fff;
-  text-align: center;
-  max-width: 600px;
-  margin: 0 1rem;
-}
-
-.hero-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  letter-spacing: 1px;
-}
-
-.hero-subtext {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
-  font-weight: 400;
-  color: #e0e7ef;
-}
-
-.hero-cta {
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 0.85rem 2.2rem;
-  font-size: 1.15rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-  transition: background 0.2s, transform 0.2s;
-}
-
-.hero-cta:hover,
-.hero-cta:focus {
-  background: #1e40af;
-  transform: translateY(-2px) scale(1.03);
-}
-
-@media (max-width: 600px) {
-  .hero-title {
-    font-size: 1.5rem;
-  }
-  .hero-subtext {
-    font-size: 1rem;
-  }
-  .hero-section {
-    min-height: 38vh;
-  }
-}
+@media (max-width:600px){ .hero-title{ font-size:1.6rem; } .hero-subtext{ font-size:1rem; } .hero-section{ min-height:40vh; } }

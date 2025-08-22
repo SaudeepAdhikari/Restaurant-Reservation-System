@@ -1,0 +1,18 @@
+@import './theme.css';
+
+.profile-wrapper { min-height:60vh; display:flex; align-items:center; justify-content:center; padding:2rem 1rem; background:linear-gradient(180deg,var(--muted-100),#fff); }
+.profile-card { min-width:320px; max-width:460px; width:100%; padding:1.6rem; border-radius:var(--radius-lg); box-shadow:var(--card-shadow); background:#fff; display:flex; flex-direction:column; gap:1rem; }
+.profile-title{ font-family:'Poppins', Inter; font-size:1.6rem; font-weight:700; text-align:center; color:var(--text-900); }
+.profile-row{ display:flex; gap:.6rem; align-items:center; font-size:1rem; color:var(--text-900); }
+.profile-label{ font-weight:600; color:var(--royal-500); min-width:110px; }
+
+.profile-edit-btn, .profile-save-btn{ background:linear-gradient(90deg,var(--royal-500),var(--royal-400)); color:#fff; border:none; padding:.6rem 1.1rem; border-radius:10px; font-weight:600; box-shadow:0 8px 20px rgba(42,88,214,0.12); cursor:pointer; }
+.profile-cancel-btn{ background:#eef2f8; color:var(--text-900); padding:.55rem .95rem; border-radius:10px; border:none; }
+.profile-edit-btn:hover, .profile-save-btn:hover{ transform:translateY(-2px); }
+
+.profile-form input{ padding:.9rem .9rem .45rem .9rem; border-radius:8px; border:1px solid rgba(15,23,36,0.08); background:transparent; }
+.profile-form input:focus{ outline:none; box-shadow:0 6px 18px rgba(42,88,214,0.06); border-color:var(--royal-500); background:#fff; }
+.form-error{ color:#dc2626; font-size:.95rem; margin-top:.25rem; }
+.success-message{ background:#e6ffef; color:#065f46; padding:.6rem .9rem; border-radius:8px; text-align:center; font-weight:600; }
+
+@media (max-width:600px){ .profile-card{ padding:1rem; border-radius:12px; } .profile-label{ min-width:90px; } }

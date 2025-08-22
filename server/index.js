@@ -1,3 +1,4 @@
+// (user routes moved below after app initialization)
 
 const express = require('express');
 const cors = require('cors');
@@ -13,6 +14,11 @@ app.use(express.json());
 connectDB();
 
 
+
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'your_jwt_secret'; // Change this in production
+
 // Get all tables from DB
 app.get('/api/tables', async (req, res) => {
   try {
@@ -20,16 +26,13 @@ app.get('/api/tables', async (req, res) => {
     res.json(tables);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch tables' });
-  const bcrypt = require('bcryptjs');
-  const jwt = require('jsonwebtoken');
-  const JWT_SECRET = 'your_jwt_secret'; // Change this in production
   }
 });
 
   // User registration
   app.post('/api/register', async (req, res) => {
-    const { name, email, password, isAdmin } = req.body;
-    if (!name || !email || !password) {
+    const { name, email, password, phone, isAdmin } = req.body;
+    if (!name || !email || !password || !phone) {
       return res.status(400).json({ error: 'Missing fields' });
     }
     try {
@@ -38,7 +41,7 @@ app.get('/api/tables', async (req, res) => {
         return res.status(409).json({ error: 'Email already registered' });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new models.User({ name, email, password: hashedPassword, isAdmin: !!isAdmin });
+      const user = new models.User({ name, email, password: hashedPassword, phone, isAdmin: !!isAdmin });
       await user.save();
       res.status(201).json({ message: 'User registered' });
     } catch (err) {
@@ -108,6 +111,65 @@ app.post('/api/reservations', async (req, res) => {
     res.status(201).json(reservation);
   } catch (err) {
     res.status(500).json({ error: 'Failed to create reservation' });
+  }
+});
+
+// Update user details by ID
+app.put('/api/user/:id', async (req, res) => {
+  try {
+    const { firstName, lastName, email, phone, password } = req.body;
+    const update = {
+      name: `${firstName} ${lastName}`.trim(),
+      email,
+      phone
+    };
+    if (password) {
+      update.password = await bcrypt.hash(password, 10);
+    }
+    const user = await models.User.findByIdAndUpdate(req.params.id, update, { new: true });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    const [f = '', l = ''] = (user.name || '').split(' ');
+    res.json({
+      id: user._id,
+      firstName: f,
+      lastName: l,
+      email: user.email,
+      phone: user.phone || ''
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update user' });
+  }
+});
+
+// Get user details by ID
+app.get('/api/user/:id', async (req, res) => {
+  try {
+    const user = await models.User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    // Split name into first and last for frontend
+    const [firstName = '', lastName = ''] = (user.name || '').split(' ');
+    res.json({
+      id: user._id,
+      firstName,
+      lastName,
+      email: user.email,
+      phone: user.phone || ''
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
+// Get user details by email (fallback)
+app.get('/api/user/email/:email', async (req, res) => {
+  try {
+    const email = decodeURIComponent(req.params.email);
+    const user = await models.User.findOne({ email });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    const [firstName = '', lastName = ''] = (user.name || '').split(' ');
+    res.json({ id: user._id, firstName, lastName, email: user.email, phone: user.phone || '' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch user by email' });
   }
 });
 

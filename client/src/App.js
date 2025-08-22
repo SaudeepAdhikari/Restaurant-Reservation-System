@@ -12,11 +12,15 @@ import ReservationForm from './ReservationForm';
 import ReservationHistory from './ReservationHistory';
 import Login from './Login';
 import Signup from './Signup';
+import Profile from './Profile';
 
 function App() {
   const [tables, setTables] = useState([]);
   const [reservations, setReservations] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem('user');
+    return stored ? JSON.parse(stored) : null;
+  });
   const [restaurants] = useState([
     { id: 1, name: 'Olive Garden', location: 'New York', cuisine: 'Italian' },
     { id: 2, name: 'Sushi Zen', location: 'San Francisco', cuisine: 'Japanese' },
@@ -40,6 +44,19 @@ function App() {
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
+
+  // Persist user to localStorage on login
+  const handleLogin = (u) => {
+    setUser(u);
+    localStorage.setItem('user', JSON.stringify(u));
+  };
+
+  // Remove user from localStorage on logout
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
+    window.location.hash = '#home';
+  };
 
 
   // Reservation form submit handler
@@ -85,9 +102,11 @@ function App() {
   } else if (hash === '#my-reservations') {
     content = <ReservationHistory reservations={reservations} />;
   } else if (hash === '#login') {
-    content = <Login onLogin={(u) => setUser(u)} />;
+    content = <Login onLogin={handleLogin} />;
   } else if (hash === '#signup') {
     content = <Signup onSignup={() => (window.location.hash = '#login')} />;
+  } else if (hash === '#profile') {
+    content = <Profile user={user} />;
   } else if (hash === '#restaurant-details') {
     // Dummy data for demonstration; replace with real data as needed
     const restaurant = {
@@ -154,7 +173,7 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header user={user} onLogout={handleLogout} />
       {content}
       <Footer />
     </>

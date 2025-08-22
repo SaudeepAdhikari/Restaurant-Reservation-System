@@ -1,0 +1,63 @@
+:root{
+  --royal-700: #153f9b;
+  --royal-600: #1e4db7;
+  --royal-500: #2a58d6;
+  --royal-400: #4a79e6;
+  --gold-600: #b5862b;
+  --gold-500: #d4af37;
+  --gold-400: #f0c65a;
+  --muted-50: #fbfcfe;
+  --muted-100: #f6f7fb;
+  --muted-200: #eef2f8;
+  --muted-300: #e2e8f0;
+  --text-900: #081426;
+  --focus-ring: rgba(42,88,214,0.18);
+  --card-shadow: 0 12px 36px rgba(15,23,36,0.08), 0 4px 10px rgba(15,23,36,0.04);
+  --glass-bg: rgba(255,255,255,0.6);
+  --glass-border: rgba(255,255,255,0.12);
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
+}
+
+/* Typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap');
+html { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+/* richer background with a subtle radial accent */
+body { margin:0; background: radial-gradient(1200px 600px at 10% 10%, rgba(42,88,214,0.06), transparent 12%), linear-gradient(180deg,var(--muted-50), #fff 60%); color:var(--text-900); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+/* Responsive typography */
+h1{font-family:'Poppins', Inter; font-weight:700; font-size:clamp(1.75rem, 2.5vw, 2.25rem);} 
+h2{font-family:'Poppins', Inter; font-weight:600; font-size:clamp(1.25rem, 2vw, 1.5rem);} 
+p{line-height:1.6; color:rgba(15,23,36,0.88);} 
+
+/* Buttons */
+.btn { display:inline-flex; align-items:center; gap:.6rem; padding:.6rem 1rem; border-radius:10px; border:none; cursor:pointer; font-weight:600; transition:all .2s ease; }
+.btn-primary { background:linear-gradient(90deg,var(--royal-600),var(--royal-500)); color:#fff; box-shadow:0 10px 30px rgba(42,88,214,0.14); }
+.btn-primary:hover{ transform:translateY(-3px); box-shadow:0 16px 40px rgba(42,88,214,0.18); }
+.btn-gold { background:linear-gradient(90deg,var(--gold-600),var(--gold-500)); color:#081426; box-shadow:0 8px 26px rgba(212,175,55,0.14); }
+.btn-gold:hover{ transform:translateY(-3px); box-shadow:0 14px 36px rgba(212,175,55,0.16); }
+.btn-ghost{ background:transparent; color:var(--royal-500); border:1px solid rgba(42,88,214,0.08); }
+
+/* Glass navbar (with Safari support) */
+.glass-navbar{ -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); background:var(--glass-bg); border:1px solid var(--glass-border); box-shadow:0 10px 30px rgba(15,23,36,0.06); border-radius:var(--radius-lg); }
+
+/* Cards */
+.card{ background: linear-gradient(180deg,#fff, #fbfdff); border-radius:var(--radius-md); box-shadow:var(--card-shadow); padding:1.25rem; border:1px solid rgba(15,23,36,0.02); }
+
+/* Floating labels */
+.form-floating { position:relative; margin-bottom:1rem; }
+.form-floating input, .form-floating textarea { width:100%; padding:1.15rem .9rem .4rem .9rem; border-radius:8px; border:1px solid rgba(15,23,36,0.08); background:transparent; transition:box-shadow .15s, border-color .15s; }
+.form-floating label{ position:absolute; left:.9rem; top:1.05rem; transform-origin:left top; transition:all .15s ease; color:rgba(15,23,36,0.55); pointer-events:none; font-size:.95rem; }
+.form-floating input:focus, .form-floating textarea:focus{ outline:none; box-shadow:0 10px 30px rgba(42,88,214,0.08); border-color:var(--royal-500); }
+.form-floating input:focus + label, .form-floating input:not(:placeholder-shown) + label, .form-floating textarea:not(:placeholder-shown) + label{ transform:translateY(-54%) scale(.86); color:var(--royal-600); }
+
+/* Utility spacing */
+.container{ max-width:1100px; margin:0 auto; padding:1rem; }
+.muted{ color:rgba(15,23,36,0.55); }
+
+/* Accessibility focus */
+:focus{ outline:3px solid var(--focus-ring); outline-offset:3px; }
+
+/* Responsive layout tweaks */
+@media (max-width:720px){ h1{font-size:1.6rem;} .btn{ padding:.55rem .8rem; } }

@@ -1,116 +1,162 @@
-/* Header.css - Modern Responsive Sticky Navbar */
+/* Jamie-Oliver like header styles for RestroBook */
+
+:root {
+  --primary: #2563eb; /* keep user's palette */
+  --muted: #f7f8fb;
+  --text: #111827;
+  --light: #f3f4f6;
+  --accent: #f59e0b;
+  --shadow: 0 6px 20px rgba(16,24,40,0.06);
+}
 
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 100;
-  background: #fff;
+  z-index: 120;
+  background: white;
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+  transition: padding 200ms ease, box-shadow 200ms ease;
+}
+/* Make header a flex container so we can position nav to the right and keep logo centered */
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  position: relative; /* required for absolute-centering the logo */
+}
+.navbar--compressed { padding: 6px 0; box-shadow: var(--shadow); }
+.navbar__wrap {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 2rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-/* removed extra closing brace */
+  gap: 1rem;
+  padding: 14px 20px;
+}
 
 .navbar__logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2563eb;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
+  position: absolute; /* center visually inside header */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: inline-block;
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.2rem;
+  padding: 4px 12px;
+  margin: 0;
+}
+.navbar__logo {
+  position: absolute; /* center visually inside header */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: inline-block;
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.2rem;
+  padding: 4px 12px;
+  margin: 0;
 }
 
+.navbar__list { display: flex; align-items: center; gap: 18px; list-style: none; padding: 0; margin: 0; }
+.navbar__list--left { justify-content: flex-start; }
+.navbar__list--right { justify-content: flex-end; }
+.navbar__item { position: relative; }
+.navbar__link, .navbar__button { background: none; border: none; color: var(--text); text-decoration: none; font-weight: 600; padding: 6px 8px; cursor: pointer; position: relative; }
+.navbar__link:after { content: ''; position: absolute; height: 2px; left: 6px; right: 6px; bottom: -6px; background: var(--primary); transform: scaleX(0); transform-origin: left center; transition: transform 220ms cubic-bezier(.2,.8,.2,1); border-radius: 2px; }
+.navbar__link:hover:after, .navbar__link:focus:after { transform: scaleX(1); }
+.navbar__link:hover, .navbar__button:hover, .navbar__link:focus { color: var(--primary); outline: none; }
+.navbar__link--cta { background: var(--primary); color: white; padding: 6px 12px; border-radius: 18px; }
+
+.navbar__icons { display: flex; align-items: center; gap: 8px; }
+.navbar__icon-btn { background: none; border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: var(--text); }
+.navbar__icon-btn:hover, .navbar__icon-btn:focus { background: var(--light); color: var(--primary); }
+
+/* hamburger toggle - hidden on desktop */
+.navbar__toggle { display: none; background: none; border: none; padding: 8px; cursor: pointer; }
+
+/* navbar toggles removed - mobile nav removed in JS */
+
+/* Ensure the main nav sits to the right of the header */
 .navbar__nav {
+  margin-left: auto;
   display: flex;
-  gap: 2rem;
-}
-
-  .navbar__link {
-    color: #222;
-    text-decoration: none;
-    font-size: 1.08rem;
-    font-weight: 500;
-    transition: color 0.2s;
-    position: relative;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-  }
-
-  .navbar__link:hover,
-  .navbar__link:focus {
-    color: #2563eb;
-    background: #f0f4ff;
-  }
-
-  .navbar__link--cta {
-    background: #2563eb;
-    color: #fff;
-    padding: 0.25rem 1rem;
-    border-radius: 20px;
-    margin-left: 0.5rem;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(37,99,235,0.08);
-    transition: background 0.2s, color 0.2s;
-  }
-  .navbar__link--cta:hover,
-  .navbar__link--cta:focus {
-    background: #1741a6;
-    color: #fff;
-  }
-}
-
-.navbar__toggle {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 2.2rem;
-  height: 2.2rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 110;
+  gap: 12px;
 }
 
-.navbar__hamburger {
-  width: 1.7rem;
-  height: 3px;
-  background: #222;
-  margin: 0.22rem 0;
-  border-radius: 2px;
-  transition: all 0.3s;
-}
+/* Profile dropdown (kept small and accessible) */
+.navbar__profile-wrapper { position: relative; }
+.navbar__profile-dropdown { position: absolute; right: 0; top: 110%; background: white; border-radius: 10px; box-shadow: var(--shadow); min-width: 200px; padding: 0.5rem; display: flex; flex-direction: column; gap: 6px; }
+.navbar__profile-name { font-weight: 700; color: var(--primary); }
+.navbar__profile-link { background: none; border: none; text-align: left; padding: 8px; border-radius: 8px; cursor: pointer; }
+.navbar__profile-link:hover { background: var(--muted); }
 
-/* Mobile Styles */
-@media (max-width: 800px) {
+/* Mega menu namespace */
+.mega-menu { position: absolute; left: 0; right: 0; top: 100%; transform-origin: top center; display: block; opacity: 0; pointer-events: none; background: white; border-top: 4px solid var(--primary); box-shadow: 0 20px 40px rgba(15,23,42,0.08); padding: 22px 0; transition: opacity 200ms ease, transform 200ms ease; transform: translateY(-6px); }
+.mega-menu--open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.mega-menu__inner { max-width: 1000px; margin: 0 auto; display: flex; gap: 22px; align-items: flex-start; padding: 0 20px; }
+.mega-menu__section { width: 220px; }
+.mega-menu__thumb { font-size: 34px; }
+.mega-menu__thumb img { width: 64px; height: 48px; object-fit: cover; border-radius: 8px; display:block; }
+.mega-menu__thumb--emoji { font-size: 34px; display:inline-block; }
+.mega-menu__heading { font-size: 1rem; margin: 6px 0; color: var(--primary); }
+.mega-menu__items { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.mega-menu__item { color: var(--text); text-decoration: none; }
+.mega-menu__item:hover, .mega-menu__item:focus { color: var(--primary); }
+.mega-menu__promo { margin-left: auto; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.mega-menu__promo-img { font-size: 42px; }
+
+/* Full width search bar under header */
+.navbar-search { width: 100%; background: transparent; padding: 12px 0; }
+.navbar-search__inner { max-width: 1100px; margin: 6px auto; display:flex; gap:8px; padding: 6px 20px; }
+.navbar-search__input { flex: 1; padding: 12px 16px; border-radius: 999px; border: none; font-size: 1rem; box-shadow: 0 6px 20px rgba(16,24,40,0.04); background: #fff; transition: box-shadow 180ms ease, transform 120ms ease; }
+.navbar-search__input:focus { box-shadow: 0 10px 30px rgba(37,99,235,0.14); transform: translateY(-2px); outline: none; }
+.navbar-search__btn { background: var(--primary); color: white; border: none; padding: 10px 14px; border-radius: 999px; cursor: pointer; }
+.navbar-search__suggestions { max-width: 1100px; margin: 6px auto 18px; background: white; border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
+.navbar-search__trending { padding: 8px 12px; font-weight: 700; color: var(--primary); border-bottom: 1px solid rgba(15,23,42,0.03); }
+.navbar-search__suggestion { display: flex; gap: 10px; align-items: center; padding: 10px 12px; cursor: pointer; }
+.navbar-search__thumb { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; background: var(--muted); overflow: hidden; }
+.navbar-search__thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Mobile adjustments: logo remains centered */
+@media (max-width: 900px) {
+  .navbar { padding: 10px 12px; }
+  /* show hamburger */
+  .navbar__toggle { display: inline-flex; }
+
+  /* mobile slide-in nav */
   .navbar__nav {
     position: fixed;
-    top: 0;
-    right: -100vw;
-    height: 100vh;
-    width: 70vw;
-    max-width: 320px;
-    background: #fff;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 5rem 2rem 2rem 2rem;
-    gap: 2rem;
-    box-shadow: -2px 0 16px rgba(0,0,0,0.08);
-    transition: right 0.3s;
-    z-index: 105;
-  }
-  .navbar__nav--open {
     right: 0;
+    top: 0;
+    height: 100vh;
+    width: 80%;
+    max-width: 360px;
+    background: white;
+    transform: translateX(100%);
+    transition: transform 240ms ease;
+    flex-direction: column;
+    padding: 80px 20px;
+    gap: 12px;
+    box-shadow: -10px 0 30px rgba(2,6,23,0.12);
+    z-index: 150;
   }
-  .navbar__toggle {
-    display: flex;
-  }
+  .navbar__nav--open { transform: translateX(0); }
+
+  .navbar__nav a, .navbar__profile-wrapper { display: block; padding: 12px 0; }
+  .navbar-search__inner { padding: 8px 12px; }
+
+  /* backdrop displayed when menu open (rendered by JSX) */
+  .navbar__backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.36); z-index: 140; }
+  .mega-menu { position: static; box-shadow: none; border-top: none; padding: 12px 0; }
+  .mega-menu__inner { flex-direction: column; gap: 8px; }
 }
 
-.navbar__backdrop {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.18);
-  z-index: 104;
-}
+/* keyboard focus visibility */
+.navbar__link:focus, .navbar__button:focus, .navbar__icon-btn:focus, .navbar-search__input:focus { outline: 3px solid rgba(37,99,235,0.12); outline-offset: 2px; }
+
