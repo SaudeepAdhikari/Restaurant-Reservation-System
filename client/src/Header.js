@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import './Header.css';
 
-function Header({ user, onLogout }) {
+function Header({ user, onLogout, onBookNow }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
@@ -26,6 +26,9 @@ function Header({ user, onLogout }) {
         <a href="#home" className="navbar__link">Home</a>
         <a href="#search" className="navbar__link">Search Restaurants</a>
         <a href="#my-reservations" className="navbar__link">My Reservations</a>
+        <button className="navbar__link navbar__button--book" onClick={(e) => { e.preventDefault(); if (onBookNow) onBookNow(); }}>
+          Make a Reservation
+        </button>
         {!user ? (
           <a href="#login" className="navbar__link navbar__link--cta">Login/Register</a>
         ) : (

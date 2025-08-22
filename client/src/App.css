@@ -133,3 +133,33 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Reservation modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  padding: 20px;
+}
+.modal {
+  width: 100%;
+  max-width: 760px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 30px 60px rgba(2,6,23,0.4);
+  overflow: hidden;
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom: 1px solid #eef2f7; }
+.modal-body { padding: 18px 20px 12px 20px; overflow: auto; }
+.modal-close { background: none; border: none; font-size: 22px; line-height: 1; cursor: pointer; }
+
+/* small tweak for header Book button */
+.navbar__button--book { background: none; color: inherit; padding: 6px 8px; border-radius: 6px; font-weight: 600; cursor: pointer; }
+.navbar__button--book:hover, .navbar__button--book:focus { color: #2563eb; }

@@ -32,6 +32,7 @@ function App() {
   const [selectedTableId, setSelectedTableId] = useState('');
   const [message, setMessage] = useState('');
   const [hash, setHash] = useState(window.location.hash || '#home');
+  const [reserveOpen, setReserveOpen] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:5000/api/tables')
@@ -69,21 +70,22 @@ function App() {
       body: JSON.stringify(form)
     });
     if (res.ok) {
-      setMessage('Reservation successful!');
       const updated = await res.json();
       setReservations([...reservations, updated]);
+      setMessage('Reservation successful!');
+      return { ok: true, data: updated };
     } else {
       const err = await res.json();
-      setMessage(err.error || 'Error making reservation');
+      const errorMsg = err.error || 'Error making reservation';
+      setMessage(errorMsg);
+      return { ok: false, error: errorMsg };
     }
   };
 
   // Scroll to reservation form when Book Now is clicked
   const handleBookNow = () => {
-    const formSection = document.querySelector('.reservation-section');
-    if (formSection) {
-      formSection.scrollIntoView({ behavior: 'smooth' });
-    }
+  // open reservation modal instead of scrolling
+  setReserveOpen(true);
   };
 
   // When Reserve button is clicked on a table card
@@ -148,16 +150,7 @@ function App() {
             <h1>Restaurant Reservation System</h1>
           </header>
           <TablesSection tables={tables} reservations={reservations} onReserve={handleReserveTable} />
-          <section className="reservation-section">
-            <h2>Make a Reservation</h2>
-            <ReservationForm
-              restaurants={restaurants}
-              tables={tables}
-              selectedTableId={selectedTableId}
-              onSubmit={handleReservationSubmit}
-            />
-            {message && <div className={message.includes('success') ? 'success-message' : 'error-message'}>{message}</div>}
-          </section>
+          {/* reservation form is rendered in a modal opened from header */}
           <section className="reservations-section">
             <h2>Reservations</h2>
             <ul className="reservations-list">
@@ -173,8 +166,29 @@ function App() {
 
   return (
     <>
-      <Header user={user} onLogout={handleLogout} />
+      <Header user={user} onLogout={handleLogout} onBookNow={() => setReserveOpen(true)} />
       {content}
+
+      {reserveOpen && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true" onClick={() => setReserveOpen(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Make a Reservation</h2>
+              <button aria-label="Close" className="modal-close" onClick={() => setReserveOpen(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <ReservationForm
+                restaurants={restaurants}
+                tables={tables}
+                selectedTableId={selectedTableId}
+                onSubmit={(f) => { handleReservationSubmit(f); setReserveOpen(false); }}
+              />
+              {message && <div className={message.includes('success') ? 'success-message' : 'error-message'}>{message}</div>}
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );

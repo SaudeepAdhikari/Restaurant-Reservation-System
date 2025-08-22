@@ -14,6 +14,8 @@ function ReservationForm({ restaurants = [], tables = [], onSubmit, selectedTabl
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   // Update form state
   const handleChange = e => {
@@ -51,9 +53,20 @@ function ReservationForm({ restaurants = [], tables = [], onSubmit, selectedTabl
     setErrors(validation);
     setTouched({ restaurantId: true, name: true, email: true, phone: true, guests: true, date: true, time: true, tableId: true });
     if (Object.keys(validation).length === 0) {
-      onSubmit(form);
-      setForm({ restaurantId: '', tableId: '', name: '', email: '', phone: '', guests: '', date: '', time: '' });
-      setTouched({});
+      // prevent duplicate submits and show success animation when done
+      setSubmitting(true);
+      Promise.resolve(onSubmit(form)).then(result => {
+        setSubmitting(false);
+        if (result && result.ok) {
+          setSuccess(true);
+          // fade out after animation
+          setTimeout(() => {
+            setForm({ restaurantId: '', tableId: '', name: '', email: '', phone: '', guests: '', date: '', time: '' });
+            setTouched({});
+            setSuccess(false);
+          }, 2200);
+        }
+      }).catch(() => setSubmitting(false));
     }
   };
 
@@ -62,6 +75,12 @@ function ReservationForm({ restaurants = [], tables = [], onSubmit, selectedTabl
 
   return (
     <form className="reservation-form-2" onSubmit={handleSubmit} noValidate>
+      {success && (
+        <div className="reserve-success">
+          <div className="checkmark">✓</div>
+          <div className="success-text">Reservation confirmed</div>
+        </div>
+      )}
       <div className="form-row">
         <label>Restaurant
           <select name="restaurantId" value={form.restaurantId} onChange={handleChange} onBlur={handleBlur} className={errors.restaurantId && touched.restaurantId ? 'invalid' : ''} required>
@@ -120,7 +139,7 @@ function ReservationForm({ restaurants = [], tables = [], onSubmit, selectedTabl
         </label>
         {errors.tableId && touched.tableId && <span className="form-error">{errors.tableId}</span>}
       </div>
-      <button className="form-submit-btn" type="submit">Reserve</button>
+  <button className="form-submit-btn" type="submit" disabled={submitting}>{submitting ? 'Reserving...' : 'Reserve'}</button>
     </form>
   );
 }
