@@ -5,6 +5,12 @@ function Footer() {
   return (
     <footer className="footer-main">
       <div className="footer">
+        <div className="newsletter-bar" role="region" aria-label="Newsletter signup">
+          <form onSubmit={(e)=>{ e.preventDefault(); /* placeholder */ }}>
+            <input className="newsletter-input" type="email" placeholder="Enter your email" aria-label="Email address" />
+            <button className="newsletter-btn" type="submit">Subscribe</button>
+          </form>
+        </div>
         <div className="footer-top">
           <div className="footer-col">
           <h3 className="footer-title">RestroBook</h3>

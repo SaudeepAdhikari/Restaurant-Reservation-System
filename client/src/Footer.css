@@ -46,7 +46,7 @@
 
 .footer-top {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 360px;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
   gap: var(--gap);
   align-items: start;
   animation: footerColsPop 520ms calc(120ms) var(--ease) both;
@@ -132,6 +132,28 @@
   margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--divider);
   display:flex; justify-content:space-between; align-items:center; gap:12px; color:var(--muted-dim); font-size:0.95rem;
 }
+
+/* divider above footer to prevent empty feel */
+.footer-main::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+  pointer-events: none;
+}
+
+/* newsletter bar */
+.newsletter-bar {
+  display:flex; gap:12px; align-items:center; justify-content: center;
+  padding: 14px; margin-bottom: 10px; border-radius: 10px; background: rgba(255,255,255,0.02);
+}
+.newsletter-bar form { display:flex; gap:10px; align-items:center; width:100%; max-width:880px; }
+.newsletter-input { flex:1; padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.04); background: rgba(255,255,255,0.01); color: var(--muted); }
+.newsletter-btn { padding: 11px 16px; border-radius: 8px; background: linear-gradient(90deg,var(--accent-a),var(--accent-b)); border:none; color:#091018; font-weight:700; cursor:pointer; }
+.newsletter-input:focus, .newsletter-btn:focus { outline: 3px solid rgba(202,164,58,0.12); outline-offset: 2px; }
 
 /* subtle moving sheen for premium feel */
 .footer-main::before {

@@ -1,11 +1,24 @@
 const mongoose = require('mongoose');
+const path = require('path');
 
+// Load environment variables from server/.env if present
+try {
+  require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+} catch (e) {
+  // dotenv is optional in some environments
+}
 
 const connectDB = async () => {
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    console.error('MONGO_URI is not defined in environment. Aborting DB connection.');
+    return;
+  }
+
   try {
-    await mongoose.connect('mongodb+srv://Resturant:resturant@cluster0.oozkww9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+    await mongoose.connect(mongoUri, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
     console.log('MongoDB connected');
   } catch (err) {
