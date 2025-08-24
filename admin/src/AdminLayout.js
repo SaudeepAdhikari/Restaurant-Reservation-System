@@ -61,7 +61,9 @@ function AdminLayout({ adminName = 'Owner', adminEmail = '', children, onLogout,
                         <div className="profile-email">{profile ? profile.email : adminEmail}</div>
                       </div>
                     </div>
-                    <div className="profile-actions">
+                    <div className="profile-actions" style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
+                      <button className="profile-btn" onClick={() => { window.location.hash = '#profile'; setOpen(false); }}>View profile</button>
+                      <div style={{height: '0.5rem'}} />
                       <button className="profile-btn" onClick={() => { if (onLogout) onLogout(); setOpen(false); }}>Logout</button>
                     </div>
                   </div>

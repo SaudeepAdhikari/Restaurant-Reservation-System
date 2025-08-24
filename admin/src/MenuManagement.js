@@ -75,9 +75,9 @@ function MenuManagement({ initialMenu = [], onSave }) {
             menu.map((item, idx) => (
               <tr key={idx}>
                 <td>{item.name}</td>
-                <td>${item.price}</td>
-                <td>{item.category}</td>
-                <td>{item.description}</td>
+                <td>{typeof item.price !== 'undefined' && item.price !== '' ? `$${parseFloat(item.price).toFixed(2)}` : '-'}</td>
+                <td>{item.category || '-'}</td>
+                <td>{item.description || '-'}</td>
                 <td>
                   <button className="edit-btn" onClick={() => handleEdit(idx)}>Edit</button>
                   <button className="delete-btn" onClick={() => handleDelete(idx)}>Delete</button>

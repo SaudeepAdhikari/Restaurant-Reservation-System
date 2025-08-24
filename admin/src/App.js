@@ -2,6 +2,7 @@
 
 import AdminLayout from './AdminLayout';
 import AdminLogin from './AdminLogin';
+import AdminProfile from './AdminProfile';
 import MyRestaurant from './MyRestaurant';
 import MenuManagement from './MenuManagement';
 import ManageTables from './ManageTables';
@@ -27,8 +28,26 @@ function App() {
     }
   }, []);
 
-  // TODO: replace with real restaurant id from auth/user context
-  const restaurantId = 'rest1';
+  // Restaurants owned by the authenticated admin
+  const [restaurants, setRestaurants] = useState([]);
+
+  // Helper to pick a restaurant id for actions that need one.
+  // If none exist, prompt the user to create a restaurant first.
+  const pickRestaurantId = () => {
+    if (!restaurants || restaurants.length === 0) {
+      alert('No restaurants found. Please create a restaurant first from your profile.');
+      return null;
+    }
+    if (restaurants.length === 1) return restaurants[0].id;
+    const choices = restaurants.map((r, i) => `${i + 1}) ${r.name} (${r.id})`).join('\n');
+    const sel = prompt(`Choose a restaurant by number:\n${choices}`);
+    const idx = parseInt(sel, 10) - 1;
+    if (isNaN(idx) || idx < 0 || idx >= restaurants.length) {
+      alert('Invalid selection');
+      return null;
+    }
+    return restaurants[idx].id;
+  };
 
   // Tables state (simulate with local state; replace with API calls as needed)
   const [tables, setTables] = useState([]);
@@ -36,12 +55,14 @@ function App() {
   // Table handlers
   // Table handlers — backed by API
   const handleAddTable = async () => {
+    const restaurantId = pickRestaurantId();
+    if (!restaurantId) return;
     const name = prompt('Enter table name:');
     const seats = parseInt(prompt('Enter number of seats:'), 10);
     if (!name || isNaN(seats)) return;
     try {
       const created = await apiPost('/tables', { restaurantId, name, capacity: seats });
-      setTables(t => [...t, { id: created._id, name: created.name, seats: created.capacity, status: created.status, restaurantId: created.restaurant }]);
+      setTables(t => [...t, { id: created._id, name: created.name, seats: created.capacity, status: created.status, restaurantId: String(created.restaurant) }]);
     } catch (err) {
       alert('Failed to create table: ' + (err.message || ''));
     }
@@ -93,6 +114,8 @@ function App() {
 
   const handleSaveMenu = async (updatedMenu) => {
     try {
+    const restaurantId = pickRestaurantId();
+    if (!restaurantId) return;
       // Determine deleted items by comparing server-known ids to updated list
       const existingIds = new Set(menu.map(m => m.id || m._id));
       const updatedIds = new Set((updatedMenu || []).map(m => m.id || m._id).filter(Boolean));
@@ -106,7 +129,7 @@ function App() {
       // Create or update remaining items
       for (const it of updatedMenu) {
         if (!it.id && !it._id) {
-          await apiPost('/menu', { restaurantId, name: it.name, price: parseFloat(it.price) || 0, category: it.category, description: it.description });
+      await apiPost('/menu', { restaurantId, name: it.name, price: parseFloat(it.price) || 0, category: it.category, description: it.description });
         } else {
           await apiPut(`/menu/${it.id || it._id}`, { name: it.name, price: parseFloat(it.price) || 0, category: it.category, description: it.description });
         }
@@ -130,10 +153,40 @@ function App() {
   useEffect(() => {
     async function load() {
       try {
-        const [tbls, resv, menuItems] = await Promise.all([apiGet('/tables'), apiGet('/reservations'), apiGet('/menu')]);
-        setTables(tbls.map(t => ({ id: t._id, name: t.name, seats: t.capacity, status: t.status, restaurantId: t.restaurant })));
-        setReservations(resv.map(r => ({ id: r._id, name: r.user ? r.user.name : '', email: r.user ? r.user.email : '', phone: r.user ? r.user.phone : '', tableId: r.table, guests: r.guests, time: r.date ? r.date : r.time, status: r.status, restaurantId: r.restaurant })));
-        setMenu(menuItems.map(i => ({ id: i._id, name: i.name, price: i.price, category: i.category, description: i.description })));
+        // Fetch core data; restaurants endpoint requires auth and should not block tables/menu loading
+        const results = await Promise.allSettled([
+          apiGet('/tables'),
+          apiGet('/reservations'),
+          apiGet('/menu'),
+          apiGet('/restaurants')
+        ]);
+
+        const [tblsRes, resvRes, menuRes, restsRes] = results;
+
+        if (tblsRes.status === 'fulfilled' && Array.isArray(tblsRes.value)) {
+          setTables(tblsRes.value.map(t => ({ id: t._id, name: t.name, seats: t.capacity, status: t.status, restaurantId: String(t.restaurant) })));
+        } else {
+          console.warn('Failed to fetch tables', tblsRes.status === 'rejected' ? tblsRes.reason : tblsRes.value);
+        }
+
+        if (resvRes.status === 'fulfilled' && Array.isArray(resvRes.value)) {
+          setReservations(resvRes.value.map(r => ({ id: r._id, name: r.user ? r.user.name : '', email: r.user ? r.user.email : '', phone: r.user ? r.user.phone : '', tableId: r.table, guests: r.guests, time: r.date ? r.date : r.time, status: r.status, restaurantId: String(r.restaurant) })));
+        } else {
+          console.warn('Failed to fetch reservations', resvRes.status === 'rejected' ? resvRes.reason : resvRes.value);
+        }
+
+        if (menuRes.status === 'fulfilled' && Array.isArray(menuRes.value)) {
+          setMenu(menuRes.value.map(i => ({ id: i._id, name: i.name, price: i.price, category: i.category, description: i.description })));
+        } else {
+          console.warn('Failed to fetch menu', menuRes.status === 'rejected' ? menuRes.reason : menuRes.value);
+        }
+
+        if (restsRes.status === 'fulfilled' && Array.isArray(restsRes.value)) {
+          setRestaurants(restsRes.value.map(x => ({ id: x._id, name: x.name })));
+        } else {
+          // It's okay if restaurants couldn't be fetched (e.g., unauthenticated); just log it
+          console.warn('Failed to fetch restaurants (may require login)', restsRes.status === 'rejected' ? restsRes.reason : restsRes.value);
+        }
       } catch (err) {
         console.warn('Failed to load admin data', err);
       }
@@ -147,8 +200,9 @@ function App() {
   } else if (hash === '#menu') {
     content = <MenuManagement initialMenu={menu} onSave={handleSaveMenu} />;
   } else if (hash === '#tables') {
-    // Only show tables for this owner's restaurant
-    const ownerTables = tables.filter(t => t.restaurantId === restaurantId);
+    // Only show tables for this owner's restaurants
+    const ownerRestaurantIds = new Set(restaurants.map(r => String(r.id)));
+    const ownerTables = tables.filter(t => ownerRestaurantIds.has(String(t.restaurantId)));
     content = (
       <ManageTables
         tables={ownerTables}
@@ -158,8 +212,9 @@ function App() {
       />
     );
   } else if (hash === '#reservations') {
-    // Only show reservations for this owner's restaurant
-    const ownerReservations = reservations.filter(r => r.restaurantId === restaurantId);
+    // Only show reservations for this owner's restaurants
+    const ownerRestaurantIds = new Set(restaurants.map(r => String(r.id)));
+    const ownerReservations = reservations.filter(r => ownerRestaurantIds.has(String(r.restaurantId)));
     content = (
       <ManageReservations
         reservations={ownerReservations}
@@ -169,6 +224,10 @@ function App() {
     );
   } else {
     content = <div style={{padding: '2rem'}}>Select a section from the sidebar.</div>;
+  }
+
+  if (hash === '#profile') {
+  content = <AdminProfile authUser={authUser} onMenuAdded={(created) => setMenu(m => [...m, { id: created._id, name: created.name, price: created.price, category: created.category, description: created.description }])} onTableAdded={(created) => setTables(t => [...t, { id: created._id, name: created.name, seats: created.capacity, status: created.status, restaurantId: String(created.restaurant) }])} />;
   }
 
   const handleLogin = ({ token, user }) => {

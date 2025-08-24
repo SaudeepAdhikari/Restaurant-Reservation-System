@@ -13,6 +13,16 @@ async function request(path, options = {}) {
 
   const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
   const data = await res.json().catch(() => ({}));
+  // Central handling for unauthorized / forbidden responses
+  if (res.status === 401 || res.status === 403) {
+    try { localStorage.removeItem('adminToken'); localStorage.removeItem('adminUser'); } catch (e) {}
+    // redirect to admin login (hash-based route used in app)
+    if (typeof window !== 'undefined') window.location.hash = '#login';
+    const err = new Error(data.error || (res.status === 403 ? 'Forbidden' : 'Unauthorized'));
+    err.status = res.status;
+    err.body = data;
+    throw err;
+  }
   if (!res.ok) {
     const err = new Error(data.error || 'API error');
     err.status = res.status;
