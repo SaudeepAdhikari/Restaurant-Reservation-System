@@ -19,6 +19,21 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'your_jwt_secret'; // Change this in production
 
+// Simple JWT auth middleware for admin-only routes
+function authMiddleware(req, res, next) {
+  const auth = req.headers.authorization || '';
+  if (!auth.startsWith('Bearer ')) return res.status(401).json({ error: 'No token provided' });
+  const token = auth.split(' ')[1];
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.user = payload;
+    if (!payload.isAdmin) return res.status(403).json({ error: 'Admin privileges required' });
+    return next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
 // Get all tables from DB
 app.get('/api/tables', async (req, res) => {
   try {
@@ -29,9 +44,49 @@ app.get('/api/tables', async (req, res) => {
   }
 });
 
-  // User registration
+// Create a table
+app.post('/api/tables', authMiddleware, async (req, res) => {
+  const { restaurantId, name, capacity } = req.body;
+  if (!name || typeof capacity === 'undefined') return res.status(400).json({ error: 'Missing fields' });
+  try {
+    const table = new models.Table({ restaurant: restaurantId || null, name, capacity, status: 'available' });
+    await table.save();
+    res.status(201).json(table);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create table' });
+  }
+});
+
+// Update a table
+app.put('/api/tables/:id', authMiddleware, async (req, res) => {
+  try {
+    const updates = {};
+    const { name, capacity, status } = req.body;
+    if (name) updates.name = name;
+    if (typeof capacity !== 'undefined') updates.capacity = capacity;
+    if (status) updates.status = status;
+    const table = await models.Table.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (!table) return res.status(404).json({ error: 'Table not found' });
+    res.json(table);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update table' });
+  }
+});
+
+// Delete a table
+app.delete('/api/tables/:id', authMiddleware, async (req, res) => {
+  try {
+    const t = await models.Table.findByIdAndDelete(req.params.id);
+    if (!t) return res.status(404).json({ error: 'Table not found' });
+    res.json({ message: 'Deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete table' });
+  }
+});
+
+  // User registration - isAdmin is determined server-side only (never trust client-sent isAdmin)
   app.post('/api/register', async (req, res) => {
-    const { name, email, password, phone, isAdmin } = req.body;
+    const { name, email, password, phone } = req.body; // ignore isAdmin from client
     if (!name || !email || !password || !phone) {
       return res.status(400).json({ error: 'Missing fields' });
     }
@@ -41,7 +96,8 @@ app.get('/api/tables', async (req, res) => {
         return res.status(409).json({ error: 'Email already registered' });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new models.User({ name, email, password: hashedPassword, phone, isAdmin: !!isAdmin });
+      // By default new users are not admins. To create an admin, use a separate server-side process or protected endpoint.
+      const user = new models.User({ name, email, password: hashedPassword, phone, isAdmin: false });
       await user.save();
       res.status(201).json({ message: 'User registered' });
     } catch (err) {
@@ -114,6 +170,68 @@ app.post('/api/reservations', async (req, res) => {
   }
 });
 
+// Update reservation (confirm/cancel/status)
+app.put('/api/reservations/:id', async (req, res) => {
+  try {
+    const { status } = req.body;
+    const updates = {};
+    if (status) updates.status = status;
+    const r = await models.Reservation.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (!r) return res.status(404).json({ error: 'Reservation not found' });
+    res.json(r);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update reservation' });
+  }
+});
+
+// Menu items CRUD
+app.get('/api/menu', async (req, res) => {
+  try {
+    const items = await models.MenuItem.find().populate('restaurant');
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch menu' });
+  }
+});
+
+app.post('/api/menu', authMiddleware, async (req, res) => {
+  const { restaurantId, name, price, category, description } = req.body;
+  if (!name || typeof price === 'undefined') return res.status(400).json({ error: 'Missing fields' });
+  try {
+    const item = new models.MenuItem({ restaurant: restaurantId || null, name, price, category, description });
+    await item.save();
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create menu item' });
+  }
+});
+
+app.put('/api/menu/:id', authMiddleware, async (req, res) => {
+  try {
+    const { name, price, category, description } = req.body;
+    const updates = {};
+    if (name) updates.name = name;
+    if (typeof price !== 'undefined') updates.price = price;
+    if (category) updates.category = category;
+    if (description) updates.description = description;
+    const item = await models.MenuItem.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (!item) return res.status(404).json({ error: 'Menu item not found' });
+    res.json(item);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update menu item' });
+  }
+});
+
+app.delete('/api/menu/:id', authMiddleware, async (req, res) => {
+  try {
+    const it = await models.MenuItem.findByIdAndDelete(req.params.id);
+    if (!it) return res.status(404).json({ error: 'Menu item not found' });
+    res.json({ message: 'Deleted' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete menu item' });
+  }
+});
+
 // Update user details by ID
 app.put('/api/user/:id', async (req, res) => {
   try {
@@ -142,8 +260,12 @@ app.put('/api/user/:id', async (req, res) => {
 });
 
 // Get user details by ID
-app.get('/api/user/:id', async (req, res) => {
+app.get('/api/user/:id', authMiddleware, async (req, res) => {
   try {
+    // Only allow the owning user to fetch their profile
+    if (!req.user || String(req.user.id) !== String(req.params.id)) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
     const user = await models.User.findById(req.params.id);
     if (!user) return res.status(404).json({ error: 'User not found' });
     // Split name into first and last for frontend
