@@ -1,0 +1,56 @@
+.booking-modal-wrapper {
+  margin-top: 2em;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(34, 49, 63, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal-content {
+  background: #fff;
+  border-radius: 18px;
+  padding: 2em 2.5em;
+  box-shadow: 0 8px 32px rgba(44,204,122,0.18);
+  min-width: 320px;
+  max-width: 90vw;
+  animation: popIn 0.2s;
+}
+@keyframes popIn {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+.table-times {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+  margin: 1.5em 0;
+}
+.table-btn {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 18px;
+  padding: 0.7em 1.5em;
+  font-size: 1rem;
+  color: #1abc9c;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.table-btn.selected, .table-btn:hover {
+  background: #1abc9c;
+  color: #fff;
+}
+.table-btn.unavailable {
+  background: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+}

@@ -1,0 +1,29 @@
+.menu-section {
+  margin: 2em 0 1em 0;
+}
+.menu-section h4 {
+  color: #1abc9c;
+  margin-bottom: 1em;
+  font-size: 1.2rem;
+}
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1em;
+}
+.menu-item {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1em 1.2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #222;
+  box-shadow: 0 1px 4px rgba(44,204,122,0.04);
+}
+.menu-price {
+  color: #1abc9c;
+  font-weight: 600;
+}

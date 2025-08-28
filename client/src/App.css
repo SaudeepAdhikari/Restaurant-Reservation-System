@@ -1,0 +1,36 @@
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #2ecc7a 0%, #1abc9c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  padding: 0.7em 2em;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(44,204,122,0.08);
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #1abc9c 0%, #2ecc7a 100%);
+  box-shadow: 0 4px 16px rgba(44,204,122,0.15);
+}
+
+.btn-secondary {
+  background: #e0e0e0;
+  color: #222;
+  border: none;
+  border-radius: 24px;
+  padding: 0.7em 2em;
+  font-size: 1rem;
+  margin-left: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-secondary:hover {
+  background: #bdbdbd;
+}

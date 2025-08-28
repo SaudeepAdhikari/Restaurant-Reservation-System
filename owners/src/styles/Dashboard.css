@@ -1,0 +1,27 @@
+.dashboard-page {
+  padding: 1em 0;
+}
+.dashboard-page h1 {
+  color: #1a2233;
+  font-size: 2.1rem;
+  margin-bottom: 2em;
+}
+.dashboard-cards {
+  display: flex;
+  gap: 2em;
+  flex-wrap: wrap;
+}
+.dashboard-card {
+  background: #23305a;
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(26,34,51,0.10);
+  padding: 2em 2em 1.5em 2em;
+  min-width: 220px;
+  flex: 1;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.dashboard-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(26,34,51,0.18);
+}

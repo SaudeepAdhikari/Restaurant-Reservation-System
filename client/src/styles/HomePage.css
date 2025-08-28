@@ -1,0 +1,36 @@
+.homepage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2em 1em;
+}
+.hero-section {
+  text-align: center;
+  margin-bottom: 2em;
+}
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1abc9c;
+  margin-bottom: 1em;
+  letter-spacing: 1px;
+}
+.search-bar {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.8em 1.2em;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  font-size: 1.1rem;
+  background: #fafafa;
+  transition: box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(44,204,122,0.04);
+}
+.search-bar:focus {
+  outline: none;
+  box-shadow: 0 4px 16px rgba(44,204,122,0.12);
+}
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 2em;
+}

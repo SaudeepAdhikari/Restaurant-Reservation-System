@@ -1,0 +1,77 @@
+.datatable-wrapper {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(34,49,63,0.07);
+  padding: 2em 1.5em;
+  margin-bottom: 2em;
+  overflow-x: auto;
+}
+.datatable-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1em;
+}
+.datatable-search {
+  padding: 0.6em 1em;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+  font-size: 1rem;
+  background: #f7fafd;
+}
+.datatable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+.datatable th, .datatable td {
+  padding: 0.8em 1em;
+  text-align: left;
+}
+.datatable th {
+  background: #f7fafd;
+  color: #2e86de;
+  font-weight: 600;
+  border-bottom: 2px solid #eaeaea;
+}
+.datatable tbody tr {
+  transition: background 0.15s;
+}
+.datatable tbody tr:hover {
+  background: #f0f6ff;
+}
+.datatable-action {
+  background: #2e86de;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 0.4em 1.2em;
+  font-size: 0.98rem;
+  margin-right: 0.5em;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.datatable-action:hover {
+  background: #00b894;
+}
+.datatable-pagination {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  justify-content: flex-end;
+}
+.datatable-pagination button {
+  background: #2e86de;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.datatable-pagination button:disabled {
+  background: #eaeaea;
+  color: #aaa;
+  cursor: not-allowed;
+}

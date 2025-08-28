@@ -1,0 +1,30 @@
+.bookings-page {
+  max-width: 700px;
+  margin: 2em auto;
+}
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+}
+.booking-card {
+  background: #23305a;
+  color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(26,34,51,0.10);
+  padding: 1.2em 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.status {
+  font-weight: 600;
+  margin-top: 0.5em;
+}
+.status.confirmed {
+  color: #ffd700;
+}
+.status.pending {
+  color: #fff;
+  opacity: 0.7;
+}
