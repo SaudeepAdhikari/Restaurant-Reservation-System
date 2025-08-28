@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Admin from '../models/Admin.js';
+import { verifyToken, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
@@ -32,6 +33,15 @@ router.post('/login', async (req, res) => {
     if (!match) return res.status(401).json({ message: 'Invalid credentials.' });
     const token = jwt.sign({ adminId: admin._id, role: 'admin' }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, admin: { id: admin._id, name: admin.name, email: admin.email } });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// Verify token (returns 200 when token is valid and belongs to admin)
+router.get('/verify', verifyToken, adminOnly, async (req, res) => {
+  try {
+    res.json({ ok: true, adminId: req.user.adminId });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
   }

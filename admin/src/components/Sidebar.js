@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { removeToken } from '../utils/auth';
 import '../styles/Sidebar.css';
 
 const navItems = [
@@ -13,6 +14,14 @@ const navItems = [
 ];
 
 function Sidebar() {
+  const navigate = useNavigate();
+  function handleLogout() {
+  removeToken();
+  navigate('/login');
+  // reload so App re-reads token and shows login
+  window.location.reload();
+  }
+
   return (
     <aside className="sidebar">
       <div className="sidebar-header">Admin</div>
@@ -29,6 +38,10 @@ function Sidebar() {
           </NavLink>
         ))}
       </nav>
+
+      <div className="sidebar-footer">
+        <button className="small-btn" onClick={handleLogout}>Logout</button>
+      </div>
     </aside>
   );
 }

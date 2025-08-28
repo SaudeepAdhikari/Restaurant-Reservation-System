@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import styles from '../styles/modules/Auth.module.css';
 import { apiPost, saveToken } from '../utils/auth';
 
-function Signup() {
+function Signup({ onAuth }) {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ function Signup() {
     try {
       const res = await apiPost('/api/admin/auth/register', form);
       saveToken(res.token);
+      if (typeof onAuth === 'function') onAuth();
       navigate('/');
     } catch (err) {
       setError(err.message || 'Signup failed');

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Topbar from './components/Topbar';
@@ -15,13 +15,29 @@ import Settings from './pages/Settings';
 import './App.css';
 
 function App() {
-  const token = getToken();
+  const [token, setToken] = useState(getToken());
+  useEffect(() => {
+    // verify token server-side on mount
+    if (!token) return;
+    (async () => {
+      try {
+        const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/admin/auth/verify', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('invalid');
+      } catch (err) {
+        // invalid token — clear and show login
+        localStorage.removeItem('admin_token');
+        setToken(null);
+      }
+    })();
+  }, []);
   if (!token) {
     return (
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="*" element={<Login />} />
+        <Route path="/login" element={<Login onAuth={() => setToken(getToken())} />} />
+        <Route path="/signup" element={<Signup onAuth={() => setToken(getToken())} />} />
+        <Route path="*" element={<Login onAuth={() => setToken(getToken())} />} />
       </Routes>
     );
   }
