@@ -1,15 +1,33 @@
 import React, { useState } from 'react';
 import '../styles/DataTable.css';
 
+function getValue(row, key) {
+  if (!key) return '';
+  // support nested keys like 'owner.name'
+  const parts = key.split('.');
+  let v = row;
+  for (const p of parts) {
+    if (v == null) return '';
+    v = v[p];
+  }
+  if (v == null) return '';
+  if (typeof v === 'object') {
+    // prefer common display fields
+    return v.name ?? v.title ?? v.email ?? v._id ?? JSON.stringify(v);
+  }
+  return v;
+}
+
 function DataTable({ columns, data, actions = [] }) {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 5;
+
   const filtered = data.filter(row =>
-    columns.some(col => String(row[col.key]).toLowerCase().includes(search.toLowerCase()))
+    columns.some(col => String(getValue(row, col.key)).toLowerCase().includes(search.toLowerCase()))
   );
   const paged = filtered.slice((page-1)*pageSize, page*pageSize);
-  const pageCount = Math.ceil(filtered.length / pageSize);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
 
   return (
     <div className="datatable-wrapper">
@@ -18,7 +36,7 @@ function DataTable({ columns, data, actions = [] }) {
           className="datatable-search"
           placeholder="Search..."
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={e => { setSearch(e.target.value); setPage(1); }}
         />
       </div>
       <table className="datatable">
@@ -30,8 +48,8 @@ function DataTable({ columns, data, actions = [] }) {
         </thead>
         <tbody>
           {paged.map(row => (
-            <tr key={row.id}>
-              {columns.map(col => <td key={col.key}>{row[col.key]}</td>)}
+            <tr key={row._id || row.id}>
+              {columns.map(col => <td key={col.key}>{getValue(row, col.key)}</td>)}
               {actions.length > 0 && (
                 <td>
                   {actions.map((a,i) => (
