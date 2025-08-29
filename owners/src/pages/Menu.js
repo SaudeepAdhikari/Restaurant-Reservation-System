@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MenuModal from '../components/MenuModal';
+import Header from '../components/Header';
 import '../styles/Menu.css';
 
 const initialMenu = [
@@ -23,10 +24,15 @@ function Menu() {
     setModal({ open: false, item: null });
   };
 
+  function handleProfile() {
+    // placeholder - navigate to profile or open modal
+    alert('Open owner profile (not implemented)');
+  }
+
   return (
     <div className="menu-page">
-      <div className="menu-header">
-        <h2>Menu Items</h2>
+      <Header title="Menu Items" onProfile={handleProfile} />
+      <div style={{padding:'8px 16px'}}>
         <button className="btn-primary" onClick={handleAdd}>Add Item</button>
       </div>
       <div className="menu-grid">

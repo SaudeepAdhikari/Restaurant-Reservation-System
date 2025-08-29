@@ -8,6 +8,7 @@
   border-radius: 0 0 18px 18px;
   box-shadow: 0 2px 8px rgba(34,49,63,0.04);
 }
+.topbar { position: sticky; top: 0; z-index: 1000; }
 .topbar-title {
   font-size: 1.3rem;
   font-weight: 700;

@@ -5,14 +5,16 @@ import RestaurantDetails from './pages/RestaurantDetails';
 import Tables from './pages/Tables';
 import Menu from './pages/Menu';
 import Bookings from './pages/Bookings';
-import Settings from './pages/Settings';
+import Profile from './pages/Profile';
 import RestaurantsList from './pages/RestaurantsList';
 import RestaurantForm from './pages/RestaurantForm';
 import TablesList from './pages/TablesList';
 import TableForm from './pages/TableForm';
 import MenuList from './pages/MenuList';
 import MenuForm from './pages/MenuForm';
-import Sidebar from './components/Sidebar';
+// Sidebar removed per request
+import Header from './components/Header';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -35,10 +37,17 @@ function App() {
     setToken(null);
   }
 
+  // clear token when other parts of the app dispatch app:logout (e.g. on 401)
+  React.useEffect(() => {
+    function onGlobalLogout() { setToken(null); }
+    window.addEventListener('app:logout', onGlobalLogout);
+    return () => window.removeEventListener('app:logout', onGlobalLogout);
+  }, []);
+
   return (
     <div className="owner-app-layout">
-      <Sidebar onLogout={handleLogout} />
-      <main className="owner-main-content">
+      <main className="owner-main-content full-width">
+        <AppHeader onLogout={handleLogout} />
         <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/restaurants" element={<RestaurantsList />} />
@@ -49,12 +58,32 @@ function App() {
             <Route path="/menu" element={<MenuList />} />
             <Route path="/menu/new" element={<MenuForm />} />
             <Route path="/restaurant" element={<RestaurantDetails />} />
-          <Route path="/bookings" element={<Bookings />} />
-          <Route path="/settings" element={<Settings />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/settings" element={<Navigate to="/profile" replace />} />
+            <Route path="/profile" element={<Profile />} />
         </Routes>
       </main>
     </div>
   );
+}
+
+function AppHeader({ onLogout }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  function titleForPath(path) {
+    if (path === '/' || path === '') return 'Dashboard';
+    if (path.startsWith('/restaurants')) return 'Restaurants';
+    if (path.startsWith('/menu')) return 'Menu Items';
+    if (path.startsWith('/tables')) return 'Tables';
+    if (path.startsWith('/bookings')) return 'Bookings';
+    if (path.startsWith('/settings')) return 'Settings';
+    return 'Owner Panel';
+  }
+
+  const title = titleForPath(location.pathname);
+
+  return <Header title={title} onProfile={() => navigate('/profile')} onLogout={onLogout} />;
 }
 
 export default App;

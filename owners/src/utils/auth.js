@@ -35,7 +35,30 @@ export function authFetch(path, options = {}) {
       Authorization: token ? `Bearer ${token}` : undefined
     }
   }).then(async r => {
-    if (!r.ok) throw new Error((await r.json()).message || 'Request failed');
-    return r.json();
+    const ct = r.headers.get('content-type') || '';
+    // handle non-ok responses first
+    if (!r.ok) {
+      // If unauthorized, clear token and notify app
+      if (r.status === 401 || r.status === 403) {
+        try { removeToken(); } catch(e){}
+        try { window.dispatchEvent(new Event('app:logout')); } catch(e){}
+      }
+      // try to read JSON error, otherwise text
+      if (ct.includes('application/json')) {
+        const err = await r.json().catch(()=>({ message: 'Request failed' }));
+        throw new Error(err.message || 'Request failed');
+      } else {
+        const txt = await r.text().catch(()=>'');
+        throw new Error(`Request failed: ${r.status} ${r.statusText} - response not JSON: ${txt.slice(0,200)}`);
+      }
+    }
+
+    // ok response
+    if (ct.includes('application/json')) {
+      return r.json();
+    }
+    const txt = await r.text().catch(()=>'');
+    // likely HTML (index.html) returned by dev server or proxy misconfig
+    throw new Error(`Expected JSON but got non-JSON response from ${url}: ${txt.slice(0,200)}`);
   });
 }

@@ -1,0 +1,19 @@
+ .settings-page {
+  max-width: 520px;
+  margin: 2em auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(26,34,51,0.07);
+  padding: 2em 2em 1.5em 2em;
+}
+.settings-page h2 {
+  color: #1a2233;
+  margin-bottom: 1em;
+}
+
+.profile-details .profile-row { margin-bottom: 8px; }
+.profile-form label, .modal form label { display:block; margin:8px 0; }
+.modal-overlay { position:fixed; inset:0; background:rgba(10,20,30,0.4); display:flex; align-items:center; justify-content:center; z-index:60; }
+.modal { background:#fff; padding:20px; border-radius:12px; width:420px; box-shadow:0 8px 30px rgba(10,20,30,0.12); }
+.form-error { color:#b00020; margin-bottom:8px; }
+.form-success { color:#0a8a4a; margin-bottom:8px; }

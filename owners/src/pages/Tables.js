@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import TableModal from '../components/TableModal';
+import Header from '../components/Header';
 import '../styles/Tables.css';
 
 const initialTables = [
@@ -23,10 +24,14 @@ function Tables() {
     setModal({ open: false, table: null });
   };
 
+  function handleProfile() {
+    alert('Open owner profile (not implemented)');
+  }
+
   return (
     <div className="tables-page">
-      <div className="tables-header">
-        <h2>Tables</h2>
+      <Header title="Tables" onProfile={handleProfile} />
+      <div style={{padding:'8px 16px'}}>
         <button className="btn-primary" onClick={handleAdd}>Add Table</button>
       </div>
       <div className="tables-grid">

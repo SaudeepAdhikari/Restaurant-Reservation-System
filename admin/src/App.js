@@ -32,6 +32,15 @@ function App() {
       }
     })();
   }, []);
+
+  // listen for global logout events (dispatched by other components) so we can clear token
+  useEffect(() => {
+    function handleGlobalLogout() {
+      setToken(null);
+    }
+    window.addEventListener('app:logout', handleGlobalLogout);
+    return () => window.removeEventListener('app:logout', handleGlobalLogout);
+  }, []);
   if (!token) {
     return (
       <Routes>
