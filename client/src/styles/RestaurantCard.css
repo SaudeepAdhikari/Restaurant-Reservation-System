@@ -1,3 +1,26 @@
+.restaurant-grid-wrapper { width: 100%; max-width: 1100px; margin: 0 auto; }
+.restaurant-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-top:0.8rem; }
+
+.restaurant-card.new { background: var(--color-white); border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); transition:transform 0.18s; }
+.restaurant-card.new:hover { transform: translateY(-6px); }
+
+.card-media { position:relative; overflow:hidden; }
+.card-image { width:100%; height:150px; object-fit:cover; display:block; }
+
+.like-btn { position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.9); border:none; padding:6px 8px; border-radius:50%; cursor:pointer; font-size:0.95rem; transition:transform 0.18s, background 0.18s; }
+.like-btn.liked { background:linear-gradient(90deg,#ff6b6b,#ff8a65); color:#fff; transform:scale(1.05); }
+
+.hover-cta { position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center; padding-bottom:14px; pointer-events:none; }
+.book-now { pointer-events:auto; opacity:0; transform:translateY(8px); transition:opacity 0.25s, transform 0.25s; background:linear-gradient(90deg,var(--color-accent),var(--color-accent2)); color:#fff; border:none; padding:0.6rem 1rem; border-radius:20px; font-weight:700; }
+.restaurant-card.new:hover .book-now { opacity:1; transform:translateY(0); }
+
+.card-content { padding:0.9rem 1rem 1.1rem 1rem; }
+.card-title { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.card-title h3 { margin:0; font-size:1.05rem; }
+.card-rating { background:rgba(0,0,0,0.05); padding:4px 8px; border-radius:8px; font-weight:700; }
+.card-details { margin-top:6px; color:#666; font-size:0.95rem; }
+
+.restaurant-card.trending::after { content: ""; position:absolute; top:8px; left:8px; width:10px; height:10px; background:linear-gradient(90deg,#ff6b6b,#ff8a65); border-radius:50%; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
 .restaurant-card {
   background: #fff;
   border-radius: 18px;

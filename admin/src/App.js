@@ -11,7 +11,7 @@ import Restaurants from './pages/Restaurants';
 import Customers from './pages/Customers';
 import Bookings from './pages/Bookings';
 import Analytics from './pages/Analytics';
-import Settings from './pages/Settings';
+import Profile from './pages/Profile';
 import './App.css';
 
 function App() {
@@ -64,7 +64,7 @@ function App() {
             <Route path="/customers" element={<Customers />} />
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/analytics" element={<Analytics />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </main>
       </div>

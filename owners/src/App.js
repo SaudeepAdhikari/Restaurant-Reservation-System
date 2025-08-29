@@ -23,6 +23,13 @@ import { getToken } from './utils/auth';
 function App() {
   const [token, setToken] = useState(getToken());
 
+  // clear token when other parts of the app dispatch app:logout (e.g. on 401)
+  React.useEffect(() => {
+    function onGlobalLogout() { setToken(null); }
+    window.addEventListener('app:logout', onGlobalLogout);
+    return () => window.removeEventListener('app:logout', onGlobalLogout);
+  }, []);
+
   if (!token) {
     return (
       <Routes>
@@ -37,12 +44,6 @@ function App() {
     setToken(null);
   }
 
-  // clear token when other parts of the app dispatch app:logout (e.g. on 401)
-  React.useEffect(() => {
-    function onGlobalLogout() { setToken(null); }
-    window.addEventListener('app:logout', onGlobalLogout);
-    return () => window.removeEventListener('app:logout', onGlobalLogout);
-  }, []);
 
   return (
     <div className="owner-app-layout">
@@ -82,6 +83,11 @@ function AppHeader({ onLogout }) {
   }
 
   const title = titleForPath(location.pathname);
+
+  if (typeof Header !== 'function' && typeof Header !== 'object') {
+    console.error('Invalid Header import in AppHeader:', Header);
+    return <div style={{padding:20,background:'#fee',color:'#900'}}>Header component not found (check imports). See console for details.</div>;
+  }
 
   return <Header title={title} onProfile={() => navigate('/profile')} onLogout={onLogout} />;
 }

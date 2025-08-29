@@ -14,9 +14,30 @@
 .heroBg {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(120deg, #e0f7fa 0%, #fff 100%);
   opacity: 1;
   z-index: 1;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 18px;
+  opacity: 0.85;
+}
+.shape1 { width: 220px; height: 220px; background: linear-gradient(135deg,#ffd54f, #ff7043); left: -60px; top: -40px; animation: floatY 12s ease-in-out infinite; }
+.shape2 { width: 140px; height: 140px; background: linear-gradient(135deg,#80deea, #26c6da); right: -40px; top: 20px; animation: floatX 10s ease-in-out infinite; border-radius: 50%; }
+.shape3 { width: 100px; height: 100px; background: linear-gradient(135deg,#a5d6a7,#66bb6a); left: 10%; bottom: -30px; animation: floatY 14s ease-in-out infinite; transform: rotate(18deg); }
+.shape4 { width: 60px; height: 60px; background: linear-gradient(135deg,#ce93d8,#ab47bc); right: 18%; bottom: 10%; animation: floatX 9s ease-in-out infinite; transform: rotate(-8deg); }
+
+@keyframes floatY {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(18px); }
+  100% { transform: translateY(0); }
+}
+@keyframes floatX {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(18px); }
+  100% { transform: translateX(0); }
 }
 .heroContent {
   position: relative;
@@ -25,6 +46,26 @@
   max-width: 600px;
   margin: 0 auto;
   color: var(--color-dark);
+}
+.heroTagline {
+  margin: 0.4rem 0 1rem 0;
+  font-size: 1.05rem;
+  color: #333;
+  font-weight: 600;
+}
+.fadeIn {
+  animation: taglineFade 0.45s ease-in forwards;
+}
+.fadeOut {
+  animation: taglineFadeOut 0.35s ease-out forwards;
+}
+@keyframes taglineFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes taglineFadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-6px); }
 }
 .heroContent h1 {
   font-size: 2.7rem;
@@ -74,6 +115,24 @@
 }
 .searchBtn:hover {
   background: linear-gradient(90deg, var(--color-accent2) 0%, var(--color-accent) 100%);
+}
+
+.primaryCta {
+  display: inline-block;
+  margin: 0.4rem auto 1rem auto;
+  background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent2) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 28px;
+  padding: 0.8rem 1.6rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+.primaryCta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.12);
 }
 .quickFilters {
   display: flex;

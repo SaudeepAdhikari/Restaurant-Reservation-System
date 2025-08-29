@@ -24,18 +24,44 @@ export async function apiPost(path, body) {
   return res.json();
 }
 
-export function authFetch(path, options = {}) {
+export async function authFetch(path, options = {}) {
   const token = getToken();
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
-  return fetch(url, {
+  const res = await fetch(url, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
       ...(options.headers || {}),
       Authorization: token ? `Bearer ${token}` : undefined
     }
-  }).then(async r => {
-    if (!r.ok) throw new Error((await r.json()).message || 'Request failed');
-    return r.json();
   });
+
+  const contentType = (res.headers.get('content-type') || '').toLowerCase();
+  const isJson = contentType.includes('application/json');
+
+  // handle errors
+  if (!res.ok) {
+    // auto-logout on auth errors
+    if (res.status === 401 || res.status === 403) {
+      try { removeToken(); window.dispatchEvent(new Event('app:logout')); } catch(e){}
+    }
+
+    if (isJson) {
+      const body = await res.json().catch(() => ({}));
+      const msg = body && (body.message || body.error) ? (body.message || body.error) : JSON.stringify(body);
+      throw new Error(msg || res.statusText || 'Request failed');
+    }
+
+    // non-JSON error (HTML page, etc.)
+    const txt = await res.text().catch(() => res.statusText);
+    throw new Error(txt || res.statusText || 'Request failed');
+  }
+
+  // success but not JSON (likely an HTML response) — surface as error to avoid JSON parse crash
+  if (!isJson) {
+    const txt = await res.text().catch(() => 'Received non-JSON response');
+    throw new Error(txt || 'Received non-JSON response');
+  }
+
+  return res.json();
 }

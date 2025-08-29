@@ -39,7 +39,7 @@ function Header({ title, onProfile, onLogout }) {
   return (
     <header className="owner-topbar">
       <div className="owner-topbar-left" onClick={() => { console.log('logo clicked'); navigate('/'); }} style={{cursor:'pointer'}}>
-        <div className="owner-logo">Your<span className="logo-accent">Resto</span></div>
+        <div className="owner-logo">Your Restro</div>
       </div>
       <nav className="owner-topbar-nav">
         {nav.map(item => (

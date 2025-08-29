@@ -1,0 +1,13 @@
+.cat-carousel-root { display:flex; align-items:center; gap:8px; margin-top:1.2rem; position:relative; }
+.cat-track { display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth; padding:8px; }
+.cat-item { min-width:110px; background:var(--color-white); border-radius:12px; padding:10px; display:flex; flex-direction:column; align-items:center; box-shadow:0 4px 12px rgba(0,0,0,0.06); cursor:pointer; position:relative; }
+.cat-icon { font-size:1.6rem; }
+.cat-label { margin-top:6px; font-weight:700; color:var(--color-accent); }
+.cat-badge { position:absolute; top:-8px; right:-8px; background:linear-gradient(90deg,#ff6b6b,#ff8a65); color:#fff; padding:4px 8px; border-radius:16px; font-size:0.7rem; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+.navBtn { background:transparent; border:none; font-size:1.5rem; cursor:pointer; padding:6px 8px; }
+.navBtn.left { margin-left:4px; }
+.navBtn.right { margin-right:4px; }
+
+/* hide scrollbar for visual cleanliness */
+.cat-track::-webkit-scrollbar { height:8px; }
+.cat-track::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius:8px; }

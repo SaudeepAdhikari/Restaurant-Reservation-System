@@ -1,0 +1,7 @@
+.filter-root { position: relative; }
+.filterBtn { background: transparent; border: 1px solid #ddd; padding: 0.5rem 0.8rem; border-radius: 20px; cursor: pointer; }
+.filterMenu { position: absolute; right: 0; top: 42px; width: 220px; background: var(--color-white); box-shadow: 0 8px 24px rgba(0,0,0,0.08); border-radius: 10px; padding: 0.6rem; z-index: 260; }
+.filter-row { display: flex; justify-content: space-between; margin-bottom: 0.6rem; align-items: center; }
+.filter-actions { display:flex; gap:0.5rem; justify-content:flex-end; }
+.applyBtn { background: var(--color-accent); color: #fff; border:none; padding:0.4rem 0.8rem; border-radius:8px; }
+.resetBtn { background:transparent; border:1px solid #ddd; padding:0.3rem 0.6rem; border-radius:8px; }

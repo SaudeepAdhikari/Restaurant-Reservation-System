@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/RestaurantCard.css';
 
-function RestaurantCard({ restaurant }) {
+function RestaurantCard({ restaurant, image, name, rating, cuisine, location, trending }) {
+  // Support both legacy prop "restaurant" and new props
+  const data = restaurant || { image, name, rating, cuisine, location, trending };
+  const [liked, setLiked] = useState(false);
+
   return (
-    <div className="restaurant-card">
-      <Link to={`/restaurant/${restaurant.id}`} className="card-link">
-        <img src={restaurant.image} alt={restaurant.name} className="card-image" />
+    <div className={`restaurant-card new ${data.trending ? 'trending' : ''}`}>
+      <Link to={`/restaurant/${data.id || ''}`} className="card-link">
+        <div className="card-media">
+          <img src={data.image} alt={data.name} className="card-image" />
+          <button className={`like-btn ${liked ? 'liked' : ''}`} onClick={(e) => { e.preventDefault(); setLiked(s => !s); }} aria-label="Save restaurant">❤</button>
+          <div className="hover-cta">
+            <button className="book-now">Book Now</button>
+          </div>
+        </div>
         <div className="card-content">
-          <h3>{restaurant.name}</h3>
-          <div className="card-rating">⭐ {restaurant.rating}</div>
-          <div className="card-details">{restaurant.details}</div>
-          <div className="card-location">{restaurant.location} • {restaurant.cuisine}</div>
+          <div className="card-title">
+            <h3>{data.name}</h3>
+            <div className="card-rating">{data.rating} ★</div>
+          </div>
+          <div className="card-details">{data.cuisine} · {data.location}</div>
         </div>
       </Link>
     </div>

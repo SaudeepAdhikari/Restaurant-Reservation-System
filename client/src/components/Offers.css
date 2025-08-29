@@ -1,0 +1,18 @@
+.offers-section { margin-top: 2rem; max-width: 1100px; margin-left:auto; margin-right:auto; padding: 0 8px; }
+.offers-header { display:flex; align-items:center; justify-content:space-between; }
+.offers-track { display:flex; gap:12px; overflow-x:auto; padding:12px 0; }
+.offer-card { min-width:260px; background:var(--color-white); border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06); overflow:hidden; position:relative; }
+.offer-card img { width:100%; height:140px; object-fit:cover; display:block; }
+.offer-body { padding:10px; }
+.offer-meta { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+.offer-discount { font-weight:800; color:var(--color-accent); }
+.offer-countdown { background:rgba(0,0,0,0.06); padding:6px 8px; border-radius:8px; font-weight:700; }
+.offer-card.top { border: 2px solid rgba(255, 107, 107, 0.12); }
+.offer-glow { position:absolute; top:10px; left:10px; background:linear-gradient(90deg,#ff8a65,#ff6b6b); color:#fff; padding:6px 10px; border-radius:16px; font-weight:800; box-shadow:0 8px 20px rgba(255,107,107,0.2); }
+
+/* small nav buttons */
+.offers-controls button { background:transparent; border:none; font-size:1.5rem; cursor:pointer; }
+
+/* make track scrollbar visible but small */
+.offers-track::-webkit-scrollbar { height:8px; }
+.offers-track::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.06); border-radius:8px; }
