@@ -8,6 +8,8 @@ const restaurantSchema = new mongoose.Schema({
   contact: { type: String },
   images: [String],
   approved: { type: Boolean, default: false },
+  // new status field: 'pending' | 'approved' | 'rejected'
+  status: { type: String, enum: ['pending','approved','rejected'], default: 'pending' },
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -12,18 +12,28 @@ function Restaurants() {
       .catch(console.error);
   }, []);
 
-  async function handleApprove(id) {
+  // accept either the whole row or an id string (DataTable passes the row)
+  async function handleApprove(item) {
+    const id = typeof item === 'string' ? item : (item && item._id);
+    if (!id) return console.error('No id provided to approve');
     try {
-      const res = await authFetch(`/api/admin/restaurants/${id}/approve`, { method: 'PUT' });
-      setData(d => d.map(x => x._id === id ? res : x));
+  await authFetch(`/api/admin/restaurants/${id}/approve`, { method: 'PUT' });
+  // Re-fetch full list to ensure consistent populated shapes
+  const list = await authFetch('/api/admin/restaurants');
+  setData(list);
     } catch (err) { console.error(err); }
   }
 
-  async function handleDelete(id) {
-    if (!window.confirm('Delete restaurant?')) return;
+  // Reject (mark as rejected)
+  async function handleReject(item) {
+    const id = typeof item === 'string' ? item : (item && item._id);
+    if (!id) return console.error('No id provided to reject');
+    if (!window.confirm('Reject this restaurant?')) return;
     try {
-      await authFetch(`/api/admin/restaurants/${id}`, { method: 'DELETE' });
-      setData(d => d.filter(x => x._id !== id));
+      await authFetch(`/api/admin/restaurants/${id}/reject`, { method: 'PUT' });
+      // Re-fetch full list to keep shapes consistent
+      const list = await authFetch('/api/admin/restaurants');
+      setData(list);
     } catch (err) { console.error(err); }
   }
 
@@ -31,9 +41,9 @@ function Restaurants() {
     <div className="restaurants-page">
       <h2>Restaurants</h2>
       <DataTable
-        columns={[{label:'Name',key:'name'},{label:'Owner',key:'ownerId'},{label:'Status',key:'approved'}]}
+        columns={[{label:'Name',key:'name'},{label:'Owner',key:'ownerId'},{label:'Status',key:'status'}]}
         data={data}
-        actions={[{label:'Approve',onClick:handleApprove},{label:'Delete',onClick:handleDelete}]}
+        actions={[{label:'Approve',onClick:handleApprove},{label:'Reject',onClick:handleReject}]}
       />
     </div>
   );

@@ -14,6 +14,7 @@ import ownerRestaurantsRoutes from './routes/ownerRestaurants.js';
 import ownerMenuRoutes from './routes/ownerMenu.js';
 import ownerTablesRoutes from './routes/ownerTables.js';
 import uploadsRoutes from './routes/uploads.js';
+import restaurantsRoutes from './routes/restaurants.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -38,6 +39,9 @@ app.use('/api/admin/analytics', analyticsRoutes);
 app.use('/api/owner/restaurants', ownerRestaurantsRoutes);
 app.use('/api/owner/menu', ownerMenuRoutes);
 app.use('/api/owner/tables', ownerTablesRoutes);
+
+// Public restaurants
+app.use('/api/restaurants', restaurantsRoutes);
 
 // serve uploads directory
 const __filename = fileURLToPath(import.meta.url);

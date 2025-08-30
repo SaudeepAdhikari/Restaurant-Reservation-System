@@ -1,12 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './Offers.css';
 
-const OFFERS = [
-  { id: 1, title: '20% off at Pizzeria Napoli', image: '/assets/offer-pizza.jpg', discount: '20%', endsAt: Date.now() + 1000 * 60 * 60 * 6, topDeal: true },
-  { id: 2, title: 'Buy 1 Get 1 - Cafe Mocha', image: '/assets/offer-cafe.jpg', discount: 'B1G1', endsAt: Date.now() + 1000 * 60 * 30, topDeal: false },
-  { id: 3, title: '30% off at Sushi Central', image: '/assets/offer-sushi.jpg', discount: '30%', endsAt: Date.now() + 1000 * 60 * 60 * 24, topDeal: true },
-  { id: 4, title: '15% off The Spice Route', image: '/assets/offer-indian.jpg', discount: '15%', endsAt: Date.now() + 1000 * 60 * 45, topDeal: false }
-];
+// Offers will be loaded from the backend (if available). No mocked data here.
 
 function formatRemaining(ms) {
   if (ms <= 0) return '00:00:00';
@@ -18,11 +13,29 @@ function formatRemaining(ms) {
 
 export default function Offers() {
   const [now, setNow] = useState(Date.now());
+  const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const trackRef = useRef(null);
 
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    const base = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+    fetch(`${base}/api/offers`)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(data => { if (mounted) setOffers(Array.isArray(data) ? data : []); })
+      .catch(err => { console.debug('No offers endpoint or failed to load offers', err); if (mounted) setOffers([]); })
+      .finally(() => { if (mounted) setLoading(false); });
+    return () => { mounted = false; };
   }, []);
 
   const slide = (dir=1) => {
@@ -41,15 +54,17 @@ export default function Offers() {
         </div>
       </div>
       <div className="offers-track" ref={trackRef}>
-        {OFFERS.map(o => (
+        {loading && <div style={{padding:16}}>Loading offers...</div>}
+        {!loading && offers.length === 0 && <div style={{padding:16}}>No offers found.</div>}
+        {!loading && offers.map(o => (
           <div key={o.id} className={`offer-card ${o.topDeal ? 'top' : ''}`}>
             {o.topDeal && <div className="offer-glow">Top Deal</div>}
-            <img src={o.image} alt={o.title} />
+            <img src={o.image || '/assets/placeholder.jpg'} alt={o.title} />
             <div className="offer-body">
               <h3>{o.title}</h3>
               <div className="offer-meta">
                 <div className="offer-discount">{o.discount}</div>
-                <div className="offer-countdown">{formatRemaining(o.endsAt - now)}</div>
+                <div className="offer-countdown">{formatRemaining((o.endsAt || 0) - now)}</div>
               </div>
             </div>
           </div>

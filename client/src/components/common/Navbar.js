@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from '../../styles/modules/Navbar.module.css';
 import HeaderDropdown from './HeaderDropdown';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -8,6 +9,7 @@ function Navbar() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userRef = useRef(null);
   const cuisinesRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -30,32 +32,53 @@ function Navbar() {
   }, []);
 
   const cuisines = ['Italian', 'Chinese', 'Indian', 'Mexican', 'Thai'];
+  // convert to action items that navigate within the SPA
+  const cuisineItems = cuisines.map((c) => ({
+    label: c,
+    action: () => {
+      setShowCuisines(false);
+      navigate(`/?cuisine=${encodeURIComponent(c)}`);
+    },
+  }));
+
   const userMenu = [
-    { label: 'Profile', action: () => (window.location.href = '/profile') },
-    { label: 'Bookings', action: () => (window.location.href = '/bookings') },
-    { label: 'Logout', action: () => console.log('logout clicked') },
+    { label: 'Profile', action: () => { setShowUserMenu(false); navigate('/profile'); } },
+    { label: 'Logout', action: () => { setShowUserMenu(false); console.log('logout clicked'); } },
   ];
+
+  // derive user initials from localStorage (fallback to 'U')
+  const [initials, setInitials] = useState('U');
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('user');
+      if (raw) {
+        const u = JSON.parse(raw);
+        const name = u.name || u.fullName || u.username || '';
+        if (name) {
+          const parts = name.trim().split(/\s+/);
+          const first = parts[0] ? parts[0].charAt(0).toUpperCase() : '';
+          const last = parts.length > 1 ? parts[parts.length-1].charAt(0).toUpperCase() : '';
+          setInitials((first + last) || 'U');
+          return;
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+    setInitials('U');
+  }, []);
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.logo}>Your Restro</div>
 
       <ul className={styles.navLinks}>
-        <li>Home</li>
+        <li role="button" tabIndex={0} onClick={() => navigate('/')}>Home</li>
 
-        <li
-          ref={cuisinesRef}
-          className={styles.dropdownTrigger}
-          onMouseEnter={() => setShowCuisines(true)}
-          onMouseLeave={() => setShowCuisines(false)}
-          onClick={() => setShowCuisines((s) => !s)}
-        >
-          Restaurants
-          <HeaderDropdown items={cuisines} visible={showCuisines} small />
-        </li>
+  <li role="button" tabIndex={0} onClick={() => navigate('/restaurants')}>Restaurants</li>
 
-        <li>Offers</li>
-        <li>Bookings</li>
+        <li role="button" tabIndex={0} onClick={() => navigate('/offers')}>Offers</li>
+        <li role="button" tabIndex={0} onClick={() => navigate('/booking/history')}>Bookings</li>
 
         <li ref={userRef} className={styles.avatarWrapper}>
           <button
@@ -63,18 +86,15 @@ function Navbar() {
             onClick={() => setShowUserMenu((s) => !s)}
             aria-haspopup="true"
             aria-expanded={showUserMenu}
+            aria-label="User menu"
           >
-            <img
-              src="/assets/avatar-placeholder.png"
-              alt="user avatar"
-              className={styles.avatarImg}
-            />
+            <div className={styles.avatarInitials} aria-hidden="true">{initials}</div>
           </button>
           <HeaderDropdown items={userMenu} visible={showUserMenu} />
         </li>
       </ul>
 
-      <button className={styles.loginBtn}>Login</button>
+      <button className={styles.loginBtn} onClick={() => navigate('/login')}>Login</button>
     </nav>
   );
 }

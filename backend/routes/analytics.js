@@ -11,7 +11,7 @@ router.get('/summary', verifyToken, adminOnly, async (req, res) => {
     const totalBookings = await Booking.countDocuments();
     const totalRestaurants = await Restaurant.countDocuments();
     const totalCustomers = await Customer.countDocuments();
-    const activeRestaurants = await Restaurant.countDocuments({ approved: true });
+  const activeRestaurants = await Restaurant.countDocuments({ status: 'approved' });
     res.json({ totalBookings, totalRestaurants, totalCustomers, activeRestaurants });
   } catch (err) { res.status(500).json({ message: 'Server error' }); }
 });

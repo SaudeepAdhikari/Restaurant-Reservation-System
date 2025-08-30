@@ -1,0 +1,60 @@
+/* Simple, modern grid for Restaurants page */
+.pageWrap {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7fbff 0%, #ffffff 100%);
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: #0b3a67;
+  margin: 0;
+}
+
+.sub {
+  color: #486b87;
+  margin: 0;
+}
+
+.gridSection {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 6px 18px rgba(16,40,80,0.06);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.msg, .msgError {
+  padding: 1rem 0.5rem;
+  color: #6b7280;
+}
+
+.msgError { color: #b91c1c; }
+
+/* tweak restaurant-card inside grid for consistent sizing */
+.restaurant-card.new {
+  height: 100%;
+}
+
+@media (min-width: 900px) {
+  .content { padding: 3rem 1.5rem; }
+  .header h1 { font-size: 2.4rem; }
+}

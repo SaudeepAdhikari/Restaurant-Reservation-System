@@ -7,11 +7,13 @@ function RestaurantCard({ restaurant, image, name, rating, cuisine, location, tr
   const data = restaurant || { image, name, rating, cuisine, location, trending };
   const [liked, setLiked] = useState(false);
 
+  const id = data._id || data.id || '';
+
   return (
     <div className={`restaurant-card new ${data.trending ? 'trending' : ''}`}>
-      <Link to={`/restaurant/${data.id || ''}`} className="card-link">
+      <Link to={`/restaurant/${id}`} className="card-link">
         <div className="card-media">
-          <img src={data.image} alt={data.name} className="card-image" />
+          <img src={(data.images && data.images[0]) || data.image || '/assets/placeholder.jpg'} alt={data.name} className="card-image" />
           <button className={`like-btn ${liked ? 'liked' : ''}`} onClick={(e) => { e.preventDefault(); setLiked(s => !s); }} aria-label="Save restaurant">❤</button>
           <div className="hover-cta">
             <button className="book-now">Book Now</button>

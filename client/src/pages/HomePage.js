@@ -1,18 +1,34 @@
-import React from 'react';
-import Navbar from '../components/common/Navbar';
+import React, { useEffect, useState } from 'react';
+// Navbar rendered globally in App.js
 import HeroTagline from '../components/HeroTagline';
 import HeroBackground from '../components/HeroBackground';
 import SearchBar from '../components/SearchBar';
 import CategoryCarousel from '../components/CategoryCarousel';
 import RestaurantCard from '../components/RestaurantCard';
 import Offers from '../components/Offers';
-import Footer from '../components/Footer';
 import styles from '../styles/modules/HomePage.module.css';
 
 function HomePage() {
+  const [restaurants, setRestaurants] = useState([]);
+  const [loadingRestaurants, setLoadingRestaurants] = useState(true);
+  const [restaurantsError, setRestaurantsError] = useState(null);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoadingRestaurants(true);
+    const base = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+    fetch(`${base}/api/restaurants`)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(data => { if (mounted) { setRestaurants(data || []); setRestaurantsError(null); } })
+      .catch(err => { console.error('Failed to fetch restaurants', err); if (mounted) { setRestaurants([]); setRestaurantsError(err.message || String(err)); } })
+      .finally(() => { if (mounted) setLoadingRestaurants(false); });
+    return () => { mounted = false; };
+  }, []);
   return (
     <div className={styles.homeWrapper}>
-      <Navbar />
       <section className={styles.heroSection}>
         <HeroBackground />
         <div className={styles.heroContent}>
@@ -29,42 +45,17 @@ function HomePage() {
           <div className="restaurant-grid-wrapper">
             <h2 style={{marginTop: '1.5rem', color: 'var(--color-dark)'}}>Popular near you</h2>
             <div className="restaurant-grid">
-              <RestaurantCard
-                name="Pizzeria Napoli"
-                rating={4.6}
-                cuisine="Italian"
-                location="Downtown"
-                image="/assets/pizza.jpg"
-              />
-              <RestaurantCard
-                name="The Spice Route"
-                rating={4.5}
-                cuisine="Indian"
-                location="Kathmandu"
-                image="/assets/indian.jpg"
-                trending
-              />
-              <RestaurantCard
-                name="Café Mocha"
-                rating={4.2}
-                cuisine="Café"
-                location="Riverside"
-                image="/assets/cafe.jpg"
-              />
-              <RestaurantCard
-                name="Sushi Central"
-                rating={4.7}
-                cuisine="Japanese"
-                location="Harbor"
-                image="/assets/sushi.jpg"
-              />
+              {loadingRestaurants && <p>Loading restaurants...</p>}
+              {restaurantsError && <p style={{color:'crimson'}}>Failed to load restaurants: {restaurantsError}</p>}
+              {!loadingRestaurants && !restaurantsError && restaurants.length === 0 && <p>No restaurants found.</p>}
+              {!loadingRestaurants && !restaurantsError && restaurants.map(r => (
+                <RestaurantCard key={r._id} restaurant={r} />
+              ))}
             </div>
           </div>
         </div>
       </section>
-      <Offers />
-      {/* Footer */}
-      <Footer />
+  <Offers />
       {/* Add carousel, banners, and more sections here */}
     </div>
   );

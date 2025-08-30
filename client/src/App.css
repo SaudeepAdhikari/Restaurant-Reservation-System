@@ -34,3 +34,9 @@ a {
 .btn-secondary:hover {
   background: #bdbdbd;
 }
+
+/* Layout to keep footer at bottom */
+html, body, #root { height: 100%; }
+.app-container { display:flex; flex-direction:column; min-height:100vh; }
+.page-content { flex:1 1 auto; }
+.page-content > * { min-height: 0; }

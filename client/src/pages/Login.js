@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Auth.css';
 
 function Login() {
@@ -9,7 +10,7 @@ function Login() {
         <input type="email" placeholder="Email" required />
         <input type="password" placeholder="Password" required />
         <button className="btn-primary" type="submit">Login</button>
-        <div className="auth-link">Don't have an account? <a href="/signup">Sign up</a></div>
+  <div className="auth-link">Don't have an account? <Link to="/signup">Sign up</Link></div>
       </form>
     </div>
   );
