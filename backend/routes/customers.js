@@ -78,4 +78,34 @@ router.get('/me', verifyToken, async (req, res) => {
   }
 });
 
+// Update current customer profile
+router.put('/me', verifyToken, async (req, res) => {
+  try {
+    const customerId = req.user.customerId;
+    if (!customerId) return res.status(403).json({ message: 'Access denied' });
+    const { firstName, lastName, phone, email, password } = req.body;
+    const update = {};
+    if (firstName) update.firstName = firstName;
+    if (lastName) update.lastName = lastName;
+    if (firstName || lastName) update.name = `${(firstName || '').trim()} ${(lastName || '').trim()}`.trim();
+    if (phone !== undefined) update.phone = phone;
+    if (email) {
+      // ensure email not used by another customer
+      const exists = await Customer.findOne({ email, _id: { $ne: customerId } });
+      if (exists) return res.status(409).json({ message: 'Email already in use' });
+      update.email = email;
+    }
+    if (password) {
+      const hash = await bcrypt.hash(password, 10);
+      update.password = hash;
+    }
+    const updated = await Customer.findByIdAndUpdate(customerId, update, { new: true }).select('-password');
+    if (!updated) return res.status(404).json({ message: 'Not found' });
+    res.json({ id: updated._id, firstName: updated.firstName, lastName: updated.lastName, phone: updated.phone, name: updated.name, email: updated.email, createdAt: updated.createdAt });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error.' });
+  }
+});
+
 export default router;
