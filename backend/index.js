@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 
 import authRoutes from './routes/auth.js';
@@ -15,14 +16,48 @@ import ownerMenuRoutes from './routes/ownerMenu.js';
 import ownerTablesRoutes from './routes/ownerTables.js';
 import uploadsRoutes from './routes/uploads.js';
 import restaurantsRoutes from './routes/restaurants.js';
+import customersRoutes from './routes/customers.js';
+import debugAuthRoutes from './routes/debugAuth.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
+// allow requests from configured origins with credentials (cookies)
+// Accept a comma-separated list in CLIENT_ORIGIN, e.g. "http://localhost:3000,http://localhost:3001"
+// In development allow the requesting Origin to be reflected back so credentialed
+// requests from multiple local frontends (e.g. localhost:3000 and localhost:3001)
+// are accepted. In production set a fixed origin or a stricter whitelist.
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin (curl, mobile apps)
+    if (!origin) return callback(null, true);
+    // reflect the request origin back — dev-friendly
+    return callback(null, origin);
+  },
+  credentials: true
+}));
 app.use(express.json());
+app.use(cookieParser());
+
+// Dev-friendly CORS fallback: reflect the request Origin and handle preflight
+// This ensures requests from multiple local frontends (eg. :3000 and :3001)
+// receive proper Access-Control-Allow-* headers. In production use a fixed origin whitelist.
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 // Auth routes
 app.use('/api/auth', authRoutes);
@@ -42,6 +77,10 @@ app.use('/api/owner/tables', ownerTablesRoutes);
 
 // Public restaurants
 app.use('/api/restaurants', restaurantsRoutes);
+// Customer auth and profile
+app.use('/api/customers', customersRoutes);
+// DEV debug endpoints
+app.use('/api/debug', debugAuthRoutes);
 
 // serve uploads directory
 const __filename = fileURLToPath(import.meta.url);

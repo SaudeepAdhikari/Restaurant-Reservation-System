@@ -1,32 +1,80 @@
 .hdr-dropdown {
   position: absolute;
   margin-top: 8px;
-  background: var(--color-white);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  border-radius: 8px;
+  background-color: #ffffff; /* opaque white */
+  box-shadow: 0 10px 30px rgba(22, 28, 37, 0.12);
+  border-radius: 12px;
   overflow: hidden;
-  min-width: 160px;
-  z-index: 220;
+  min-width: 180px;
+  z-index: 1200;
+  transform-origin: top right;
+  animation: dropdown-in 200ms cubic-bezier(.2,.9,.2,1);
+  border: 1px solid rgba(28,36,46,0.06);
 }
 
 .hdr-dropdown.small {
   min-width: 140px;
 }
 
+.hdr-dropdown::before {
+  /* small arrow */
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 14px;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  box-shadow: -2px -2px 6px rgba(22,28,37,0.04);
+  border-left: 1px solid rgba(28,36,46,0.04);
+  border-top: 1px solid rgba(28,36,46,0.04);
+}
+
 .hdr-dropdown ul {
   list-style: none;
   margin: 0;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
 }
 
 .hdr-item {
   padding: 0.6rem 1rem;
   cursor: pointer;
-  color: var(--color-dark);
-  font-weight: 500;
+  color: #1a202c; /* dark text */
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 140ms ease, color 140ms ease, transform 120ms ease;
 }
 
-.hdr-item:hover {
-  background: var(--color-muted);
-  color: var(--color-accent);
+.hdr-item + .hdr-item {
+  border-top: 1px solid rgba(28,36,46,0.04);
+}
+
+.hdr-item:hover,
+.hdr-item:focus {
+  background: linear-gradient(90deg, rgba(243,250,255,0.8), rgba(247,251,255,0.9));
+  color: #0b6b5a; /* accent color on hover */
+  transform: translateY(-1px);
+}
+
+.hdr-item:active {
+  transform: translateY(0);
+}
+
+/* keyboard focus outline for accessibility */
+.hdr-item:focus-visible {
+  outline: 3px solid rgba(11,107,90,0.12);
+  outline-offset: -3px;
+}
+
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes dropdown-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(-6px) scale(0.98); }
 }

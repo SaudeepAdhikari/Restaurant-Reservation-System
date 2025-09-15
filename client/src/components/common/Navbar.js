@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from '../../styles/modules/Navbar.module.css';
 import HeaderDropdown from './HeaderDropdown';
+import ConfirmModal from './ConfirmModal';
 import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
@@ -41,39 +42,46 @@ function Navbar() {
     },
   }));
 
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   const userMenu = [
     { label: 'Profile', action: () => { setShowUserMenu(false); navigate('/profile'); } },
-    { label: 'Logout', action: () => { setShowUserMenu(false); console.log('logout clicked'); } },
+    { label: 'Logout', action: () => { setShowUserMenu(false); setConfirmOpen(true); } },
   ];
 
-  // derive user initials from localStorage (fallback to 'U')
+  const doLogout = () => {
+    const base = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+    fetch(`${base}/api/customers/logout`, { method: 'POST', credentials: 'include' })
+      .finally(() => {
+        setConfirmOpen(false);
+        navigate('/login');
+      });
+  };
+
+  // derive user initials from server-side profile
   const [initials, setInitials] = useState('U');
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('user');
-      if (raw) {
-        const u = JSON.parse(raw);
-        const name = u.name || u.fullName || u.username || '';
-        if (name) {
-          const parts = name.trim().split(/\s+/);
-          const first = parts[0] ? parts[0].charAt(0).toUpperCase() : '';
-          const last = parts.length > 1 ? parts[parts.length-1].charAt(0).toUpperCase() : '';
-          setInitials((first + last) || 'U');
-          return;
-        }
-      }
-    } catch (e) {
-      // ignore
-    }
-    setInitials('U');
+    let mounted = true;
+    const base = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+    fetch(`${base}/api/customers/me`, { credentials: 'include' })
+      .then(res => res.ok ? res.json() : null)
+      .then(u => {
+        if (!mounted || !u) return;
+        const name = u.name || '';
+        const parts = name.trim().split(/\s+/);
+        const first = parts[0] ? parts[0].charAt(0).toUpperCase() : '';
+        const last = parts.length > 1 ? parts[parts.length-1].charAt(0).toUpperCase() : '';
+        setInitials((first + last) || 'U');
+      }).catch(() => {}).finally(() => { mounted = false; });
+    return () => { mounted = false; };
   }, []);
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
       <div className={styles.logo}>Your Restro</div>
 
-      <ul className={styles.navLinks}>
-        <li role="button" tabIndex={0} onClick={() => navigate('/')}>Home</li>
+  <ul className={styles.navLinks}>
+  <li role="button" tabIndex={0} onClick={() => navigate('/dashboard')}>Home</li>
 
   <li role="button" tabIndex={0} onClick={() => navigate('/restaurants')}>Restaurants</li>
 
@@ -95,6 +103,7 @@ function Navbar() {
       </ul>
 
       <button className={styles.loginBtn} onClick={() => navigate('/login')}>Login</button>
+  <ConfirmModal show={confirmOpen} title="Logout" message="Are you sure you want to logout?" onConfirm={doLogout} onCancel={() => setConfirmOpen(false)} />
     </nav>
   );
 }

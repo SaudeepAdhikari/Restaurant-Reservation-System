@@ -2,12 +2,26 @@ import jwt from 'jsonwebtoken';
 const JWT_SECRET = process.env.JWT_SECRET || 'changeme';
 
 export function verifyToken(req, res, next) {
+  // Try Authorization header first
   const auth = req.headers.authorization || req.headers.Authorization;
-  if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ message: 'Missing token' });
-  const token = auth.split(' ')[1];
+  let token = null;
+  if (auth && auth.startsWith('Bearer ')) {
+    token = auth.split(' ')[1];
+  } else if (req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+  } else if (req.headers.cookie) {
+    // fallback simple cookie parse if cookie-parser not present
+    const parts = req.headers.cookie.split(';').map(p => p.trim());
+    for (const p of parts) {
+      if (p.startsWith('token=')) {
+        token = decodeURIComponent(p.split('=')[1]);
+        break;
+      }
+    }
+  }
+  if (!token) return res.status(401).json({ message: 'Missing token' });
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    // decoded may contain adminId or ownerId and role
     req.user = decoded;
     next();
   } catch (err) {
