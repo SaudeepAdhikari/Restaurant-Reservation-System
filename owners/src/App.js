@@ -6,6 +6,7 @@ import Tables from './pages/Tables';
 import Menu from './pages/Menu';
 import Bookings from './pages/Bookings';
 import Profile from './pages/Profile';
+import Offers from './pages/Offers';
 import RestaurantsList from './pages/RestaurantsList';
 import RestaurantForm from './pages/RestaurantForm';
 import TablesList from './pages/TablesList';
@@ -55,6 +56,7 @@ function App() {
             <Route path="/restaurant/:id" element={<RestaurantForm />} />
             <Route path="/restaurant/new" element={<RestaurantForm />} />
             <Route path="/tables" element={<TablesList />} />
+            <Route path="/offers" element={<Offers />} />
             <Route path="/tables/new" element={<TableForm />} />
             <Route path="/menu" element={<MenuList />} />
             <Route path="/menu/new" element={<MenuForm />} />

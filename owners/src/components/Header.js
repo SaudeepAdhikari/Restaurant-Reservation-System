@@ -10,6 +10,7 @@ function Header({ title, onProfile, onLogout }) {
     { label: 'Dashboard', to: '/' },
     { label: 'Restaurants', to: '/restaurants' },
     { label: 'Menu', to: '/menu' },
+    { label: 'Offers', to: '/offers' },
     { label: 'Tables', to: '/tables' },
     { label: 'Bookings', to: '/bookings' },
   ];

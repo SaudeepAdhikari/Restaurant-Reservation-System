@@ -15,7 +15,9 @@ import ownerRestaurantsRoutes from './routes/ownerRestaurants.js';
 import ownerMenuRoutes from './routes/ownerMenu.js';
 import ownerTablesRoutes from './routes/ownerTables.js';
 import uploadsRoutes from './routes/uploads.js';
+import ownerOffersRoutes from './routes/ownerOffers.js';
 import restaurantsRoutes from './routes/restaurants.js';
+import offersRoutes from './routes/offers.js';
 import customersRoutes from './routes/customers.js';
 import debugAuthRoutes from './routes/debugAuth.js';
 import path from 'path';
@@ -74,9 +76,12 @@ app.use('/api/admin/analytics', analyticsRoutes);
 app.use('/api/owner/restaurants', ownerRestaurantsRoutes);
 app.use('/api/owner/menu', ownerMenuRoutes);
 app.use('/api/owner/tables', ownerTablesRoutes);
+app.use('/api/owner/offers', ownerOffersRoutes);
 
 // Public restaurants
 app.use('/api/restaurants', restaurantsRoutes);
+// Public offers
+app.use('/api/offers', offersRoutes);
 // Customer auth and profile
 app.use('/api/customers', customersRoutes);
 // DEV debug endpoints
