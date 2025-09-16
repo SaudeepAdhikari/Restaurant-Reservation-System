@@ -20,6 +20,9 @@ import restaurantsRoutes from './routes/restaurants.js';
 import offersRoutes from './routes/offers.js';
 import customersRoutes from './routes/customers.js';
 import debugAuthRoutes from './routes/debugAuth.js';
+import tablesRoutes from './routes/tables.js';
+import bookingsRoutes from './routes/bookings.js';
+import ownerBookingsRoutes from './routes/ownerBookings.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -80,8 +83,14 @@ app.use('/api/owner/offers', ownerOffersRoutes);
 
 // Public restaurants
 app.use('/api/restaurants', restaurantsRoutes);
+// Public tables
+app.use('/api/tables', tablesRoutes);
 // Public offers
 app.use('/api/offers', offersRoutes);
+// Bookings (customer)
+app.use('/api/bookings', bookingsRoutes);
+// Owner bookings and table controls
+app.use('/api/owner/bookings', ownerBookingsRoutes);
 // Customer auth and profile
 app.use('/api/customers', customersRoutes);
 // DEV debug endpoints

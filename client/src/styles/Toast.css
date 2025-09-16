@@ -1,0 +1,24 @@
+.app-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  z-index: 2000;
+  cursor: pointer;
+}
+
+.app-toast.in { animation: toast-in 240ms ease-out both; }
+.app-toast.out { animation: toast-out 240ms ease-in both; }
+
+@keyframes toast-in {
+  from { transform: translateY(8px) scale(.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes toast-out {
+  from { transform: translateY(0) scale(1); opacity: 1; }
+  to { transform: translateY(8px) scale(.98); opacity: 0; }
+}

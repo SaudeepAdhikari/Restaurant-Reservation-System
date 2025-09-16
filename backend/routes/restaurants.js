@@ -15,4 +15,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get a single restaurant by id
+router.get('/:id', async (req, res) => {
+  try {
+    const r = await Restaurant.findById(req.params.id);
+    if (!r) return res.status(404).json({ message: 'Not found' });
+    res.json(r);
+  } catch (err) {
+    console.error('Failed to fetch restaurant by id', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 export default router;

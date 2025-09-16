@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { ToastProvider } from './components/common/ToastContext';
 import HomePage from './pages/HomePage';
 import RestaurantDetail from './pages/RestaurantDetail';
 import Login from './pages/Login';
@@ -19,6 +20,7 @@ function App() {
     const hideHeaderFooter = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/signup';
 
     return (
+      <ToastProvider>
       <div className="app-container">
         {!hideHeaderFooter && <Navbar />}
         <div className="page-content">
@@ -54,6 +56,11 @@ function App() {
                 <BookingConfirmation />
               </ProtectedRoute>
             } />
+            <Route path="/booking/confirmation/:id" element={
+              <ProtectedRoute>
+                <BookingConfirmation />
+              </ProtectedRoute>
+            } />
             <Route path="/booking/history" element={
               <ProtectedRoute>
                 <BookingHistory />
@@ -65,6 +72,7 @@ function App() {
   </div>
   {!hideHeaderFooter && <Footer />}
       </div>
+      </ToastProvider>
     );
 }
 

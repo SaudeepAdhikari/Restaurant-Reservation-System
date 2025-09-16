@@ -16,6 +16,17 @@ function TablesList() {
     }).catch(console.error);
   }, []);
 
+  const toggleAvailability = async (tableId, current) => {
+    try {
+      await authFetch(`/api/owner/bookings/tables/${tableId}/availability`, { method: 'PUT', body: JSON.stringify({ available: !current }) });
+      // simple refresh
+      setList(list.map(l => l._id === tableId ? { ...l, available: !current } : l));
+    } catch (err) {
+      console.error('Failed to update availability', err);
+      alert(err.message || 'Failed to update');
+    }
+  };
+
   return (
     <div className="tables-page">
       <h2>Your Tables</h2>
@@ -26,10 +37,12 @@ function TablesList() {
             <div>
               <strong>{t.name}</strong>
               <div className="muted small">Capacity: {t.capacity}</div>
+              <div className="muted small">Status: {t.available ? 'Available' : 'Unavailable'}</div>
             </div>
             <div className="card-actions">
               <button className="small-btn">Edit</button>
               <button className="small-btn danger-btn">Delete</button>
+              <button className="small-btn" onClick={() => toggleAvailability(t._id, t.available)}>{t.available ? 'Mark Unavailable' : 'Mark Available'}</button>
             </div>
           </div>
         ))}

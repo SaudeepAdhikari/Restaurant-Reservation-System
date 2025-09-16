@@ -24,6 +24,23 @@ import { getToken } from './utils/auth';
 function App() {
   const [token, setToken] = useState(getToken());
 
+  // verify token server-side on mount (prevents stale tokens from bypassing login)
+  React.useEffect(() => {
+    if (!token) return;
+    (async () => {
+      try {
+        const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error('invalid');
+      } catch (err) {
+        // invalid token — clear and show login
+        try { localStorage.removeItem('owner_token'); } catch(e){}
+        setToken(null);
+      }
+    })();
+  }, []);
+
   // clear token when other parts of the app dispatch app:logout (e.g. on 401)
   React.useEffect(() => {
     function onGlobalLogout() { setToken(null); }
