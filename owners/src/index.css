@@ -1,6 +1,10 @@
+@import './styles/design.css';
+@import './styles/theme-overrides.css';
+
 body {
   margin: 0;
-  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
-  background: #f4f7fa;
+  /* Inter will be used from theme overrides; keep fallback fonts */
+  font-family: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
+  background: var(--background, #f4f7fa);
   color: #1a2233;
 }

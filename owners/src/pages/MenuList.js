@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { authFetch } from '../utils/auth';
 import '../styles/RestaurantDetails.css';
 
@@ -7,7 +8,19 @@ function MenuList() {
   const [selected, setSelected] = useState('');
   const [items, setItems] = useState([]);
   const [form, setForm] = useState({ name: '', description: '', price: '', image: null });
+  const [preview, setPreview] = useState(null);
+  const prevUrlRef = useRef(null);
+  const fileRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // if coming back from uploader, accept the uploaded image path
+  useEffect(() => {
+    if (location && location.state && location.state.uploadedImage) {
+      setForm(f => ({ ...f, image: location.state.uploadedImage }));
+    }
+  }, [location]);
 
   useEffect(() => {
     authFetch('/api/owner/restaurants')
@@ -30,7 +43,22 @@ function MenuList() {
 
   function handleChange(e) {
     const { name, value, files } = e.target;
-    setForm(f => ({ ...f, [name]: files ? files[0] : value }));
+    if (files) {
+      const file = files[0] || null;
+      setForm(f => ({ ...f, [name]: file }));
+      if (file) {
+        const url = URL.createObjectURL(file);
+        if (prevUrlRef.current) URL.revokeObjectURL(prevUrlRef.current);
+        prevUrlRef.current = url;
+        setPreview(url);
+      } else {
+        if (prevUrlRef.current) URL.revokeObjectURL(prevUrlRef.current);
+        prevUrlRef.current = null;
+        setPreview(null);
+      }
+    } else {
+      setForm(f => ({ ...f, [name]: value }));
+    }
   }
 
   async function uploadImage(file) {
@@ -73,7 +101,7 @@ function MenuList() {
     <div>
       <h2>Your Menu Items</h2>
 
-      <div style={{display:'flex', gap:12, alignItems:'center', marginBottom:12}}>
+  <div style={{display:'flex', gap:12, alignItems:'center', marginBottom:12}}>
         <label style={{margin:0}}>
           Restaurant
           <select value={selected} onChange={e => setSelected(e.target.value)} style={{marginLeft:8}}>
@@ -81,22 +109,24 @@ function MenuList() {
             {restaurants.map(r => <option key={r._id} value={r._id}>{r.name}</option>)}
           </select>
         </label>
-        <div style={{marginLeft:'auto'}}>
-          <small className="muted">Selected restaurant is required to add items</small>
+        <div style={{marginLeft:'auto', display:'flex', gap:12, alignItems:'center'}}>
+          <button type="button" className="upload-menu-cta" onClick={() => navigate('/upload-menu')}>Upload Menu Item</button>
+          <small className="muted">Select a restaurant, then add menu items via the Upload Menu page</small>
         </div>
       </div>
-
-      <form className="details-form" onSubmit={handleSubmit} style={{marginBottom:18}}>
-        <div style={{display:'flex', gap:12}}>
-          <input name="name" placeholder="Name" value={form.name} onChange={handleChange} />
-          <input name="price" placeholder="Price" type="number" value={form.price} onChange={handleChange} />
+      <div style={{marginBottom:18}}>
+        <div className="menu-form-card" style={{padding:16}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+            <div>
+              <h4 style={{margin:0}}>Add a new menu item</h4>
+              <div className="small muted">Use the Upload Menu page to add name, price and image</div>
+            </div>
+            <div>
+              <div className="small muted">Or click the Upload Menu Item button above to add a new item.</div>
+            </div>
+          </div>
         </div>
-        <textarea name="description" placeholder="Description" value={form.description} onChange={handleChange} />
-        <input name="image" type="file" accept="image/*" onChange={handleChange} />
-        <div>
-          <button className="btn-primary" type="submit" disabled={loading}>{loading ? 'Adding...' : 'Add Menu Item'}</button>
-        </div>
-      </form>
+      </div>
 
       <div className="menu-grid">
         {items.map(i => (

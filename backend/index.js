@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import { apiLimiter } from './middleware/rateLimiter.js';
+import logger from './utils/logger.js';
 
 import authRoutes from './routes/auth.js';
 import adminAuthRoutes from './routes/adminAuth.js';
@@ -46,6 +48,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
+
+// Apply rate limiting to all requests
+app.use(apiLimiter);
 
 // Dev-friendly CORS fallback: reflect the request Origin and handle preflight
 // This ensures requests from multiple local frontends (eg. :3000 and :3001)
@@ -94,7 +99,12 @@ app.use('/api/owner/bookings', ownerBookingsRoutes);
 // Customer auth and profile
 app.use('/api/customers', customersRoutes);
 // DEV debug endpoints
-app.use('/api/debug', debugAuthRoutes);
+// Only enable debug routes in development
+if (process.env.NODE_ENV !== 'production') {
+  // Add a warning about debug routes being enabled
+  logger.warn('Debug authentication routes are enabled - these should NOT be used in production!');
+  app.use('/api/debug', debugAuthRoutes);
+}
 
 // serve uploads directory
 const __filename = fileURLToPath(import.meta.url);
@@ -109,9 +119,9 @@ mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
-  console.log('MongoDB connected');
+  logger.info('MongoDB connected');
 }).catch(err => {
-  console.error('MongoDB connection error:', err);
+  logger.error(`MongoDB connection error: ${err.message}`);
 });
 
 app.get('/', (req, res) => {
@@ -119,5 +129,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`);
+  logger.info(`Server running on http://0.0.0.0:${PORT}`);
 });

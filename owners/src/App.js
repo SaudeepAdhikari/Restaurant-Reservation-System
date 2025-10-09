@@ -13,6 +13,7 @@ import TablesList from './pages/TablesList';
 import TableForm from './pages/TableForm';
 import MenuList from './pages/MenuList';
 import MenuForm from './pages/MenuForm';
+import UploadMenu from './pages/UploadMenu';
 // Sidebar removed per request
 import Header from './components/Header';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -77,6 +78,7 @@ function App() {
             <Route path="/tables/new" element={<TableForm />} />
             <Route path="/menu" element={<MenuList />} />
             <Route path="/menu/new" element={<MenuForm />} />
+            <Route path="/upload-menu" element={<UploadMenu />} />
             <Route path="/restaurant" element={<RestaurantDetails />} />
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/settings" element={<Navigate to="/profile" replace />} />
