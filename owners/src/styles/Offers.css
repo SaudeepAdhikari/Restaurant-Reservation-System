@@ -1,13 +1,401 @@
-.offers-page{ padding:24px; }
-.offers-content{ display:grid; grid-template-columns: 360px 1fr; gap:20px; align-items:start }
-.offers-form-card, .offers-list-card{ background:var(--card); padding:18px; border-radius:12px; box-shadow:var(--shadow); flex:1 }
-.offers-form input, .offers-form textarea, .offers-form select{ width:100%; padding:10px 12px; margin-bottom:10px; border-radius:10px; border:1px solid rgba(15,23,42,0.06); background:#fff }
-.btn-primary{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; padding:10px 14px; border-radius:10px; border:none }
-.offer-item{ border-bottom:1px solid rgba(15,23,42,0.04); padding:14px 0 }
-.offer-title{ font-weight:700; color:var(--text) }
-.offer-desc{ color:var(--muted); margin-top:6px }
-.offer-meta{ color:var(--muted); font-size:0.9rem; margin-top:8px }
+/* Offers Page - Modern Restaurant Owner Dashboard Styling */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-@media (max-width:920px){
-	.offers-content{ grid-template-columns: 1fr; }
+:root {
+  --accent: #23305a;
+  --highlight: #ffd700;
+  --background: #f9fafc;
+  --text: #1a2233;
+  --muted: #6b7280;
+  --card-bg: #ffffff;
+  --border-radius: 16px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --btn-gradient: linear-gradient(90deg, #23305a 0%, #ffd700 100%);
+  --transition: all 0.25s ease;
+}
+
+.offers-page {
+  padding: 32px;
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background);
+  min-height: 100%;
+  position: relative;
+}
+
+.offers-page:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 240px;
+  background: linear-gradient(135deg, rgba(35, 48, 90, 0.03) 25%, transparent 25%) -20px 0,
+              linear-gradient(225deg, rgba(35, 48, 90, 0.03) 25%, transparent 25%) -20px 0,
+              linear-gradient(315deg, rgba(35, 48, 90, 0.03) 25%, transparent 25%),
+              linear-gradient(45deg, rgba(35, 48, 90, 0.03) 25%, transparent 25%);
+  background-size: 40px 40px;
+  z-index: 0;
+}
+
+/* Ensure content is above pattern */
+.offers-header, .offers-content {
+  position: relative;
+  z-index: 1;
+}
+
+.offers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.offers-header h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Create Offer Button - Large and Prominent */
+.create-offer-btn {
+  background: var(--btn-gradient);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 12px 24px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(35, 48, 90, 0.2);
+  transition: var(--transition);
+  display: inline-block;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+.create-offer-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(35, 48, 90, 0.3);
+}
+
+/* Content Layout - Form Hidden By Default, Will Be Toggled By Existing Logic */
+.offers-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* Form Card Styling */
+.offers-form-card {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
+  display: none; /* Hidden by default */
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.offers-form-card.active {
+  display: block;
+  max-height: 3000px; /* Large enough to show all content */
+  opacity: 1;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.offers-form-card h3 {
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: var(--accent);
+}
+
+.offers-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.offers-form input, 
+.offers-form textarea, 
+.offers-form select {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  background: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+/* Special styling for file inputs */
+.offers-form input[type="file"] {
+  padding: 10px;
+  background: rgba(35, 48, 90, 0.02);
+  border: 1px dashed rgba(35, 48, 90, 0.2);
+  cursor: pointer;
+}
+
+.offers-form input[type="file"]:hover {
+  background: rgba(35, 48, 90, 0.05);
+}
+
+/* Date inputs */
+.offers-form input[type="date"] {
+  color: var(--text);
+}
+
+/* Number inputs */
+.offers-form input[type="number"] {
+  appearance: textfield;
+}
+
+.offers-form input:focus, 
+.offers-form textarea:focus, 
+.offers-form select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(35, 48, 90, 0.1);
+}
+
+.offers-form .actions {
+  margin-top: 24px;
+}
+
+.btn-primary {
+  background: var(--btn-gradient);
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(35, 48, 90, 0.2);
+}
+
+.btn-primary:focus {
+  outline: 2px solid var(--highlight);
+  outline-offset: 2px;
+}
+
+/* Button ripple effect */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%, -50%);
+  transform-origin: 50% 50%;
+}
+
+.btn-primary:active::after {
+  animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scale(25, 25);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(50, 50);
+    opacity: 0;
+  }
+}
+
+/* Offers List Card Styling */
+.offers-list-card {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+.offers-list-card h3 {
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: var(--accent);
+}
+
+.offers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.offer-item {
+  background: var(--background);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  transition: var(--transition);
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.offer-item:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 5px;
+  background: var(--btn-gradient);
+  opacity: 0.7;
+  transition: var(--transition);
+}
+
+.offer-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+}
+
+.offer-item:hover:before {
+  width: 8px;
+}
+
+.offer-main {
+  margin-bottom: 16px;
+}
+
+.offer-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.offer-desc {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 4.5em;
+}
+
+.offer-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.offer-promo {
+  margin-top: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.85rem;
+  display: inline-block;
+  background: rgba(35, 48, 90, 0.05);
+  padding: 6px 12px;
+  border-radius: 30px;
+}
+
+/* Highlight discount percentages with a class that can be added by JS */
+.offer-promo-discount {
+  background: rgba(255, 215, 0, 0.15);
+  color: #b8860b;
+}
+
+/* Style for percentage text */
+.offer-promo span {
+  font-weight: 700;
+}
+
+.error {
+  background: rgba(255, 0, 0, 0.05);
+  color: #e53e3e;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.loading-indicator {
+  color: var(--muted);
+  text-align: center;
+  padding: 30px;
+  font-size: 0.9rem;
+  background: rgba(35, 48, 90, 0.02);
+  border-radius: 12px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+  font-size: 1rem;
+  background: rgba(35, 48, 90, 0.02);
+  border-radius: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 920px) {
+  .offers-page {
+    padding: 20px;
+  }
+  
+  .offers-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .offers-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .offers-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .create-offer-btn {
+    width: 100%;
+    text-align: center;
+  }
 }

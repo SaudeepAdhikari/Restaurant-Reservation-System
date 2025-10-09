@@ -36,38 +36,41 @@ const app = express();
 // In development allow the requesting Origin to be reflected back so credentialed
 // requests from multiple local frontends (e.g. localhost:3000 and localhost:3001)
 // are accepted. In production set a fixed origin or a stricter whitelist.
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+const CLIENT_ORIGINS = (process.env.CLIENT_ORIGIN || 'http://localhost:3000,http://localhost:3001,http://localhost:3002').split(',');
 app.use(cors({
   origin: function(origin, callback) {
     // allow requests with no origin (curl, mobile apps)
     if (!origin) return callback(null, true);
-    // reflect the request origin back — dev-friendly
-    return callback(null, origin);
+    
+    // In development mode, allow any origin for testing
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, origin);
+    }
+    
+    // In production, check against whitelist
+    if (CLIENT_ORIGINS.indexOf(origin) !== -1) {
+      return callback(null, origin);
+    } else {
+      return callback(null, CLIENT_ORIGINS[0]); // default to first origin
+    }
   },
-  credentials: true
+  credentials: true,
+  optionsSuccessStatus: 200 // some legacy browsers choke on 204
 }));
 app.use(express.json());
 app.use(cookieParser());
 
+// Debug middleware to log requests - only log essential information
+app.use((req, res, next) => {
+  // Only log the HTTP method and path without sensitive headers
+  logger.debug(`${req.method} ${req.path}`);
+  next();
+});
+
 // Apply rate limiting to all requests
 app.use(apiLimiter);
 
-// Dev-friendly CORS fallback: reflect the request Origin and handle preflight
-// This ensures requests from multiple local frontends (eg. :3000 and :3001)
-// receive proper Access-Control-Allow-* headers. In production use a fixed origin whitelist.
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (origin) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
-  next();
-});
+// No need for a second CORS handler - the cors middleware above handles this
 
 // Auth routes
 app.use('/api/auth', authRoutes);

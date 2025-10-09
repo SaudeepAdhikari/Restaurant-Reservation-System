@@ -2,10 +2,10 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import logger from '../utils/logger.js';
 
-// Load JWT secret from environment or generate a strong one if not set
+// Load JWT secret from environment or use a consistent default for development
 const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' 
   ? (() => { throw new Error('JWT_SECRET must be set in production environment') })() 
-  : crypto.randomBytes(64).toString('hex'));
+  : 'restaurant-reservation-system-dev-secret-key');
 
 // Set token expiration based on environment
 const TOKEN_EXPIRY = process.env.NODE_ENV === 'production' ? '1d' : '7d';
@@ -39,13 +39,29 @@ export const setTokenCookie = (res, token) => {
   const tokenData = jwt.decode(token);
   const expiresIn = tokenData.exp - tokenData.iat;
   
-  res.cookie('token', token, {
+  // Configure cookie settings for better cross-origin compatibility
+  // In development, use permissive settings
+  // In production, use strict settings
+  const cookieOptions = {
     httpOnly: true,
     maxAge: expiresIn * 1000, // convert to milliseconds
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
     path: '/',
-  });
+  };
+  
+  // For development (localhost or cross-origin testing)
+  if (process.env.NODE_ENV !== 'production') {
+    cookieOptions.sameSite = 'none';
+    cookieOptions.secure = true; // Required for sameSite=none even in development
+  } else {
+    // For production
+    cookieOptions.sameSite = 'strict';
+    cookieOptions.secure = true;
+  }
+  
+  res.cookie('token', token, cookieOptions);
+  
+  // Log cookie settings for debugging
+  logger.debug(`Setting auth cookie: maxAge=${expiresIn * 1000}, sameSite=${process.env.NODE_ENV === 'production' ? 'strict' : 'none'}, secure=${process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development'}`);
 };
 
 /**
@@ -93,7 +109,8 @@ export function verifyToken(req, res, next) {
     req.user = decoded;
     next();
   } catch (err) {
-    logger.warn(`Token verification failed: ${err.message}`);
+    // Log the error with additional context but redact the actual token
+    logger.warn(`Token verification failed: ${err.message}, path: ${req.path}, method: ${req.method}`);
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 }
@@ -103,6 +120,7 @@ export function verifyToken(req, res, next) {
  */
 export function adminOnly(req, res, next) {
   if (!req.user || req.user.role !== 'admin') {
+    logger.warn(`Unauthorized admin access attempt: ${JSON.stringify(req.user)}`);
     return res.status(403).json({ message: 'Admin access required' });
   }
   next();
@@ -112,7 +130,8 @@ export function adminOnly(req, res, next) {
  * Owner only middleware
  */
 export function ownerOnly(req, res, next) {
-  if (!req.user || !req.user.ownerId) {
+  if (!req.user || !req.user.ownerId || req.user.role !== 'owner') {
+    logger.warn(`Unauthorized owner access attempt: ${JSON.stringify(req.user)}`);
     return res.status(403).json({ message: 'Owner access required' });
   }
   next();

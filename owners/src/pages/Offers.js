@@ -8,6 +8,7 @@ export default function Offers() {
   const [err, setErr] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [showForm, setShowForm] = useState(false); // Add state to control form visibility
   const [form, setForm] = useState({ restaurantId: '', title: '', description: '', image: '', startDate: '', endDate: '', promoCode: '', discountPercent: '' });
 
   useEffect(() => {
@@ -52,19 +53,43 @@ export default function Offers() {
     e.preventDefault();
     setErr(null);
     try {
-      const created = await authFetch('/api/owner/offers', { method: 'POST', body: JSON.stringify(form) });
+      // Debug log to verify form data
+      console.log('Submitting offer data:', form);
+      
+      // Make sure numeric fields are properly converted
+      const processedForm = {
+        ...form,
+        discountPercent: form.discountPercent ? Number(form.discountPercent) : undefined
+      };
+      
+      const created = await authFetch('/api/owner/offers', { 
+        method: 'POST', 
+        body: JSON.stringify(processedForm)
+      });
+      
+      console.log('Offer created:', created);
       setOffers(o => [created, ...o]);
-      setForm({ restaurantId: '', title: '', description: '', image: '', startDate: '', endDate: '' });
-    } catch (err) { setErr(err.message); }
+      setForm({ restaurantId: '', title: '', description: '', image: '', startDate: '', endDate: '', promoCode: '', discountPercent: '' });
+      setShowForm(false); // Hide the form after successful submission
+    } catch (err) { 
+      console.error('Error creating offer:', err);
+      setErr(err.message || 'Failed to create offer'); 
+    }
   }
 
   return (
     <div className="offers-page">
       <div className="offers-header">
         <h2>Offers</h2>
+        <button 
+          className="create-offer-btn" 
+          onClick={() => setShowForm(prev => !prev)}
+        >
+          {showForm ? "Cancel" : "+ Create Offer"}
+        </button>
       </div>
       <div className="offers-content">
-        <div className="offers-form-card">
+        <div className={`offers-form-card ${showForm ? 'active' : ''}`}>
           <h3>Create Offer</h3>
           {err && <div className="error">{err}</div>}
           <form onSubmit={onSubmit} className="offers-form">
@@ -96,8 +121,8 @@ export default function Offers() {
         </div>
         <div className="offers-list-card">
           <h3>Your Offers</h3>
-          {loading && <div>Loading...</div>}
-          {!loading && offers.length === 0 && <div>No offers yet.</div>}
+          {loading && <div className="loading-indicator">Loading...</div>}
+          {!loading && offers.length === 0 && <div className="empty-state">No offers yet.</div>}
           <div className="offers-list">
             {offers.map(o => (
               <div className="offer-item" key={o._id}>
@@ -107,7 +132,10 @@ export default function Offers() {
                 </div>
                 <div className="offer-meta">{o.restaurantId && o.restaurantId.name ? o.restaurantId.name : 'Restaurant'} • {o.startDate ? new Date(o.startDate).toLocaleDateString() : '—'} - {o.endDate ? new Date(o.endDate).toLocaleDateString() : '—'}</div>
                 {(o.promoCode || o.discountPercent) && (
-                  <div className="offer-promo small">{o.promoCode ? `Code: ${o.promoCode}` : ''} {o.discountPercent ? ` • ${o.discountPercent}% off` : ''}</div>
+                  <div className={`offer-promo small ${o.discountPercent ? 'offer-promo-discount' : ''}`}>
+                    {o.promoCode ? `Code: ${o.promoCode}` : ''} 
+                    {o.discountPercent ? <> • <span>{o.discountPercent}% off</span></> : ''}
+                  </div>
                 )}
               </div>
             ))}

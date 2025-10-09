@@ -20,47 +20,151 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import { getToken } from './utils/auth';
+import { getToken, removeToken } from './utils/auth';
 
 function App() {
-  const [token, setToken] = useState(getToken());
+  // Don't initialize with getToken() as cookies can't be accessed via JS
+  const [token, setToken] = useState(null);
+  // Add loading state to prevent flashing login screen during auth check
+  const [loading, setLoading] = useState(true);
 
-  // verify token server-side on mount (prevents stale tokens from bypassing login)
+  // Verify token server-side on mount with improved error handling and retry
   React.useEffect(() => {
-    if (!token) return;
-    (async () => {
+    let isMounted = true; // Track if component is still mounted
+    
+    const checkAuthStatus = async () => {
       try {
-        const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/auth/me', {
-          headers: { Authorization: `Bearer ${token}` }
+        console.log('Checking authentication status on app load...');
+        if (isMounted) setLoading(true);
+        
+        // Debug auth status first
+        try {
+          const API_BASE = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+          const debugRes = await fetch(`${API_BASE}/api/auth/debug-auth`, {
+            credentials: 'include',
+            cache: 'no-store', // Prevent caching
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+          
+          if (!debugRes.ok) {
+            console.warn('Debug endpoint returned non-ok status:', debugRes.status);
+          }
+          
+          const debugData = await debugRes.json();
+          console.log('Auth debug info:', debugData);
+          
+          // Check if the debug data already confirms a valid token
+          if (debugData.tokenValid) {
+            console.log('Valid token detected in debug data');
+            if (isMounted) {
+              setToken('authenticated');
+              setLoading(false);
+            }
+            return; // Skip additional checks if we already know it's valid
+          }
+        } catch (debugErr) {
+          console.error('Debug auth error:', debugErr);
+          // Continue to main auth check even if debug check fails
+        }
+        
+        // Main authentication check
+        const API_BASE = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+        const res = await fetch(`${API_BASE}/api/auth/me`, {
+          credentials: 'include',
+          cache: 'no-store',
+          headers: {
+            'Accept': 'application/json'
+          }
         });
-        if (!res.ok) throw new Error('invalid');
+        
+        if (!res.ok) {
+          console.error('Authentication check failed:', res.status, res.statusText);
+          throw new Error('invalid');
+        }
+        
+        const userData = await res.json();
+        console.log('Successfully authenticated!', userData);
+        
+        // Successfully authenticated, update token state if component still mounted
+        if (isMounted) setToken('authenticated');
       } catch (err) {
-        // invalid token — clear and show login
-        try { localStorage.removeItem('owner_token'); } catch(e){}
-        setToken(null);
+        // Invalid token — show login
+        console.error('Auth check error:', err);
+        
+        // Only attempt to clear token if component is still mounted
+        if (isMounted) {
+          try {
+            await removeToken();
+          } catch (e) {
+            console.error('Failed to clear token on auth error:', e);
+          }
+          
+          setToken(null);
+        }
+      } finally {
+        // Always set loading to false when done if component still mounted
+        if (isMounted) setLoading(false);
       }
-    })();
+    };
+
+    // Run the auth check
+    checkAuthStatus();
+    
+    // Cleanup function to handle unmounting
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // clear token when other parts of the app dispatch app:logout (e.g. on 401)
   React.useEffect(() => {
-    function onGlobalLogout() { setToken(null); }
+    async function onGlobalLogout() { 
+      try {
+        // Make sure to clear the cookie via the logout endpoint
+        await removeToken();
+      } catch (e) {
+        console.error('Error during global logout:', e);
+      }
+      setToken(null); 
+    }
     window.addEventListener('app:logout', onGlobalLogout);
     return () => window.removeEventListener('app:logout', onGlobalLogout);
   }, []);
 
+  // Show loading spinner while checking authentication
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  }
+  
+  // Show login/signup routes if not authenticated
   if (!token) {
     return (
       <Routes>
-        <Route path="/login" element={<Login onAuth={() => setToken(getToken())} />} />
-        <Route path="/signup" element={<Signup onAuth={() => setToken(getToken())} />} />
+        <Route path="/login" element={<Login onAuth={(token) => setToken(token)} />} />
+        <Route path="/signup" element={<Signup onAuth={(token) => setToken(token)} />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     );
   }
 
-  function handleLogout() {
-    setToken(null);
+  async function handleLogout() {
+    try {
+      // Call the removeToken function which will hit the logout endpoint
+      await removeToken();
+      console.log('Logout successful');
+      // Then update our local state
+      setToken(null);
+    } catch (err) {
+      console.error('Logout error:', err);
+      // Force logout anyway
+      setToken(null);
+    }
   }
 
 

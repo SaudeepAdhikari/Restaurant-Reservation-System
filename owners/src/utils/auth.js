@@ -1,19 +1,34 @@
 const API_BASE = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000';
 
+// With HttpOnly cookies, we don't need to manually manage tokens
+// These functions are maintained for backward compatibility but operate differently
 export function getToken() {
-  return localStorage.getItem('owner_token');
+  return null; // Token is in HttpOnly cookie, not accessible via JS
 }
+
 export function saveToken(token) {
-  localStorage.setItem('owner_token', token);
+  // Token is saved via HttpOnly cookie by the server
+  // This is now a no-op function
+  console.log('Token is being saved by server as HttpOnly cookie');
 }
+
 export function removeToken() {
-  localStorage.removeItem('owner_token');
+  // We'll handle logout by calling the logout endpoint which will clear the cookie
+  console.log('Clearing authentication cookie via logout endpoint');
+  return fetch(`${API_BASE}/api/auth/logout`, {
+    method: 'POST',
+    credentials: 'include' // Important: include cookies in the request
+  }).catch(err => {
+    console.error('Logout error:', err);
+    return Promise.reject(err);
+  });
 }
 
 export async function apiPost(path, body) {
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
   const res = await fetch(url, {
     method: 'POST',
+    credentials: 'include', // Include cookies in the request
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   });
@@ -25,23 +40,29 @@ export async function apiPost(path, body) {
 }
 
 export function authFetch(path, options = {}) {
-  const token = getToken();
   const url = path.startsWith('http') ? path : `${API_BASE}${path}`;
   return fetch(url, {
     ...options,
+    credentials: 'include', // Important: include cookies in the request
     headers: {
       'Content-Type': 'application/json',
-      ...(options.headers || {}),
-      Authorization: token ? `Bearer ${token}` : undefined
-    }
+      ...(options.headers || {})
+    },
+    body: options.body // Make sure body is passed correctly
   }).then(async r => {
     const ct = r.headers.get('content-type') || '';
     // handle non-ok responses first
     if (!r.ok) {
-      // If unauthorized, clear token and notify app
+      // If unauthorized, call logout endpoint and notify app
       if (r.status === 401 || r.status === 403) {
-        try { removeToken(); } catch(e){}
-        try { window.dispatchEvent(new Event('app:logout')); } catch(e){}
+        try { 
+          // Call our removeToken function which hits the logout endpoint
+          removeToken(); 
+        } catch(e){}
+        try { 
+          // Notify app of logout
+          window.dispatchEvent(new Event('app:logout')); 
+        } catch(e){}
       }
       // try to read JSON error, otherwise text
       if (ct.includes('application/json')) {

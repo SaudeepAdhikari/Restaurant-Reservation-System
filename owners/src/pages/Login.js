@@ -14,13 +14,37 @@ function Login({ onAuth }) {
     e.preventDefault();
     setError(null);
     try {
+      // First, check auth status before login
+      await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/auth/debug-auth', {
+        credentials: 'include'
+      }).then(r => r.json()).then(data => {
+        console.log('Auth status before login:', data);
+      }).catch(err => {
+        console.error('Debug auth error:', err);
+      });
+      
+      // Perform login
       const res = await apiPost('/api/auth/login', { email, password });
-      if (res.token) {
-        saveToken(res.token);
-        if (onAuth) onAuth();
+      console.log('Login response:', res);
+      
+      // Check auth status after login
+      await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/auth/debug-auth', {
+        credentials: 'include'
+      }).then(r => r.json()).then(data => {
+        console.log('Auth status after login:', data);
+      }).catch(err => {
+        console.error('Debug auth error:', err);
+      });
+      
+      // With HttpOnly cookies, we don't need to manually save tokens
+      // The token is automatically stored as a cookie by the server
+      if (res.owner) {
+        // Signal that authentication occurred
+        if (onAuth) onAuth('authenticated');
         navigate('/');
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError(err.message || 'Login failed');
     }
   }

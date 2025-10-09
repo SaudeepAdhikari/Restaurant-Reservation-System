@@ -33,6 +33,16 @@ const format = winston.format.combine(
       // Mask password references
       message = message.replace(/password.*?:/gi, 'password: [REDACTED]');
       message = message.replace(/token.*?:/gi, 'token: [REDACTED]');
+      
+      // Mask cookie information
+      message = message.replace(/cookie.*?:/gi, 'cookie: [REDACTED]');
+      message = message.replace(/Cookie.*?:/gi, 'Cookie: [REDACTED]');
+      message = message.replace(/Cookie.*?(Present|None)/gi, 'Cookie: [REDACTED]');
+      
+      // Mask origin information
+      message = message.replace(/origin.*?:/gi, 'origin: [REDACTED]');
+      message = message.replace(/Origin.*?:/gi, 'Origin: [REDACTED]');
+      message = message.replace(/Origin: http:\/\/.*?(\s|$)/gi, 'Origin: [REDACTED] ');
     }
 
     return `${info.timestamp} ${info.level}: ${message}`;
@@ -40,14 +50,17 @@ const format = winston.format.combine(
   winston.format.colorize({ all: true })
 );
 
-// Create the logger
+// Create the logger with environment-specific console output
 const logger = winston.createLogger({
   level: level(),
   levels,
   format,
   transports: [
-    // Write logs to console
-    new winston.transports.Console(),
+    // In production, only show errors and warnings in console
+    // In development, show all logs but debug
+    new winston.transports.Console({
+      level: process.env.NODE_ENV === 'production' ? 'warn' : 'info',
+    }),
     // Write error logs to a file
     new winston.transports.File({
       filename: 'logs/error.log',

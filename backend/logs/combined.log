@@ -1,0 +1,380 @@
+[33m2025-10-09 21:10:51 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-09 21:10:51 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-09 21:10:52 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-10-09 21:10:58 info: MongoDB connected[39m
+[32m2025-10-09 21:11:12 info: Login attempt for: sa***@gmail.com[39m
+[32m2025-10-09 21:11:12 info: Successful login for customer: sa***@gmail.com[39m
+[33m2025-10-09 21:12:08 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:08 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:12 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:12 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:14 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:14 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:15 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:15 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:16 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:16 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:17 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:12:17 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:15:20 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:15:20 warn: token: [REDACTED] invalid signature[39m
+[33m2025-10-09 21:39:35 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-09 21:39:35 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-09 21:39:35 info: Server running on http://0.0.0.0:5000[39m
+[31m2025-10-09 21:39:35 error: MongoDB connection error: querySrv ECONNREFUSED _mongodb._tcp.cluster0.fbbgiqu.mongodb.net[39m
+[33m2025-10-09 21:44:34 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-09 21:44:34 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-09 21:44:34 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-10-09 21:44:35 info: MongoDB connected[39m
+[32m2025-10-09 21:45:17 info: Successful login for owner: sa***@gmail.com[39m
+[32m2025-10-09 21:45:18 info: Successful login for owner: sa***@gmail.com[39m
+[32m2025-10-09 21:45:19 info: Successful login for owner: sa***@gmail.com[39m
+[32m2025-10-09 21:45:19 info: Successful login for owner: sa***@gmail.com[39m
+[32m2025-10-09 21:45:19 info: Successful login for owner: sa***@gmail.com[39m
+[32m2025-10-09 21:45:19 info: Successful login for owner: sa***@gmail.com[39m
+[32m2025-10-09 21:45:20 info: Successful login for owner: sa***@gmail.com[39m
+[33m2025-10-09 21:55:54 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-09 21:55:54 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-09 21:55:54 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-10-09 21:55:55 info: MongoDB connected[39m
+[34m2025-10-09 22:02:15 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:15 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:15 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:15 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:15 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:15 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:15 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:02:15 warn: token: [REDACTED] invalid signature, path: /me, method: GET[39m
+[34m2025-10-09 22:02:15 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:02:15 warn: token: [REDACTED] invalid signature, path: /me, method: GET[39m
+[34m2025-10-09 22:02:15 debug: POST /api/auth/logout - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:15 info: Owner logged out[39m
+[34m2025-10-09 22:02:15 debug: POST /api/auth/logout - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:15 info: Owner logged out[39m
+[34m2025-10-09 22:02:16 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:16 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:02:17 debug: POST /api/auth/login - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:17 info: Successful login for owner: sa***@gmail.com[39m
+[34m2025-10-09 22:02:17 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:17 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:17 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:17 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:17 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:20 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:20 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:22 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:22 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:22 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:22 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:22 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:22 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:22 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:22 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:22 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:22 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:23 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:23 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:23 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:23 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:23 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:23 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:24 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:24 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:24 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:24 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:24 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:24 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:24 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:24 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:24 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:24 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:24 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:25 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:25 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:25 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:25 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:25 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:25 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:25 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:25 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:25 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:25 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:25 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:25 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:25 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:26 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:26 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:26 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:26 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:02:26 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:02:26 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:02:26 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:26 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:26 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:02:26 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:04:22 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:04:22 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:04:22 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:04:22 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:04:22 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:04:22 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:04:22 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:04:22 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:04:23 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:04:23 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:04:44 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:04:44 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:04:44 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:04:44 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:05:09 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:05:09 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:05:09 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:05:09 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:05:09 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:05:10 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:06:52 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:06:52 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:06:52 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:06:52 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:06:53 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:06:53 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:09:10 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:09:10 info: Debug auth endpoint called[39m
+[31m2025-10-09 22:09:10 error: token: [REDACTED] invalid signature[39m
+[34m2025-10-09 22:09:10 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:09:11 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:09:11 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:36:46 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-09 22:36:46 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-09 22:36:46 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-10-09 22:36:47 info: MongoDB connected[39m
+[34m2025-10-09 22:37:23 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:23 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:23 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:23 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:23 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:23 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:26 debug: POST /api/auth/logout - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:26 info: Owner logged out[39m
+[34m2025-10-09 22:37:26 debug: POST /api/auth/logout - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:26 info: Owner logged out[39m
+[34m2025-10-09 22:37:27 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:27 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:27 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:27 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:27 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:27 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:27 debug: POST /api/auth/logout - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:27 info: Owner logged out[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:28 debug: POST /api/auth/logout - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Owner logged out[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:28 debug: POST /api/auth/logout - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Owner logged out[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:28 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:28 debug: POST /api/auth/logout - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:28 info: Owner logged out[39m
+[34m2025-10-09 22:37:30 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:30 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:30 debug: POST /api/auth/login - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:30 info: Successful login for owner: sa***@gmail.com[39m
+[34m2025-10-09 22:37:30 debug: Setting auth cookie: maxAge=604800000, sameSite=none, secure=false[39m
+[34m2025-10-09 22:37:30 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:30 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:30 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:30 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:31 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:31 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:31 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:31 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:31 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:32 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:32 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:32 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:32 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:32 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:32 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:32 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:33 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:33 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:33 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:33 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:33 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:33 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:33 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:33 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:33 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:34 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:34 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:34 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:34 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:34 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:34 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:34 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:34 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:34 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:35 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:35 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:35 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:35 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:35 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/debug-auth - Origin: http://localhost:3001 - Cookie: Present[39m
+[32m2025-10-09 22:37:35 info: Debug auth endpoint called[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:35 debug: GET /api/auth/me - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:39 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:39 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:40 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:40 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:40 debug: GET /api/owner/menu/restaurant/68b0a1be53a11d3e9e1360f7 - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:41 debug: GET /api/owner/menu/restaurant/68b0a1be53a11d3e9e1360f7 - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:41 debug: GET /api/owner/menu/restaurant/68b0a1be53a11d3e9e1360f7 - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:42 debug: GET /api/owner/offers - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:42 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:43 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:43 debug: GET /api/owner/offers - Origin: http://localhost:3001 - Cookie: Present[39m
+[34m2025-10-09 22:37:44 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:37:44 warn: Rate limit exceeded for IP: 127.0.0.1[39m
+[34m2025-10-09 22:37:44 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:37:44 warn: Rate limit exceeded for IP: 127.0.0.1[39m
+[34m2025-10-09 22:37:46 debug: GET /api/owner/offers - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:37:46 warn: Rate limit exceeded for IP: 127.0.0.1[39m
+[34m2025-10-09 22:37:46 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:37:46 warn: Rate limit exceeded for IP: 127.0.0.1[39m
+[34m2025-10-09 22:37:46 debug: GET /api/owner/offers - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:37:46 warn: Rate limit exceeded for IP: 127.0.0.1[39m
+[34m2025-10-09 22:37:46 debug: GET /api/owner/restaurants - Origin: http://localhost:3001 - Cookie: Present[39m
+[33m2025-10-09 22:37:46 warn: Rate limit exceeded for IP: 127.0.0.1[39m
+[33m2025-10-09 22:42:09 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-09 22:42:09 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-09 22:42:09 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-10-09 22:42:10 info: MongoDB connected[39m
+[34m2025-10-09 22:55:31 debug: GET /api/auth/debug-auth[39m
+[32m2025-10-09 22:55:31 info: Auth check endpoint called[39m
+[34m2025-10-09 22:55:31 debug: GET /api/auth/debug-auth[39m
+[32m2025-10-09 22:55:31 info: Auth check endpoint called[39m
+[34m2025-10-09 22:55:31 debug: GET /api/auth/me[39m
+[34m2025-10-09 22:55:32 debug: GET /api/auth/me[39m
+[34m2025-10-09 22:56:11 debug: GET /api/owner/offers[39m
+[34m2025-10-09 22:56:11 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 22:56:11 debug: GET /api/owner/offers[39m
+[34m2025-10-09 22:56:12 debug: GET /api/owner/restaurants[39m
+[33m2025-10-09 22:58:25 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-09 22:58:25 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-09 22:58:25 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-10-09 22:58:26 info: MongoDB connected[39m
+[33m2025-10-09 22:58:44 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-09 22:58:44 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-09 22:58:44 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-10-09 22:58:45 info: MongoDB connected[39m
+[34m2025-10-09 22:59:05 debug: GET /api/auth/debug-auth[39m
+[32m2025-10-09 22:59:05 info: Auth check endpoint called[39m
+[34m2025-10-09 22:59:05 debug: GET /api/auth/debug-auth[39m
+[32m2025-10-09 22:59:05 info: Auth check endpoint called[39m
+[34m2025-10-09 22:59:05 debug: GET /api/auth/me[39m
+[34m2025-10-09 22:59:05 debug: GET /api/auth/me[39m
+[34m2025-10-09 22:59:08 debug: GET /api/owner/offers[39m
+[34m2025-10-09 22:59:08 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 22:59:08 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 22:59:08 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:00:33 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:00:33 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 23:00:33 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 23:00:33 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:00:41 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:00:41 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 23:00:51 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:00:51 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 23:01:29 debug: GET /api/auth/debug-auth[39m
+[32m2025-10-09 23:01:29 info: Auth check endpoint called[39m
+[34m2025-10-09 23:01:29 debug: GET /api/auth/me[39m
+[34m2025-10-09 23:01:29 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:01:29 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 23:01:29 debug: GET /api/auth/me[39m
+[34m2025-10-09 23:01:29 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:01:29 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 23:01:29 debug: GET /api/auth/me[39m
+[34m2025-10-09 23:01:29 debug: GET /api/owner/restaurants[39m
+[34m2025-10-09 23:01:29 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:01:54 debug: GET /api/owner/offers[39m
+[34m2025-10-09 23:01:54 debug: GET /api/owner/restaurants[39m

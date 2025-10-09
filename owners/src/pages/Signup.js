@@ -15,9 +15,10 @@ function Signup({ onAuth }) {
     setError(null);
     try {
       const res = await apiPost('/api/auth/register', { name, email, password });
-      if (res.token) {
-        saveToken(res.token);
-        if (onAuth) onAuth();
+      // With cookie-based auth, we don't need to save the token
+      if (res.owner) {
+        // Signal that authentication occurred
+        if (onAuth) onAuth('authenticated');
         navigate('/');
       }
     } catch (err) {

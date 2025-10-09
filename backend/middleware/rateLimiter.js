@@ -8,7 +8,8 @@ export const apiLimiter = rateLimit({
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   handler: (req, res) => {
-    logger.warn(`Rate limit exceeded for IP: ${req.ip}`);
+    // Log only that rate limit was exceeded without showing the IP address
+    logger.warn(`Rate limit exceeded - path: ${req.method} ${req.path}`);
     return res.status(429).json({
       message: 'Too many requests, please try again later.'
     });
@@ -22,7 +23,8 @@ export const authLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
-    logger.warn(`Auth rate limit exceeded for IP: ${req.ip}, path: ${req.path}`);
+    // Log auth rate limit without IP address
+    logger.warn(`Auth rate limit exceeded - path: ${req.method} ${req.path}`);
     return res.status(429).json({
       message: 'Too many login attempts, please try again later.'
     });
