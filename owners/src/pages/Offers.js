@@ -85,12 +85,11 @@ export default function Offers() {
           className="create-offer-btn" 
           onClick={() => setShowForm(prev => !prev)}
         >
-          {showForm ? "Cancel" : "+ Create Offer"}
+          {showForm ? "Cancel" : "+ Add Offer"}
         </button>
       </div>
       <div className="offers-content">
         <div className={`offers-form-card ${showForm ? 'active' : ''}`}>
-          <h3>Create Offer</h3>
           {err && <div className="error">{err}</div>}
           <form onSubmit={onSubmit} className="offers-form">
             <label>Restaurant</label>
@@ -120,7 +119,6 @@ export default function Offers() {
           </form>
         </div>
         <div className="offers-list-card">
-          <h3>Your Offers</h3>
           {loading && <div className="loading-indicator">Loading...</div>}
           {!loading && offers.length === 0 && <div className="empty-state">No offers yet.</div>}
           <div className="offers-list">

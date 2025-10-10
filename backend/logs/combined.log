@@ -378,3 +378,28 @@
 [34m2025-10-09 23:01:29 debug: GET /api/owner/offers[39m
 [34m2025-10-09 23:01:54 debug: GET /api/owner/offers[39m
 [34m2025-10-09 23:01:54 debug: GET /api/owner/restaurants[39m
+[33m2025-10-10 00:05:48 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-10-10 00:05:48 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-10-10 00:05:48 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-10-10 00:05:49 info: MongoDB connected[39m
+[34m2025-10-10 00:05:50 debug: GET /api/auth/debug-auth[39m
+[32m2025-10-10 00:05:50 info: Auth check endpoint called[39m
+[34m2025-10-10 00:05:51 debug: GET /api/auth/me[39m
+[34m2025-10-10 00:05:51 debug: GET /api/auth/me[39m
+[34m2025-10-10 00:07:12 debug: GET /api/auth/debug-auth[39m
+[32m2025-10-10 00:07:12 info: Auth check endpoint called[39m
+[34m2025-10-10 00:07:12 debug: POST /api/auth/login[39m
+[32m2025-10-10 00:07:13 info: Successful login for owner: sa***@gmail.com[39m
+[34m2025-10-10 00:07:13 debug: Setting auth Cookie: [REDACTED], secure=false[39m
+[34m2025-10-10 00:07:13 debug: GET /api/auth/debug-auth[39m
+[32m2025-10-10 00:07:13 info: Auth check endpoint called[39m
+[34m2025-10-10 00:07:13 debug: GET /api/auth/me[39m
+[34m2025-10-10 00:07:13 debug: GET /api/auth/me[39m
+[34m2025-10-10 00:07:18 debug: GET /api/owner/offers[39m
+[34m2025-10-10 00:07:18 debug: GET /api/owner/restaurants[39m
+[34m2025-10-10 00:07:18 debug: GET /api/owner/restaurants[39m
+[34m2025-10-10 00:07:18 debug: GET /api/owner/offers[39m
+[34m2025-10-10 00:07:25 debug: GET /api/owner/offers[39m
+[34m2025-10-10 00:07:25 debug: GET /api/owner/restaurants[39m
+[34m2025-10-10 00:07:25 debug: GET /api/owner/restaurants[39m
+[34m2025-10-10 00:07:25 debug: GET /api/owner/offers[39m

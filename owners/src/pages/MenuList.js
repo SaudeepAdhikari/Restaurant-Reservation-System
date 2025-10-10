@@ -114,19 +114,6 @@ function MenuList() {
           <small className="muted">Select a restaurant, then add menu items via the Upload Menu page</small>
         </div>
       </div>
-      <div style={{marginBottom:18}}>
-        <div className="menu-form-card" style={{padding:16}}>
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-            <div>
-              <h4 style={{margin:0}}>Add a new menu item</h4>
-              <div className="small muted">Use the Upload Menu page to add name, price and image</div>
-            </div>
-            <div>
-              <div className="small muted">Or click the Upload Menu Item button above to add a new item.</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div className="menu-grid">
         {items.map(i => (

@@ -51,10 +51,23 @@
 }
 
 .offers-header h2 {
-  font-size: 2rem;
-  font-weight: 600;
+  font-size: 2.2rem;
+  font-weight: 700;
   color: var(--text);
   margin: 0;
+  position: relative;
+}
+
+/* Add a subtle underline to the main heading */
+.offers-header h2:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 60px;
+  height: 4px;
+  background: var(--btn-gradient);
+  border-radius: 2px;
 }
 
 /* Create Offer Button - Large and Prominent */
@@ -118,6 +131,13 @@
   margin-top: 0;
   margin-bottom: 24px;
   color: var(--accent);
+  position: relative;
+}
+
+/* Make sure no pseudo-elements are adding text */
+.offers-form-card h3::before,
+.offers-form-card h3::after {
+  display: none;
 }
 
 .offers-form label {
@@ -240,20 +260,14 @@
   padding: 30px;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-}
-
-.offers-list-card h3 {
-  font-weight: 600;
-  font-size: 1.5rem;
-  margin-top: 0;
-  margin-bottom: 24px;
-  color: var(--accent);
+  margin-top: 5px; /* Add some spacing at the top */
 }
 
 .offers-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
+  padding-top: 10px; /* Add some padding at the top since we removed the heading */
 }
 
 .offer-item {
@@ -359,19 +373,23 @@
 .loading-indicator {
   color: var(--muted);
   text-align: center;
-  padding: 30px;
-  font-size: 0.9rem;
+  padding: 40px;
+  font-size: 1rem;
   background: rgba(35, 48, 90, 0.02);
   border-radius: 12px;
+  font-weight: 500;
+  margin: 10px 0;
 }
 
 .empty-state {
   text-align: center;
-  padding: 40px;
+  padding: 50px;
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 1.1rem;
   background: rgba(35, 48, 90, 0.02);
   border-radius: 12px;
+  font-weight: 500;
+  margin: 10px 0;
 }
 
 /* Responsive Design */
