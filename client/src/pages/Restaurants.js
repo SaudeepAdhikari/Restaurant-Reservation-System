@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import RestaurantCard from '../components/RestaurantCard';
-import styles from '../styles/modules/Restaurants.module.css';
+import Spinner from '../components/common/Spinner';
 
 export default function Restaurants() {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     let mounted = true;
@@ -14,9 +15,7 @@ export default function Restaurants() {
     fetch(`${base}/api/restaurants`)
       .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
       .then(data => {
-        console.debug('Restaurants response', data);
         if (!mounted) return;
-        // support both direct array responses and objects like { value: [...] }
         if (Array.isArray(data)) {
           setRestaurants(data);
         } else if (data && Array.isArray(data.value)) {
@@ -24,7 +23,6 @@ export default function Restaurants() {
         } else if (data && Array.isArray(data.restaurants)) {
           setRestaurants(data.restaurants);
         } else {
-          // unknown shape: store empty and surface a helpful message
           setRestaurants([]);
           setError('Unexpected response shape from server');
         }
@@ -35,28 +33,46 @@ export default function Restaurants() {
     return () => { mounted = false; };
   }, []);
 
+  const filteredRestaurants = restaurants.filter(r =>
+    r.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (r.cuisine && r.cuisine.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
-    <div className={styles.pageWrap}>
-      <main className={styles.content}>
-        <header className={styles.header}>
-          <h1>All Restaurants</h1>
-          <p className={styles.sub}>Discover restaurants near you — filter, explore, and book a table.</p>
-        </header>
+    <div className="page-wrapper">
+      <div className="page-header">
+        <h1 className="page-title">All Restaurants</h1>
+        <p className="page-subtitle">Discover the best dining experiences near you. Filter by cuisine, location, or name.</p>
+      </div>
 
-        <section className={styles.gridSection}>
-          {loading && <div className={styles.msg}>Loading restaurants...</div>}
-          {error && <div className={styles.msgError}>Failed to load restaurants: {error}</div>}
-          {!loading && !error && restaurants.length === 0 && <div className={styles.msg}>No restaurants found.</div>}
+      <div className="page-container">
+        <div className="filters-bar">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search restaurants or cuisines..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
 
-          <div style={{marginTop: '0.5rem', color:'#345'}}>{!loading && !error && `Showing ${restaurants.length} restaurants`}</div>
+        {loading && <div className="flex-center" style={{ padding: '4rem' }}><Spinner size={40} /></div>}
+        {error && <div className="error-state">Failed to load restaurants: {error}</div>}
 
-          <div className={styles.grid}>
-            {restaurants.map(r => (
-              <RestaurantCard key={r._id || r.id} restaurant={r} />
-            ))}
+        {!loading && !error && filteredRestaurants.length === 0 && (
+          <div className="empty-state">
+            <h3>No restaurants found</h3>
+            <p>Try adjusting your search terms.</p>
           </div>
-        </section>
-      </main>
+        )}
+
+        <div className="grid-responsive">
+          {filteredRestaurants.map(r => (
+            <RestaurantCard key={r._id || r.id} restaurant={r} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
+

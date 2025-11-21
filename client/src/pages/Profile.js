@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/Profile.css';
+import '../pages/Profile.css';
+import Spinner from '../components/common/Spinner';
+import Button from '../components/common/Button';
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
@@ -64,7 +66,6 @@ export default function Profile() {
       const data = await res.json();
       setProfile(data);
       setEditing(false);
-      // clear password field after successful update
       setForm(f => ({ ...f, password: '' }));
     } catch (err) {
       console.error(err);
@@ -72,61 +73,110 @@ export default function Profile() {
     }
   }
 
+  if (loading) return <div className="flex-center" style={{ minHeight: '80vh' }}><Spinner size={40} /></div>;
+
   return (
-    <main className="profile-root">
-      <div className="profile-card">
-        <div className="profile-header">
-          <h1>Your Profile</h1>
-          {profile && !editing && (
-            <button className="btn btn-edit" onClick={() => setEditing(true)}>Edit</button>
-          )}
-        </div>
+    <div className="page-wrapper">
+      <div className="page-header">
+        <h1 className="page-title">My Profile</h1>
+        <p className="page-subtitle">Manage your account settings and preferences.</p>
+      </div>
 
-        {loading && <p className="muted">Loading...</p>}
-        {error && <p className="error">Error: {error}</p>}
+      <div className="page-container">
+        {error && <div className="error-state" style={{ marginBottom: '2rem' }}>Error: {error}</div>}
 
-        {profile && !editing && (
-          <div className="profile-body">
-            <div className="field"><span className="label">Name</span><span className="value">{profile.name}</span></div>
-            <div className="field"><span className="label">Email</span><span className="value">{profile.email}</span></div>
-            <div className="field"><span className="label">Phone</span><span className="value">{profile.phone || '—'}</span></div>
-            <div className="field"><span className="label">Joined</span><span className="value">{new Date(profile.createdAt).toLocaleString()}</span></div>
+        {profile && (
+          <div className="profile-container">
+            <div className="profile-sidebar">
+              <div className="profile-avatar">
+                {profile.firstName ? profile.firstName[0] : 'U'}
+              </div>
+              <h2 className="profile-name">{profile.name}</h2>
+              <p className="profile-email">{profile.email}</p>
+
+              <div className="profile-stats">
+                <div className="stat-item">
+                  <span className="stat-value">{profile.bookings?.length || 0}</span>
+                  <span className="stat-label">Bookings</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">0</span>
+                  <span className="stat-label">Reviews</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="profile-content">
+              <div className="section-header flex-between">
+                <h2>Account Details</h2>
+                {!editing && (
+                  <Button variant="outline" size="small" onClick={() => setEditing(true)}>Edit Profile</Button>
+                )}
+              </div>
+
+              {!editing ? (
+                <div className="profile-details-view">
+                  <div className="form-grid">
+                    <div className="field">
+                      <label className="text-secondary text-sm">First Name</label>
+                      <div className="font-medium">{profile.firstName}</div>
+                    </div>
+                    <div className="field">
+                      <label className="text-secondary text-sm">Last Name</label>
+                      <div className="font-medium">{profile.lastName}</div>
+                    </div>
+                    <div className="field">
+                      <label className="text-secondary text-sm">Email</label>
+                      <div className="font-medium">{profile.email}</div>
+                    </div>
+                    <div className="field">
+                      <label className="text-secondary text-sm">Phone</label>
+                      <div className="font-medium">{profile.phone || '—'}</div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={onSubmit}>
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label className="form-label">First Name</label>
+                      <input className="form-input" name="firstName" value={form.firstName} onChange={onChange} required />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Last Name</label>
+                      <input className="form-input" name="lastName" value={form.lastName} onChange={onChange} required />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Phone</label>
+                      <input className="form-input" name="phone" value={form.phone} onChange={onChange} />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Email</label>
+                      <input className="form-input" name="email" value={form.email} onChange={onChange} type="email" required />
+                    </div>
+                    <div className="form-group full-width">
+                      <label className="form-label">New Password <span className="text-light text-sm">(leave blank to keep current)</span></label>
+                      <input className="form-input" name="password" value={form.password} onChange={onChange} type="password" />
+                    </div>
+                  </div>
+
+                  <div className="flex-end gap-4 mt-6">
+                    <Button type="button" variant="secondary" onClick={() => { setEditing(false); setForm({ firstName: profile.firstName || '', lastName: profile.lastName || '', phone: profile.phone || '', email: profile.email || '', password: '' }); }}>Cancel</Button>
+                    <Button type="submit" variant="primary">Save Changes</Button>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
         )}
 
-        {profile && editing && (
-          <form className="profile-form" onSubmit={onSubmit}>
-            <div className="form-row">
-              <label>First name</label>
-              <input name="firstName" value={form.firstName} onChange={onChange} required />
-            </div>
-            <div className="form-row">
-              <label>Last name</label>
-              <input name="lastName" value={form.lastName} onChange={onChange} required />
-            </div>
-            <div className="form-row">
-              <label>Phone</label>
-              <input name="phone" value={form.phone} onChange={onChange} />
-            </div>
-            <div className="form-row">
-              <label>Email</label>
-              <input name="email" value={form.email} onChange={onChange} type="email" required />
-            </div>
-            <div className="form-row">
-              <label>New password</label>
-              <input name="password" value={form.password} onChange={onChange} type="password" placeholder="Leave blank to keep current" />
-            </div>
-            <div className="form-actions">
-              <button type="button" className="btn btn-cancel" onClick={() => { setEditing(false); setForm({ firstName: profile.firstName || '', lastName: profile.lastName || '', phone: profile.phone || '', email: profile.email || '', password: '' }); }}>Cancel</button>
-              <button type="submit" className="btn btn-save">Save changes</button>
-            </div>
-          </form>
-        )}
-
         {!loading && !profile && !error && (
-          <p>No profile data available.</p>
+          <div className="empty-state">
+            <p>No profile data available.</p>
+          </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }
+

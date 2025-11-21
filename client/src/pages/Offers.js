@@ -1,15 +1,18 @@
 import React from 'react';
 import OffersComponent from '../components/Offers';
-// Navbar rendered globally in App.js
 
 export default function Offers() {
   return (
-    <div>
-      <main style={{ padding: '2rem' }}>
-        <h1>Offers</h1>
-        <p>Browse current restaurant offers and deals.</p>
+    <div className="page-wrapper">
+      <div className="page-header">
+        <h1 className="page-title">Exclusive Offers</h1>
+        <p className="page-subtitle">Grab the best deals and discounts from top restaurants.</p>
+      </div>
+
+      <div className="page-container">
         <OffersComponent />
-      </main>
+      </div>
     </div>
   );
 }
+

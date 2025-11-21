@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import '../styles/RestaurantDetail.css';
+import './RestaurantDetail.css';
 import MenuSection from '../components/MenuSection';
 import BookingModal from '../components/BookingModal';
+import Card from '../components/common/Card';
 
 function RestaurantDetail() {
   const { id } = useParams();
@@ -34,37 +35,67 @@ function RestaurantDetail() {
     return () => { mounted = false; };
   }, [id]);
 
-  if (loading) return <div className="restaurant-detail">Loading...</div>;
-  if (error) return <div className="restaurant-detail">Failed to load restaurant: {error}</div>;
-  if (!restaurant) return <div className="restaurant-detail">Restaurant not found.</div>;
+  if (loading) return <div className="restaurant-detail-page flex-center">Loading...</div>;
+  if (error) return <div className="restaurant-detail-page flex-center">Failed to load restaurant: {error}</div>;
+  if (!restaurant) return <div className="restaurant-detail-page flex-center">Restaurant not found.</div>;
 
   return (
-    <div className="restaurant-detail">
-      <img className="detail-image" src={restaurant.image || '/assets/placeholder.jpg'} alt={restaurant.name} />
-      <div className="detail-info">
-        <h2>{restaurant.name}</h2>
-        <div className="rating">⭐ {restaurant.rating || '—'}</div>
-        <p>{restaurant.description || restaurant.details || ''}</p>
-        {restaurant.menu && <MenuSection menu={restaurant.menu} />}
+    <div className="restaurant-detail-page">
+      <div className="detail-hero">
+        <img className="detail-hero-image" src={restaurant.image || '/assets/placeholder.jpg'} alt={restaurant.name} />
+        <div className="detail-hero-overlay">
+          <div className="detail-hero-content">
+            <h1 className="detail-title">{restaurant.name}</h1>
+            <div className="detail-meta">
+              <span>⭐ {restaurant.rating || 'New'}</span>
+              <span>•</span>
+              <span>{restaurant.cuisine}</span>
+              <span>•</span>
+              <span>{restaurant.location}</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <section className="restaurant-tables">
-          <h3>Available tables</h3>
-          {tables.length === 0 && <p>No table information available.</p>}
-          {tables.length > 0 && (
-            <ul className="table-list">
-              {tables.map(t => (
-                <li key={t._id} className={`table-item ${t.available ? 'available' : 'unavailable'}`}>
-                  <strong>{t.name}</strong> — capacity: {t.capacity} {t.location ? `· ${t.location}` : ''}
-                </li>
-              ))}
-            </ul>
+      <div className="detail-container">
+        <div className="detail-main">
+          <Card className="info-card">
+            <h2 className="section-title">About</h2>
+            <p>{restaurant.description || restaurant.details || 'No description available.'}</p>
+          </Card>
+
+          {restaurant.menu && (
+            <Card className="info-card">
+              <MenuSection menu={restaurant.menu} />
+            </Card>
           )}
-        </section>
 
-        <BookingModal tables={tables} restaurantId={restaurant._id || restaurant.id} />
+          <Card className="info-card">
+            <h2 className="section-title">Available Tables</h2>
+            {tables.length === 0 && <p>No table information available.</p>}
+            {tables.length > 0 && (
+              <ul className="table-list">
+                {tables.map(t => (
+                  <li key={t._id} className={`table-item ${t.available ? 'available' : 'unavailable'}`}>
+                    <strong>{t.name}</strong>
+                    <div>Capacity: {t.capacity}</div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
+        </div>
+
+        <div className="detail-sidebar">
+          <Card className="info-card sticky-card">
+            <h2 className="section-title">Make a Reservation</h2>
+            <BookingModal tables={tables} restaurantId={restaurant._id || restaurant.id} />
+          </Card>
+        </div>
       </div>
     </div>
   );
 }
 
 export default RestaurantDetail;
+

@@ -1,70 +1,120 @@
-.restaurant-grid-wrapper { width: 100%; max-width: 1100px; margin: 0 auto; }
-.restaurant-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-top:0.8rem; }
-
-.restaurant-card.new { background: var(--color-white); border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06); transition:transform 0.18s; }
-.restaurant-card.new:hover { transform: translateY(-6px); }
-
-.card-media { position:relative; overflow:hidden; }
-.card-image { width:100%; height:150px; object-fit:cover; display:block; }
-
-.like-btn { position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.9); border:none; padding:6px 8px; border-radius:50%; cursor:pointer; font-size:0.95rem; transition:transform 0.18s, background 0.18s; }
-.like-btn.liked { background:linear-gradient(90deg,#ff6b6b,#ff8a65); color:#fff; transform:scale(1.05); }
-
-.hover-cta { position:absolute; inset:0; display:flex; align-items:flex-end; justify-content:center; padding-bottom:14px; pointer-events:none; }
-.book-now { pointer-events:auto; opacity:0; transform:translateY(8px); transition:opacity 0.25s, transform 0.25s; background:linear-gradient(90deg,var(--color-accent),var(--color-accent2)); color:#fff; border:none; padding:0.6rem 1rem; border-radius:20px; font-weight:700; }
-.restaurant-card.new:hover .book-now { opacity:1; transform:translateY(0); }
-
-.card-content { padding:0.9rem 1rem 1.1rem 1rem; }
-.card-title { display:flex; justify-content:space-between; align-items:center; gap:8px; }
-.card-title h3 { margin:0; font-size:1.05rem; }
-.card-rating { background:rgba(0,0,0,0.05); padding:4px 8px; border-radius:8px; font-weight:700; }
-.card-details { margin-top:6px; color:#666; font-size:0.95rem; }
-
-.restaurant-card.trending::after { content: ""; position:absolute; top:8px; left:8px; width:10px; height:10px; background:linear-gradient(90deg,#ff6b6b,#ff8a65); border-radius:50%; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
 .restaurant-card {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(44,204,122,0.07);
+  padding: 0 !important;
+  /* Override default Card padding */
   overflow: hidden;
-  transition: transform 0.18s, box-shadow 0.18s;
-  cursor: pointer;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 340px;
 }
-.restaurant-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 8px 32px rgba(44,204,122,0.18);
-}
+
 .card-link {
   display: flex;
   flex-direction: column;
   height: 100%;
+  color: inherit;
 }
+
+.card-media {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
 .card-image {
   width: 100%;
-  height: 180px;
+  height: 100%;
   object-fit: cover;
+  transition: transform var(--transition-normal);
 }
+
+.restaurant-card:hover .card-image {
+  transform: scale(1.05);
+}
+
+.like-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #ccc;
+  transition: all var(--transition-fast);
+  z-index: 2;
+}
+
+.like-btn.liked {
+  color: #e74c3c;
+  transform: scale(1.1);
+}
+
+.trending-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
 .card-content {
-  padding: 1.2em 1em 1em 1em;
-  flex: 1;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
+  flex: 1;
+}
+
+.card-header {
+  display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
 }
-.card-rating {
-  color: #2ecc7a;
+
+.card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.5em;
+  margin: 0;
+  color: var(--text-main);
 }
-.card-details {
-  color: #555;
-  font-size: 1rem;
-  margin-bottom: 0.7em;
+
+.card-rating {
+  display: flex;
+  align-items: center;
+  background: #e0f2f1;
+  color: #00695c;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
-.card-location {
-  color: #1abc9c;
-  font-size: 0.95rem;
-  font-weight: 500;
+
+.star {
+  margin-right: 2px;
+}
+
+.card-info {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+
+.card-footer {
+  margin-top: auto;
+}
+
+.book-btn {
+  width: 100%;
 }

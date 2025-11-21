@@ -1,0 +1,129 @@
+.restaurant-detail-page {
+    padding-top: 80px;
+    min-height: 100vh;
+    background: var(--bg-body);
+}
+
+.detail-hero {
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+}
+
+.detail-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detail-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+    display: flex;
+    align-items: flex-end;
+    padding: 2rem;
+}
+
+.detail-hero-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    color: white;
+}
+
+.detail-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.detail-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.detail-container {
+    max-width: 1200px;
+    margin: -60px auto 2rem;
+    padding: 0 1rem;
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.detail-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.detail-sidebar {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.info-card {
+    background: var(--bg-surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+}
+
+.table-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.table-item {
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.table-item.available {
+    border-color: var(--primary-light);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.table-item.unavailable {
+    opacity: 0.6;
+    background: #f3f4f6;
+}
+
+@media (max-width: 768px) {
+    .detail-container {
+        grid-template-columns: 1fr;
+        margin-top: 0;
+    }
+
+    .detail-hero {
+        height: 300px;
+    }
+
+    .detail-title {
+        font-size: 2rem;
+    }
+}

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-// Navbar rendered globally in App.js
-import HeroTagline from '../components/HeroTagline';
-import HeroBackground from '../components/HeroBackground';
+import './HomePage.css';
 import SearchBar from '../components/SearchBar';
 import CategoryCarousel from '../components/CategoryCarousel';
 import RestaurantCard from '../components/RestaurantCard';
 import Offers from '../components/Offers';
-import styles from '../styles/modules/HomePage.module.css';
+import Button from '../components/common/Button';
 
 function HomePage() {
   const [restaurants, setRestaurants] = useState([]);
@@ -27,38 +25,61 @@ function HomePage() {
       .finally(() => { if (mounted) setLoadingRestaurants(false); });
     return () => { mounted = false; };
   }, []);
+
   return (
-    <div className={styles.homeWrapper}>
-      <section className={styles.heroSection}>
-        <HeroBackground />
-        <div className={styles.heroContent}>
-          <h1>Find & Book the Best Restaurants</h1>
-          <HeroTagline />
-          <p>Discover trending places, exclusive offers, and book your table instantly.</p>
-          <div className={styles.searchBarWrapper}>
-            {/* SearchBar component: autocomplete, voice, filters */}
+    <div className="home-wrapper">
+      <section className="hero-section">
+        <div className="hero-bg">
+          <div className="hero-blob blob-1"></div>
+          <div className="hero-blob blob-2"></div>
+        </div>
+
+        <div className="hero-content">
+          <h1 className="hero-title">
+            Find & Book the <span className="text-gradient">Best Restaurants</span>
+          </h1>
+          <p className="hero-subtitle">
+            Discover trending places, exclusive offers, and book your table instantly with our premium booking experience.
+          </p>
+
+          <div className="search-wrapper">
             <SearchBar />
           </div>
-          <button className={styles.primaryCta}>Explore Restaurants</button>
-          <CategoryCarousel />
 
-          <div className="restaurant-grid-wrapper">
-            <h2 style={{marginTop: '1.5rem', color: 'var(--color-dark)'}}>Popular near you</h2>
-            <div className="restaurant-grid">
-              {loadingRestaurants && <p>Loading restaurants...</p>}
-              {restaurantsError && <p style={{color:'crimson'}}>Failed to load restaurants: {restaurantsError}</p>}
-              {!loadingRestaurants && !restaurantsError && restaurants.length === 0 && <p>No restaurants found.</p>}
-              {!loadingRestaurants && !restaurantsError && restaurants.map(r => (
-                <RestaurantCard key={r._id} restaurant={r} />
-              ))}
-            </div>
+          <div className="hero-actions">
+            <Button variant="primary" size="large" onClick={() => document.getElementById('restaurants-grid').scrollIntoView({ behavior: 'smooth' })}>
+              Explore Restaurants
+            </Button>
           </div>
         </div>
       </section>
-  <Offers />
-      {/* Add carousel, banners, and more sections here */}
+
+      <CategoryCarousel />
+
+      <section id="restaurants-grid" className="restaurant-grid-section">
+        <h2 className="section-title">Popular near you</h2>
+
+        {loadingRestaurants && <div className="loading-state">Loading restaurants...</div>}
+
+        {restaurantsError && <div className="error-state">Failed to load restaurants: {restaurantsError}</div>}
+
+        {!loadingRestaurants && !restaurantsError && restaurants.length === 0 && (
+          <div className="empty-state">No restaurants found.</div>
+        )}
+
+        {!loadingRestaurants && !restaurantsError && (
+          <div className="grid-responsive">
+            {restaurants.map(r => (
+              <RestaurantCard key={r._id} restaurant={r} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      <Offers />
     </div>
   );
 }
 
 export default HomePage;
+

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/Auth.css';
+import './Auth.css';
+import Button from '../components/common/Button';
+import Spinner from '../components/common/Spinner';
 
 function Signup() {
   const [firstName, setFirstName] = useState('');
@@ -43,21 +45,68 @@ function Signup() {
   };
 
   return (
-    <div className="auth-container">
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2>Sign Up</h2>
-        <input type="text" name="firstName" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} required />
-        <input type="text" name="lastName" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} required />
-        <input type="tel" name="phone" placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} />
-        <input type="email" name="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
-        <input type="password" name="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
-        <input type="password" name="confirmPassword" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
-        <button className="btn-primary" type="submit" disabled={loading}>{loading ? 'Signing up…' : 'Sign Up'}</button>
-        {error && <div style={{ color: 'crimson', marginTop: 8 }}>{error}</div>}
-        <div className="auth-link">Already have an account? <Link to="/login">Login</Link></div>
-      </form>
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-visual">
+          <div className="visual-content">
+            <h2>Join Us Today</h2>
+            <p>Create an account to start booking tables at the best restaurants in town.</p>
+          </div>
+        </div>
+
+        <div className="auth-form-container">
+          <div className="auth-header">
+            <h2>Sign Up</h2>
+            <p>Create your new account</p>
+          </div>
+
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <div className="flex-between" style={{ gap: '1rem' }}>
+              <div className="form-group" style={{ flex: 1 }}>
+                <label>First Name</label>
+                <input className="form-input" type="text" placeholder="John" value={firstName} onChange={e => setFirstName(e.target.value)} required />
+              </div>
+              <div className="form-group" style={{ flex: 1 }}>
+                <label>Last Name</label>
+                <input className="form-input" type="text" placeholder="Doe" value={lastName} onChange={e => setLastName(e.target.value)} required />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>Phone Number</label>
+              <input className="form-input" type="tel" placeholder="+1 (555) 000-0000" value={phone} onChange={e => setPhone(e.target.value)} />
+            </div>
+
+            <div className="form-group">
+              <label>Email Address</label>
+              <input className="form-input" type="email" placeholder="name@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
+            </div>
+
+            <div className="form-group">
+              <label>Password</label>
+              <input className="form-input" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
+            </div>
+
+            <div className="form-group">
+              <label>Confirm Password</label>
+              <input className="form-input" type="password" placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
+            </div>
+
+            {error && <div className="auth-error">{error}</div>}
+
+            <Button type="submit" variant="primary" size="large" disabled={loading} className="w-full">
+              {loading ? <Spinner size={20} color="white" /> : 'Create Account'}
+            </Button>
+          </form>
+
+          <div className="auth-footer">
+            Already have an account? <Link to="/login">Login</Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default Signup;
+

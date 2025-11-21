@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from './common/ToastContext';
 import Spinner from './common/Spinner';
 import '../styles/BookingModal.css';
+import Button from './common/Button';
 
 function BookingModal({ tables, restaurantId }) {
   const [show, setShow] = useState(false);
@@ -40,7 +41,6 @@ function BookingModal({ tables, restaurantId }) {
       });
 
       if (res.status === 401) {
-        // not authenticated
         navigate('/login');
         return;
       }
@@ -51,10 +51,8 @@ function BookingModal({ tables, restaurantId }) {
       }
 
       const data = await res.json();
-      // success -> navigate to confirmation by id
       setShow(false);
       try { localStorage.setItem('booking_refresh', String(Date.now())); } catch (e) { /* ignore */ }
-      // server returns { success: true, booking }
       const b = data && data.booking ? data.booking : data;
       const idToUse = b && (b._id || b.booking?._id || b.bookingId);
       if (toast && toast.show) {
@@ -75,7 +73,10 @@ function BookingModal({ tables, restaurantId }) {
 
   return (
     <div className="booking-modal-wrapper">
-      <button className="btn-primary" onClick={() => setShow(true)}>Book a Table</button>
+      <Button variant="primary" size="large" onClick={() => setShow(true)} className="w-full">
+        Book a Table
+      </Button>
+
       {show && (
         <div className="modal-overlay" onClick={() => setShow(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -115,11 +116,11 @@ function BookingModal({ tables, restaurantId }) {
 
             {error && <div className="booking-error">{error}</div>}
 
-            <div style={{display:'flex',gap:8,marginTop:12}}>
-              <button className="btn-primary" disabled={!selected || !date || !time || loading} onClick={handleConfirm}>
+            <div className="modal-actions">
+              <Button variant="primary" disabled={!selected || !date || !time || loading} onClick={handleConfirm}>
                 {loading ? <Spinner size={18} /> : 'Confirm Booking'}
-              </button>
-              <button className="btn-secondary" onClick={() => setShow(false)} disabled={loading}>Cancel</button>
+              </Button>
+              <Button variant="secondary" onClick={() => setShow(false)} disabled={loading}>Cancel</Button>
             </div>
           </div>
         </div>
@@ -129,3 +130,4 @@ function BookingModal({ tables, restaurantId }) {
 }
 
 export default BookingModal;
+

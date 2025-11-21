@@ -6,9 +6,9 @@ const bookingSchema = new mongoose.Schema({
   customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
   date: { type: String, required: true },
   time: { type: String, required: true },
-  guests: { type: Number, default: 2 },
+  guests: { type: Number, default: 2, min: 1, max: 20 },
   table: { type: String },
-  status: { type: String, enum: ['pending','confirmed','cancelled'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending' },
   createdAt: { type: Date, default: Date.now }
 });
 

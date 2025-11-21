@@ -1,42 +1,38 @@
-a {
-  text-decoration: none;
-  color: inherit;
+/* Global App Layout */
+html,
+body,
+#root {
+  height: 100%;
 }
 
-.btn-primary {
-  background: linear-gradient(90deg, #2ecc7a 0%, #1abc9c 100%);
-  color: #fff;
-  border: none;
-  border-radius: 24px;
-  padding: 0.7em 2em;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(44,204,122,0.08);
-}
-.btn-primary:hover {
-  background: linear-gradient(90deg, #1abc9c 0%, #2ecc7a 100%);
-  box-shadow: 0 4px 16px rgba(44,204,122,0.15);
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-body);
 }
 
-.btn-secondary {
-  background: #e0e0e0;
-  color: #222;
-  border: none;
-  border-radius: 24px;
-  padding: 0.7em 2em;
-  font-size: 1rem;
-  margin-left: 1em;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-secondary:hover {
-  background: #bdbdbd;
+.page-content {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
-/* Layout to keep footer at bottom */
-html, body, #root { height: 100%; }
-.app-container { display:flex; flex-direction:column; min-height:100vh; }
-.page-content { flex:1 1 auto; }
-.page-content > * { min-height: 0; }
+/* Animation for page transitions if needed */
+.page-content {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
