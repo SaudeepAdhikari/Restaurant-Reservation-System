@@ -1,77 +1,67 @@
-.datatable-wrapper {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px rgba(34,49,63,0.07);
-  padding: 2em 1.5em;
-  margin-bottom: 2em;
-  overflow-x: auto;
+.data-table-container {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
 }
-.datatable-controls {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1em;
-}
-.datatable-search {
-  padding: 0.6em 1em;
-  border: 1px solid #eaeaea;
-  border-radius: 14px;
-  font-size: 1rem;
-  background: #f7fafd;
-}
-.datatable {
+
+.data-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 1em;
 }
-.datatable th, .datatable td {
-  padding: 0.8em 1em;
+
+.data-table thead {
+  background: var(--bg-body);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.data-table th {
+  padding: 1rem 1.5rem;
   text-align: left;
-}
-.datatable th {
-  background: #f7fafd;
-  color: #2e86de;
   font-weight: 600;
-  border-bottom: 2px solid #eaeaea;
+  color: var(--text-main);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
-.datatable tbody tr {
-  transition: background 0.15s;
+
+.data-table tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.2s ease;
 }
-.datatable tbody tr:hover {
-  background: #f0f6ff;
+
+.data-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.02);
 }
-.datatable-action {
-  background: #2e86de;
-  color: #fff;
-  border: none;
-  border-radius: 14px;
-  padding: 0.4em 1.2em;
-  font-size: 0.98rem;
-  margin-right: 0.5em;
-  cursor: pointer;
-  transition: background 0.18s;
+
+.data-table tbody tr:last-child {
+  border-bottom: none;
 }
-.datatable-action:hover {
-  background: #00b894;
+
+.data-table td {
+  padding: 1rem 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
 }
-.datatable-pagination {
-  display: flex;
-  align-items: center;
-  gap: 1em;
-  justify-content: flex-end;
+
+.data-table td:first-child {
+  font-weight: 600;
+  color: var(--text-main);
 }
-.datatable-pagination button {
-  background: #2e86de;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background 0.18s;
-}
-.datatable-pagination button:disabled {
-  background: #eaeaea;
-  color: #aaa;
-  cursor: not-allowed;
+
+@media (max-width: 768px) {
+  .data-table-container {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    min-width: 600px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
 }

@@ -1,79 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { authFetch } from '../utils/auth';
+import React, { useState, useEffect } from 'react';
 import '../styles/Profile.css';
 
-function EditModal({ initial, onClose, onSaved }) {
-  const [name, setName] = useState(initial.name || '');
-  const [email, setEmail] = useState(initial.email || '');
-  const [password, setPassword] = useState('');
-  const [saving, setSaving] = useState(false);
-  const [err, setErr] = useState(null);
+function Profile() {
+  const [profile, setProfile] = useState({ name: '', email: '' });
+  const [loading, setLoading] = useState(true);
 
-  async function save() {
-    setSaving(true);
-    setErr(null);
-    try {
-      const updated = await authFetch('/api/admin/auth/me', {
-        method: 'PUT',
-        body: JSON.stringify({ name, email, password: password || undefined })
-      });
-      onSaved(updated);
-      onClose();
-    } catch (e) {
-      setErr(e.message || String(e));
-    } finally { setSaving(false); }
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem('admin_token');
+        const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/admin/auth/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setProfile(data);
+        }
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  if (loading) {
+    return <div className="loading-container"><div className="loading-spinner"></div></div>;
   }
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <h3>Edit Profile</h3>
-        {err && <div className="error">{err}</div>}
-        <label>Name</label>
-        <input value={name} onChange={e => setName(e.target.value)} />
-        <label>Email</label>
-        <input value={email} onChange={e => setEmail(e.target.value)} />
-        <label>New password (leave blank to keep)</label>
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-        <div className="modal-actions">
-          <button onClick={onClose} disabled={saving}>Cancel</button>
-          <button onClick={save} disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
-        </div>
+    <div className="profile-page">
+      <div className="page-header">
+        <h1 className="page-title">Profile</h1>
+        <p className="page-subtitle">Manage your admin account</p>
       </div>
-    </div>
-  );
-}
 
-function Profile() {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showEdit, setShowEdit] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-    authFetch('/api/admin/auth/me')
-      .then(p => { if (mounted) setProfile(p); })
-      .catch(err => { if (mounted) setError(err.message || String(err)); })
-      .finally(() => { if (mounted) setLoading(false); });
-    return () => { mounted = false; };
-  }, []);
-
-  if (loading) return <div className="settings-page"><h2>Profile</h2><p>Loading...</p></div>;
-  if (error) return <div className="settings-page"><h2>Profile</h2><p className="error">{error}</p></div>;
-
-  return (
-    <div className="settings-page">
-      <h2>Profile</h2>
       <div className="profile-card">
-        <div className="profile-row"><strong>Name:</strong> <span>{profile.name}</span></div>
-        <div className="profile-row"><strong>Email:</strong> <span>{profile.email}</span></div>
-        <div className="profile-row"><strong>Member since:</strong> <span>{new Date(profile.createdAt).toLocaleString()}</span></div>
-        <div style={{marginTop:12}}>
-          <button onClick={() => setShowEdit(true)}>Edit</button>
+        <div className="profile-avatar">
+          <div className="avatar-circle">
+            {profile.name?.charAt(0).toUpperCase() || 'A'}
+          </div>
+        </div>
+
+        <div className="profile-info">
+          <div className="info-group">
+            <label className="info-label">Full Name</label>
+            <div className="info-value">{profile.name || 'Admin User'}</div>
+          </div>
+
+          <div className="info-group">
+            <label className="info-label">Email Address</label>
+            <div className="info-value">{profile.email || 'admin@restaurant.com'}</div>
+          </div>
+
+          <div className="info-group">
+            <label className="info-label">Role</label>
+            <div className="info-value">
+              <span className="role-badge">Administrator</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="profile-actions">
+          <button className="btn-base btn-primary">Edit Profile</button>
+          <button className="btn-base btn-secondary">Change Password</button>
         </div>
       </div>
-      {showEdit && <EditModal initial={profile} onClose={() => setShowEdit(false)} onSaved={(u) => setProfile(u)} />}
     </div>
   );
 }

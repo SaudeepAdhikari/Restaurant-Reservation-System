@@ -1,33 +1,65 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from '../components/DataTable';
-import { authFetch } from '../utils/auth';
 import '../styles/Customers.css';
 
 function Customers() {
-  const [data, setData] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    authFetch('/api/admin/customers')
-      .then(setData)
-      .catch(console.error);
+    const fetchCustomers = async () => {
+      try {
+        const token = localStorage.getItem('admin_token');
+        const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/admin/customers', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setCustomers(data);
+        }
+      } catch (error) {
+        console.error('Error fetching customers:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCustomers();
   }, []);
 
-  async function handleBlock(row) {
-    const id = row._id || row.id;
-    try {
-      const res = await authFetch(`/api/admin/customers/${id}/block`, { method: 'PUT' });
-      setData(d => d.map(x => (x._id === id || x.id === id) ? res : x));
-    } catch (err) { console.error(err); }
+  const columns = [
+    { key: 'name', label: 'Customer Name' },
+    { key: 'email', label: 'Email' },
+    {
+      key: 'createdAt',
+      label: 'Joined',
+      render: (row) => new Date(row.createdAt).toLocaleDateString()
+    }
+  ];
+
+  if (loading) {
+    return <div className="loading-container"><div className="loading-spinner"></div></div>;
   }
 
   return (
     <div className="customers-page">
-      <h2>Customers</h2>
-      <DataTable
-        columns={[{label:'Name',key:'name'},{label:'Email',key:'email'},{label:'Status',key:'blocked'}]}
-        data={data}
-        actions={[{label:'Block',onClick:handleBlock}]}
-      />
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Customers</h1>
+          <p className="page-subtitle">View and manage customer accounts</p>
+        </div>
+      </div>
+
+      {customers.length === 0 ? (
+        <div className="empty-state">
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>👤</div>
+          <h3>No Customers Yet</h3>
+          <p>Customer accounts will appear here once they sign up.</p>
+        </div>
+      ) : (
+        <DataTable columns={columns} data={customers} />
+      )}
     </div>
   );
 }

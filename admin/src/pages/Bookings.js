@@ -1,35 +1,80 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from '../components/DataTable';
-import { authFetch } from '../utils/auth';
 import '../styles/Bookings.css';
 
 function Bookings() {
-  const [data, setData] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    authFetch('/api/admin/bookings')
-      .then(setData)
-      .catch(console.error);
+    const fetchBookings = async () => {
+      try {
+        const token = localStorage.getItem('admin_token');
+        const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/admin/bookings', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setBookings(data);
+        }
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
   }, []);
 
-  async function handleUpdateStatus(row) {
-    const id = row._id || row.id;
-    const next = window.prompt('Enter new status (e.g., Confirmed, Cancelled, Pending):', row.status || '');
-    if (!next) return;
-    try {
-      const res = await authFetch(`/api/admin/bookings/${id}/status`, { method: 'PUT', body: JSON.stringify({ status: next }) });
-      setData(d => d.map(x => (x._id === id || x.id === id) ? res : x));
-    } catch (err) { console.error(err); }
+  const columns = [
+    {
+      key: 'customerId',
+      label: 'Customer',
+      render: (row) => row.customerId?.name || 'Unknown'
+    },
+    {
+      key: 'restaurantId',
+      label: 'Restaurant',
+      render: (row) => row.restaurantId?.name || 'Unknown'
+    },
+    { key: 'date', label: 'Date' },
+    { key: 'time', label: 'Time' },
+    { key: 'guests', label: 'Guests' },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (row) => (
+        <span className={`status-badge status-${row.status}`}>
+          {row.status}
+        </span>
+      )
+    }
+  ];
+
+  if (loading) {
+    return <div className="loading-container"><div className="loading-spinner"></div></div>;
   }
 
   return (
     <div className="bookings-page">
-      <h2>All Bookings</h2>
-      <DataTable
-        columns={[{label:'Customer',key:'customer'},{label:'Restaurant',key:'restaurant'},{label:'Date',key:'date'},{label:'Time',key:'time'},{label:'Status',key:'status'}]}
-        data={data}
-        actions={[{label:'Update Status',onClick:handleUpdateStatus}]}
-      />
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Bookings</h1>
+          <p className="page-subtitle">Monitor all restaurant reservations</p>
+        </div>
+      </div>
+
+      {bookings.length === 0 ? (
+        <div className="empty-state">
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📅</div>
+          <h3>No Bookings Yet</h3>
+          <p>Reservations will appear here once customers start booking.</p>
+        </div>
+      ) : (
+        <DataTable columns={columns} data={bookings} />
+      )}
     </div>
   );
 }

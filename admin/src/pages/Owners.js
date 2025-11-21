@@ -1,32 +1,65 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DataTable from '../components/DataTable';
-import { authFetch } from '../utils/auth';
 import '../styles/Owners.css';
 
 function Owners() {
-  const [data, setData] = useState([]);
+  const [owners, setOwners] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    authFetch('/api/admin/owners')
-      .then(setData)
-      .catch(console.error);
+    const fetchOwners = async () => {
+      try {
+        const token = localStorage.getItem('admin_token');
+        const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/admin/owners', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setOwners(data);
+        }
+      } catch (error) {
+        console.error('Error fetching owners:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOwners();
   }, []);
 
-  async function handleDeactivate(id) {
-    try {
-      const res = await authFetch(`/api/admin/owners/${id}/deactivate`, { method: 'PUT' });
-      setData(d => d.map(x => x._id === id ? res : x));
-    } catch (err) { console.error(err); }
+  const columns = [
+    { key: 'name', label: 'Owner Name' },
+    { key: 'email', label: 'Email' },
+    {
+      key: 'createdAt',
+      label: 'Joined',
+      render: (row) => new Date(row.createdAt).toLocaleDateString()
+    }
+  ];
+
+  if (loading) {
+    return <div className="loading-container"><div className="loading-spinner"></div></div>;
   }
 
   return (
     <div className="owners-page">
-      <h2>Restaurant Owners</h2>
-      <DataTable
-        columns={[{label:'Name',key:'name'},{label:'Email',key:'email'},{label:'Status',key:'active'}]}
-        data={data}
-        actions={[{label:'Deactivate',onClick:handleDeactivate}]}
-      />
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Restaurant Owners</h1>
+          <p className="page-subtitle">Manage restaurant owner accounts</p>
+        </div>
+      </div>
+
+      {owners.length === 0 ? (
+        <div className="empty-state">
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>👥</div>
+          <h3>No Owners Yet</h3>
+          <p>Owner accounts will appear here once they register.</p>
+        </div>
+      ) : (
+        <DataTable columns={columns} data={owners} />
+      )}
     </div>
   );
 }
