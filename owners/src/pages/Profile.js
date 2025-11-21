@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { authFetch } from '../utils/auth';
 import '../styles/Profile.css';
+import '../styles/Restaurants.css'; // Reuse form styles
 
 export default function Profile() {
   const [profile, setProfile] = useState({ name: '', email: '', createdAt: '' });
@@ -22,8 +23,8 @@ export default function Profile() {
     return () => { mounted = false; };
   }, []);
 
-  if (loading) return <div className="settings-page"><h2>Profile</h2><p>Loading...</p></div>;
-  if (error) return <div className="settings-page"><h2>Profile</h2><p className="error">{error}</p></div>;
+  if (loading) return <div className="loading-container"><div className="loading-spinner"></div></div>;
+  if (error) return <div className="profile-page"><div className="error-banner">{error}</div></div>;
 
   async function openEdit() {
     setForm({ name: profile.name, email: profile.email });
@@ -51,39 +52,88 @@ export default function Profile() {
   }
 
   return (
-    <div className="settings-page">
-      <h2>Profile</h2>
+    <div className="profile-page">
+      <div className="page-header-actions">
+        <div>
+          <h1 className="page-title">Account Settings</h1>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>Manage your personal information</p>
+        </div>
+      </div>
 
-      <div className="profile-details">
-        <div className="profile-row"><strong>Name:</strong> <span>{profile.name}</span></div>
-        <div className="profile-row"><strong>Email:</strong> <span>{profile.email}</span></div>
-        <div className="profile-row"><strong>Member since:</strong> <span>{new Date(profile.createdAt).toLocaleString()}</span></div>
-        <div style={{ marginTop: 16 }}>
-          <button className="btn-primary" onClick={openEdit}>Edit</button>
+      <div className="profile-card">
+        <div className="profile-header">
+          <div className="profile-avatar">
+            {profile.name ? profile.name.charAt(0).toUpperCase() : 'U'}
+          </div>
+          <div className="profile-info">
+            <h2>{profile.name}</h2>
+            <p>Restaurant Owner</p>
+          </div>
+        </div>
+
+        <div className="profile-details">
+          <div className="detail-item">
+            <span className="detail-label">Full Name</span>
+            <span className="detail-value">{profile.name}</span>
+          </div>
+          <div className="detail-item">
+            <span className="detail-label">Email Address</span>
+            <span className="detail-value">{profile.email}</span>
+          </div>
+          <div className="detail-item">
+            <span className="detail-label">Member Since</span>
+            <span className="detail-value">{new Date(profile.createdAt).toLocaleDateString()}</span>
+          </div>
+        </div>
+
+        <div className="profile-actions">
+          <button className="btn-base btn-primary" onClick={openEdit}>Edit Profile</button>
+          <button className="btn-base btn-secondary">Change Password</button>
         </div>
       </div>
 
       {editing && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Edit profile</h3>
+            <h3>Edit Profile</h3>
             {formError && <div className="form-error">{formError}</div>}
             <form onSubmit={handleSave}>
-              <label>
-                Name
-                <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} required />
-              </label>
-              <label>
-                Email
-                <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} required />
-              </label>
-              <label>
-                New password (leave blank to keep current)
-                <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-              </label>
-              <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-                <button className="btn-primary" type="submit" disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
-                <button type="button" className="small-btn" onClick={() => setEditing(false)}>Cancel</button>
+              <div className="form-group">
+                <label className="form-label">Name</label>
+                <input
+                  className="form-input"
+                  value={form.name}
+                  onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Email</label>
+                <input
+                  className="form-input"
+                  type="email"
+                  value={form.email}
+                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">New Password (optional)</label>
+                <input
+                  className="form-input"
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="Leave blank to keep current"
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                <button className="btn-base btn-primary" type="submit" disabled={saving}>
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </button>
+                <button type="button" className="btn-base btn-secondary" onClick={() => setEditing(false)}>
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
@@ -92,3 +142,4 @@ export default function Profile() {
     </div>
   );
 }
+

@@ -578,3 +578,204 @@
 [34m2025-10-10 18:28:13 debug: GET /api/owner/tables/restaurant/68b0a1be53a11d3e9e1360f7[39m
 [34m2025-10-10 18:28:13 debug: GET /api/owner/tables/restaurant/68b0a46c53a11d3e9e13613c[39m
 [34m2025-10-10 18:28:13 debug: GET /api/owner/tables/restaurant/68b14a541f1d982dc1a5f57c[39m
+[33m2025-11-21 17:34:16 warn: SECURITY WARNING: Debug authentication routes are enabled[39m
+[33m2025-11-21 17:34:16 warn: Debug authentication routes are enabled - these should NOT be used in production![39m
+[32m2025-11-21 17:34:16 info: Server running on http://0.0.0.0:5000[39m
+[32m2025-11-21 17:34:19 info: MongoDB connected[39m
+[34m2025-11-21 17:34:29 debug: POST /api/customers/login[39m
+[32m2025-11-21 17:34:29 info: Login attempt for: sa***@gmail.com[39m
+[33m2025-11-21 17:34:29 warn: Failed login attempt for non-existent account: sa***@gmail.com[39m
+[34m2025-11-21 17:34:35 debug: POST /api/customers/login[39m
+[32m2025-11-21 17:34:35 info: Login attempt for: sa***@gmail.com[39m
+[32m2025-11-21 17:34:36 info: Successful login for customer: sa***@gmail.com[39m
+[34m2025-11-21 17:34:36 debug: Setting auth Cookie: [REDACTED], secure=false[39m
+[34m2025-11-21 17:34:36 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:34:36 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:34:37 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:34:37 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:34:38 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:34:38 debug: GET /api/offers[39m
+[34m2025-11-21 17:34:38 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:34:39 debug: GET /api/offers[39m
+[34m2025-11-21 17:34:55 debug: POST /api/admin/auth/login[39m
+[33m2025-11-21 17:34:55 warn: Failed login attempt for non-existent admin account: sa***@gmail.com[39m
+[34m2025-11-21 17:34:59 debug: POST /api/admin/auth/login[39m
+[32m2025-11-21 17:35:00 info: Successful login for admin: sa***@gmail.com[39m
+[34m2025-11-21 17:35:00 debug: Setting auth Cookie: [REDACTED], secure=false[39m
+[34m2025-11-21 17:35:08 debug: GET /api/auth/debug-auth[39m
+[32m2025-11-21 17:35:08 info: Auth check endpoint called[39m
+[34m2025-11-21 17:35:08 debug: POST /api/auth/login[39m
+[32m2025-11-21 17:35:08 info: Successful login for owner: ki***@gmail.com[39m
+[34m2025-11-21 17:35:08 debug: Setting auth Cookie: [REDACTED], secure=false[39m
+[34m2025-11-21 17:35:08 debug: GET /api/auth/debug-auth[39m
+[32m2025-11-21 17:35:08 info: Auth check endpoint called[39m
+[34m2025-11-21 17:35:08 debug: GET /api/auth/me[39m
+[34m2025-11-21 17:35:08 debug: GET /api/auth/me[39m
+[34m2025-11-21 17:37:09 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:37:09 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:38:11 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:38:11 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:38:12 debug: GET /api/offers[39m
+[34m2025-11-21 17:38:13 debug: GET /api/offers[39m
+[34m2025-11-21 17:38:14 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:38:14 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:38:17 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:38:18 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:38:19 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:38:21 debug: GET /api/offers[39m
+[34m2025-11-21 17:38:21 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:38:21 debug: GET /api/offers[39m
+[34m2025-11-21 17:38:21 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:38:25 debug: POST /api/customers/login[39m
+[32m2025-11-21 17:38:25 info: Login attempt for: sa***@gmail.com[39m
+[32m2025-11-21 17:38:26 info: Successful login for customer: sa***@gmail.com[39m
+[34m2025-11-21 17:38:26 debug: Setting auth Cookie: [REDACTED], secure=false[39m
+[34m2025-11-21 17:38:26 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:38:26 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:38:26 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:38:26 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:38:26 debug: GET /api/offers[39m
+[34m2025-11-21 17:38:26 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:38:27 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:38:27 debug: GET /api/offers[39m
+[34m2025-11-21 17:42:13 debug: GET /api/offers[39m
+[34m2025-11-21 17:42:13 debug: GET /api/offers[39m
+[34m2025-11-21 17:52:33 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:52:33 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:52:33 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:52:33 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:52:34 debug: GET /api/offers[39m
+[34m2025-11-21 17:52:34 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:52:34 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:52:34 debug: GET /api/offers[39m
+[34m2025-11-21 17:52:43 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:52:43 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:52:49 debug: GET /api/offers[39m
+[34m2025-11-21 17:52:50 debug: GET /api/offers[39m
+[34m2025-11-21 17:52:51 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:52:51 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:52:53 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:52:53 debug: GET /api/restaurants[39m
+[34m2025-11-21 17:53:11 debug: GET /api/offers[39m
+[34m2025-11-21 17:53:11 debug: GET /api/offers[39m
+[34m2025-11-21 17:53:24 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:53:24 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:58:49 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:58:49 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:58:49 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:58:49 debug: GET /api/customers/me[39m
+[34m2025-11-21 17:58:50 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 17:58:50 debug: GET /api/bookings/customer[39m
+[34m2025-11-21 18:02:37 debug: GET /api/restaurants[39m
+[34m2025-11-21 18:02:37 debug: GET /api/restaurants[39m
+[34m2025-11-21 18:02:42 debug: GET /api/offers[39m
+[34m2025-11-21 18:02:42 debug: GET /api/offers[39m
+[34m2025-11-21 18:02:44 debug: GET /api/offers[39m
+[34m2025-11-21 18:02:44 debug: GET /api/restaurants[39m
+[34m2025-11-21 18:02:44 debug: GET /api/restaurants[39m
+[34m2025-11-21 18:02:44 debug: GET /api/offers[39m
+[34m2025-11-21 18:10:09 debug: GET /api/auth/me[39m
+[33m2025-11-21 18:10:09 warn: Unauthorized owner access attempt: {"customerId":"68c7926910b869eb13c65a09","role":"customer","iat":1763726006,"jti":"f0618a2831b04b906f08c2e23b932fbf","exp":1764330806}[39m
+[34m2025-11-21 18:10:09 debug: GET /api/auth/me[39m
+[33m2025-11-21 18:10:09 warn: Unauthorized owner access attempt: {"customerId":"68c7926910b869eb13c65a09","role":"customer","iat":1763726006,"jti":"f0618a2831b04b906f08c2e23b932fbf","exp":1764330806}[39m
+[34m2025-11-21 18:10:09 debug: POST /api/auth/logout[39m
+[32m2025-11-21 18:10:09 info: Owner logged out[39m
+[34m2025-11-21 18:10:09 debug: POST /api/auth/logout[39m
+[32m2025-11-21 18:10:09 info: Owner logged out[39m
+[34m2025-11-21 18:23:49 debug: POST /api/auth/login[39m
+[32m2025-11-21 18:23:50 info: Successful login for owner: ki***@gmail.com[39m
+[34m2025-11-21 18:23:50 debug: Setting auth Cookie: [REDACTED], secure=false[39m
+[34m2025-11-21 18:23:50 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:23:50 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:23:50 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:23:50 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:23:54 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:23:54 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:23:56 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:23:56 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:23:56 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:23:58 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:23:59 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:23:59 debug: GET /api/owner/tables/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:23:59 debug: GET /api/owner/tables/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:24:01 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:24:01 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:24:01 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:32:38 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:32:38 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:32:38 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:42:58 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:42:58 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:42:59 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:42:59 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:42:59 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:43:01 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:43:01 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:43:01 debug: GET /api/owner/tables/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:43:01 debug: GET /api/owner/tables/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:43:05 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:43:05 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:43:05 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:53:29 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:53:29 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:53:29 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:53:29 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:53:29 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:53:29 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:53:30 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:57:00 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:57:00 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:57:01 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:01 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:03 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:03 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:03 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:57:04 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:04 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:05 debug: GET /api/owner/tables/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:57:05 debug: GET /api/owner/tables/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:57:06 debug: GET /api/owner/bookings[39m
+[34m2025-11-21 18:57:06 debug: GET /api/owner/bookings[39m
+[34m2025-11-21 18:57:07 debug: GET /api/owner/offers[39m
+[34m2025-11-21 18:57:07 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:07 debug: GET /api/owner/offers[39m
+[34m2025-11-21 18:57:07 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:09 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:57:09 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:57:12 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:57:12 debug: GET /api/auth/me[39m
+[34m2025-11-21 18:57:53 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:53 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:58 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:58 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:57:58 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:58:00 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:58:00 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 18:58:00 debug: GET /api/owner/tables/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:58:00 debug: GET /api/owner/tables/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 18:58:02 debug: GET /api/owner/bookings[39m
+[34m2025-11-21 18:58:02 debug: GET /api/owner/bookings[39m
+[34m2025-11-21 19:15:45 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:15:45 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:15:54 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 19:15:55 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 19:15:56 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 19:15:56 debug: GET /api/owner/restaurants[39m
+[34m2025-11-21 19:15:56 debug: GET /api/owner/menu/restaurant/68b0a4c353a11d3e9e13613f[39m
+[34m2025-11-21 19:15:59 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:15:59 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:17:17 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:13 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:14 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:15 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:15 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:15 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:15 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:20 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:20 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:22 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:35:22 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:43:36 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:43:36 debug: GET /api/auth/me[39m
+[34m2025-11-21 19:43:37 debug: GET /api/owner/dashboard/stats[39m
+[34m2025-11-21 19:43:37 debug: GET /api/owner/dashboard/stats[39m

@@ -1,30 +1,130 @@
 .bookings-page {
-  max-width: 700px;
-  margin: 2em auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
+
 .bookings-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2em;
+  display: grid;
+  gap: 1rem;
 }
+
 .booking-card {
-  background: #23305a;
-  color: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(26,34,51,0.10);
-  padding: 1.2em 1.5em;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--transition-fast);
+}
+
+.booking-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--primary-light);
+}
+
+.booking-info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.booking-customer {
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
+  gap: 0.25rem;
 }
-.status {
+
+.customer-name {
+  font-family: 'Outfit', sans-serif;
   font-weight: 600;
-  margin-top: 0.5em;
+  color: var(--text-main);
+  font-size: 1.1rem;
 }
-.status.confirmed {
-  color: #ffd700;
+
+.booking-meta {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
-.status.pending {
-  color: #fff;
-  opacity: 0.7;
+
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--border-color);
+}
+
+.detail-row {
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.detail-label {
+  color: var(--text-secondary);
+  margin-right: 0.5rem;
+}
+
+.status-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+.status-badge.confirmed {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #dcfce7;
+}
+
+.status-badge.cancelled {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fee2e2;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .booking-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .booking-info {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .booking-details {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+    width: 100%;
+  }
+
+  .card-actions {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
 }

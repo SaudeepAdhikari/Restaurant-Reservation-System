@@ -1,69 +1,169 @@
 .tables-page {
-  max-width: 900px;
-  margin: 2em auto;
-}
-.tables-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2em;
-}
-.tables-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 2em;
-}
-.table-card {
-  background: #23305a;
-  color: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px rgba(26,34,51,0.10);
-  padding: 1.5em 1.2em;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 160px;
-  transition: transform 0.18s, box-shadow 0.18s;
+  gap: 2rem;
 }
-.table-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 8px 32px rgba(26,34,51,0.18);
+
+.tables-floor-plan {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  min-height: 500px;
+  background-image:
+    linear-gradient(var(--border-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: -1px -1px;
+  position: relative;
 }
-.table-info h4 {
-  color: #ffd700;
-  margin-bottom: 0.5em;
+
+.tables-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
 }
-.table-actions {
+
+.table-item {
   display: flex;
-  gap: 1em;
-  margin-top: 1em;
-}
-.btn-secondary {
-  background: #fff;
-  color: #23305a;
-  border: none;
-  border-radius: 24px;
-  padding: 0.5em 1.5em;
-  font-size: 1rem;
-  font-weight: 600;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.2s;
 }
-.btn-secondary:hover {
-  background: #ffd700;
-  color: #23305a;
+
+.table-item:hover {
+  transform: scale(1.05);
+  z-index: 10;
 }
-.btn-danger {
-  background: #e74c3c;
-  color: #fff;
-  border: none;
-  border-radius: 24px;
-  padding: 0.5em 1.5em;
-  font-size: 1rem;
-  font-weight: 600;
+
+/* Visual Table Shapes */
+.table-shape {
+  position: relative;
+  background: white;
+  border: 2px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--text-main);
+  transition: all 0.3s;
+}
+
+.table-shape.available {
+  border-color: #10b981;
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.table-shape.unavailable {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Shape Variants */
+.table-shape.circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.table-shape.square {
+  width: 100px;
+  height: 100px;
+  border-radius: 16px;
+}
+
+.table-shape.rectangle {
+  width: 140px;
+  height: 90px;
+  border-radius: 12px;
+}
+
+/* Chairs */
+.chair {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Chair positioning logic would be complex in pure CSS, 
+   so we'll use pseudo-elements for a simple effect or 
+   just rely on the shape itself for now to keep it clean. */
+
+.table-info-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text-main);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  margin-bottom: 0.5rem;
+  z-index: 20;
+}
+
+.table-item:hover .table-info-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.table-controls {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table-action-btn {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid var(--border-color);
+  background: white;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
-.btn-danger:hover {
-  background: #c0392b;
+
+.table-action-btn:hover {
+  background: var(--bg-body);
+  border-color: var(--primary);
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  width: fit-content;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
 }

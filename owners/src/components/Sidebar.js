@@ -1,46 +1,47 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import '../styles/Sidebar.css';
-import { removeToken } from '../utils/auth';
+import { NavLink } from 'react-router-dom';
+import './Sidebar.css';
 
-const navItems = [
-  { path: '/', label: 'Dashboard', icon: '🏠' },
-  { path: '/restaurant', label: 'Restaurant', icon: '🍽️' },
-  { path: '/tables', label: 'Tables', icon: '🪑' },
-  { path: '/menu', label: 'Menu', icon: '📋' },
-  { path: '/bookings', label: 'Bookings', icon: '📅' },
-  { path: '/settings', label: 'Settings', icon: '⚙️' }
-];
+const Sidebar = ({ isOpen, toggle }) => {
+  const menuItems = [
+    { path: '/', icon: '📊', label: 'Dashboard' },
+    { path: '/restaurants', icon: '🏪', label: 'Restaurants' },
+    { path: '/menu', icon: '🍽️', label: 'Menu' },
+    { path: '/tables', icon: '🪑', label: 'Tables' },
+    { path: '/bookings', icon: '📅', label: 'Bookings' },
+    { path: '/offers', icon: '🏷️', label: 'Offers' },
+  ];
 
-function Sidebar({ onLogout }) {
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    removeToken();
-    if (onLogout) onLogout();
-    navigate('/login');
-  }
   return (
-    <aside className="sidebar">
-      <div className="sidebar-header">Owner Panel</div>
+    <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
+      <div className="sidebar-header">
+        <h2 className="brand-logo">
+          Owner<span className="text-primary">Panel</span>
+          <span className="pro-badge">PRO</span>
+        </h2>
+        <button className="toggle-btn" onClick={toggle}>
+          {isOpen ? '◀' : '▶'}
+        </button>
+      </div>
+
       <nav className="sidebar-nav">
-        {navItems.map(item => (
+        {menuItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
-            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
-            end={item.path === '/'}
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
           >
             <span className="nav-icon">{item.icon}</span>
-            <span>{item.label}</span>
+            {isOpen && <span className="nav-label">{item.label}</span>}
           </NavLink>
         ))}
       </nav>
+
       <div className="sidebar-footer">
-        <button className="logout-button" onClick={handleLogout}>Logout</button>
+        {isOpen && <p className="copyright">© 2024 Restaurant OS</p>}
       </div>
     </aside>
   );
-}
+};
 
 export default Sidebar;

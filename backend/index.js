@@ -38,15 +38,15 @@ const app = express();
 // are accepted. In production set a fixed origin or a stricter whitelist.
 const CLIENT_ORIGINS = (process.env.CLIENT_ORIGIN || 'http://localhost:3000,http://localhost:3001,http://localhost:3002').split(',');
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     // allow requests with no origin (curl, mobile apps)
     if (!origin) return callback(null, true);
-    
+
     // In development mode, allow any origin for testing
     if (process.env.NODE_ENV !== 'production') {
       return callback(null, origin);
     }
-    
+
     // In production, check against whitelist
     if (CLIENT_ORIGINS.indexOf(origin) !== -1) {
       return callback(null, origin);
@@ -83,11 +83,14 @@ app.use('/api/admin/customers', adminCustomersRoutes);
 app.use('/api/admin/bookings', adminBookingsRoutes);
 app.use('/api/admin/analytics', analyticsRoutes);
 
+import ownerDashboardRoutes from './routes/ownerDashboard.js';
+
 // Owner routes
 app.use('/api/owner/restaurants', ownerRestaurantsRoutes);
 app.use('/api/owner/menu', ownerMenuRoutes);
 app.use('/api/owner/tables', ownerTablesRoutes);
 app.use('/api/owner/offers', ownerOffersRoutes);
+app.use('/api/owner/dashboard', ownerDashboardRoutes);
 
 // Public restaurants
 app.use('/api/restaurants', restaurantsRoutes);

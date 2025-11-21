@@ -1,111 +1,193 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authFetch } from '../utils/auth';
+import '../styles/Menu.css';
+import '../styles/Restaurants.css'; // Reuse form styles
 
 function MenuForm() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ restaurantId: '', name: '', description: '', price: 0, image: null });
   const [restaurants, setRestaurants] = useState([]);
-  const [preview, setPreview] = useState(null);
-  const fileInputRef = useRef(null);
-  const prevUrlRef = useRef(null);
+  const [form, setForm] = useState({
+    restaurantId: '',
+    name: '',
+    description: '',
+    price: '',
+    image: null,
+    previewUrl: null
+  });
+  const [loading, setLoading] = useState(false);
 
-  React.useEffect(() => {
-    authFetch('/api/owner/restaurants').then(setRestaurants).catch(console.error);
+  useEffect(() => {
+    authFetch('/api/owner/restaurants')
+      .then(data => {
+        setRestaurants(data);
+        if (data.length > 0) {
+          setForm(f => ({ ...f, restaurantId: data[0]._id }));
+        }
+      })
+      .catch(console.error);
   }, []);
-
-  const location = useLocation();
-  // if user returns from uploader with an image path, set it
-  React.useEffect(() => {
-    if (location && location.state && location.state.uploadedImage) {
-      setForm(f => ({ ...f, image: location.state.uploadedImage }));
-      // show preview for remote image
-      const path = location.state.uploadedImage;
-      if (path) setPreview(path);
-    }
-  }, [location]);
 
   function handleChange(e) {
     const { name, value, files } = e.target;
-    // we no longer allow choosing files here — use Upload Menu page instead
-    if (files) {
-      // ignore local file selection here to force using Upload Menu
-      return;
+    if (files && files[0]) {
+      const file = files[0];
+      setForm(f => ({
+        ...f,
+        image: file,
+        previewUrl: URL.createObjectURL(file)
+      }));
+    } else {
+      setForm(f => ({ ...f, [name]: value }));
     }
-    setForm(f => ({ ...f, [name]: value }));
   }
 
   async function uploadImage(file) {
-    const data = new FormData(); data.append('image', file);
-    const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/uploads/image', { method: 'POST', body: data });
+    const data = new FormData();
+    data.append('image', file);
+    const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/uploads/image', {
+      method: 'POST', body: data
+    });
     return res.json();
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!form.restaurantId || !form.name) return alert('restaurant and name required');
-    const payload = { restaurantId: form.restaurantId, name: form.name, description: form.description, price: Number(form.price) };
+    if (!form.restaurantId || !form.name || !form.price) return alert('Restaurant, name and price are required');
+
+    setLoading(true);
     try {
+      const payload = {
+        restaurantId: form.restaurantId,
+        name: form.name,
+        description: form.description,
+        price: Number(form.price)
+      };
+
       if (form.image instanceof File) {
         const upl = await uploadImage(form.image);
-        payload.image = upl.path;
+        const base = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+        payload.image = upl.path.startsWith('/') ? base + upl.path : upl.path;
       }
+
       await authFetch('/api/owner/menu', { method: 'POST', body: JSON.stringify(payload) });
       navigate('/menu');
-    } catch (err) { console.error(err); alert('Error'); }
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Error saving menu item');
+    } finally {
+      setLoading(false);
+    }
   }
 
-  useEffect(() => {
-    return () => {
-      // cleanup object URL on unmount
-      if (prevUrlRef.current) URL.revokeObjectURL(prevUrlRef.current);
-    };
-  }, []);
-
   return (
-    <div className="menu-form-card">
-      <div className="card-header">
-        <h3>Add New Menu Item</h3>
+    <div className="menu-page">
+      <div className="page-header-actions">
+        <div>
+          <h1 className="page-title">Add Menu Item</h1>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+            Create a new dish for your restaurant
+          </p>
+        </div>
+        <button className="btn-base btn-secondary" onClick={() => navigate('/menu')}>
+          Cancel
+        </button>
       </div>
-      <form className="card-body" onSubmit={handleSubmit}>
-        <label>
-          Restaurant
-          <select name="restaurantId" value={form.restaurantId} onChange={handleChange} required>
-            <option value="">Select restaurant</option>
-            {restaurants.map(r => <option key={r._id} value={r._id}>{r.name}</option>)}
-          </select>
-        </label>
 
-        <label>
-          Name
-          <input name="name" value={form.name} onChange={handleChange} required />
-        </label>
+      <div className="form-container">
+        <form onSubmit={handleSubmit}>
+          <div className="form-section">
+            <h3 className="form-section-title">Item Details</h3>
 
-        <label>
-          Description
-          <textarea name="description" value={form.description} onChange={handleChange} />
-        </label>
-
-        <label>
-          Price
-          <input name="price" type="number" value={form.price} onChange={handleChange} required />
-        </label>
-
-          <div className="file-upload">
-            <div className="preview" aria-hidden>
-              {preview ? <img src={preview} alt="preview"/> : <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="6" fill="#f3f4f6"/><path d="M12 8V16" stroke="#c7cdd6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M8 12h8" stroke="#c7cdd6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+            <div className="form-group">
+              <label className="form-label">Restaurant</label>
+              <select
+                className="form-input"
+                name="restaurantId"
+                value={form.restaurantId}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Restaurant</option>
+                {restaurants.map(r => <option key={r._id} value={r._id}>{r.name}</option>)}
+              </select>
             </div>
-            <div>
-              <div className="small muted" style={{marginTop:6}}>Image attachments are handled on the Upload Menu page.</div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Item Name</label>
+                <input
+                  className="form-input"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="e.g. Classic Burger"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Price ($)</label>
+                <input
+                  className="form-input"
+                  name="price"
+                  type="number"
+                  step="0.01"
+                  value={form.price}
+                  onChange={handleChange}
+                  required
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Description</label>
+              <textarea
+                className="form-textarea"
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                placeholder="Describe the dish..."
+              />
             </div>
           </div>
 
-        <div style={{marginTop:8}}>
-          <button type="submit" className="add-btn">Add Menu Item</button>
-        </div>
-      </form>
+          <div className="form-section">
+            <h3 className="form-section-title">Image</h3>
+            <div className="form-group">
+              <label className="image-upload-preview">
+                {form.previewUrl ? (
+                  <img src={form.previewUrl} alt="Preview" className="preview-image" />
+                ) : (
+                  <div className="upload-placeholder">
+                    <span style={{ fontSize: '2rem' }}>🍲</span>
+                    <p>Click to upload food image</p>
+                  </div>
+                )}
+                <input
+                  name="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleChange}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="button" className="btn-base btn-secondary" onClick={() => navigate('/menu')}>
+              Cancel
+            </button>
+            <button type="submit" className="btn-base btn-primary" disabled={loading}>
+              {loading ? 'Saving...' : 'Add Item'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
 
 export default MenuForm;
+

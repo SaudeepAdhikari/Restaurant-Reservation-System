@@ -1,26 +1,22 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authFetch } from '../utils/auth';
-import '../styles/RestaurantDetails.css';
+import '../styles/Menu.css';
+
+
 
 function MenuList() {
   const [restaurants, setRestaurants] = useState([]);
   const [selected, setSelected] = useState('');
   const [items, setItems] = useState([]);
-  const [form, setForm] = useState({ name: '', description: '', price: '', image: null });
-  const [preview, setPreview] = useState(null);
-  const prevUrlRef = useRef(null);
-  const fileRef = useRef(null);
-  const [loading, setLoading] = useState(false);
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // if coming back from uploader, accept the uploaded image path
-  useEffect(() => {
-    if (location && location.state && location.state.uploadedImage) {
-      setForm(f => ({ ...f, image: location.state.uploadedImage }));
-    }
-  }, [location]);
+  // Derived categories from items
+  const categories = ['All', ...new Set(items.map(i => i.category || 'Mains'))];
 
   useEffect(() => {
     authFetch('/api/owner/restaurants')
@@ -28,111 +24,184 @@ function MenuList() {
         setRestaurants(rests);
         if (rests.length) {
           setSelected(rests[0]._id);
-          return authFetch(`/api/owner/menu/restaurant/${rests[0]._id}`);
         }
-        return [];
+        setLoading(false);
       })
-      .then(setItems)
-      .catch(console.error);
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   }, []);
 
   useEffect(() => {
-    if (!selected) return;
-    authFetch(`/api/owner/menu/restaurant/${selected}`).then(setItems).catch(console.error);
+    if (!selected) {
+      setItems([]);
+      return;
+    }
+
+    setLoading(true);
+    authFetch(`/api/owner/menu/restaurant/${selected}`)
+      .then(data => {
+        setItems(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   }, [selected]);
 
-  function handleChange(e) {
-    const { name, value, files } = e.target;
-    if (files) {
-      const file = files[0] || null;
-      setForm(f => ({ ...f, [name]: file }));
-      if (file) {
-        const url = URL.createObjectURL(file);
-        if (prevUrlRef.current) URL.revokeObjectURL(prevUrlRef.current);
-        prevUrlRef.current = url;
-        setPreview(url);
-      } else {
-        if (prevUrlRef.current) URL.revokeObjectURL(prevUrlRef.current);
-        prevUrlRef.current = null;
-        setPreview(null);
-      }
-    } else {
-      setForm(f => ({ ...f, [name]: value }));
+  useEffect(() => {
+    let result = items;
+
+    // Search filter
+    if (searchTerm) {
+      const lower = searchTerm.toLowerCase();
+      result = result.filter(i => i.name.toLowerCase().includes(lower) || i.description?.toLowerCase().includes(lower));
     }
-  }
 
-  async function uploadImage(file) {
-    const data = new FormData();
-    data.append('image', file);
-    const base = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000';
-    const res = await fetch(base + '/api/uploads/image', { method: 'POST', body: data });
-    return res.json();
-  }
+    // Category filter
+    if (activeCategory !== 'All') {
+      result = result.filter(i => (i.category || 'Mains') === activeCategory);
+    }
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (!selected) return alert('Please select a restaurant');
-    if (!form.name || !form.price) return alert('Name and price are required');
-    setLoading(true);
-    try {
-      const payload = { restaurantId: selected, name: form.name, description: form.description, price: Number(form.price) };
-      if (form.image instanceof File) {
-        const upl = await uploadImage(form.image);
-        const base = process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000';
-        payload.image = (upl.path && upl.path.startsWith('/')) ? base + upl.path : upl.path || '';
-      }
-      await authFetch('/api/owner/menu', { method: 'POST', body: JSON.stringify(payload) });
-      setForm({ name: '', description: '', price: '', image: null });
-      const list = await authFetch(`/api/owner/menu/restaurant/${selected}`);
-      setItems(list);
-    } catch (err) { console.error(err); alert(err.message || 'Error adding menu'); }
-    finally { setLoading(false); }
-  }
+    setFilteredItems(result);
+  }, [items, searchTerm, activeCategory]);
 
   async function handleDelete(id) {
-    if (!window.confirm('Delete menu item?')) return;
+    if (!window.confirm('Are you sure you want to delete this menu item?')) return;
     try {
       await authFetch(`/api/owner/menu/${id}`, { method: 'DELETE' });
       setItems(s => s.filter(x => x._id !== id));
-    } catch (err) { console.error(err); alert('Delete failed'); }
+    } catch (err) {
+      console.error(err);
+      alert('Delete failed');
+    }
+  }
+
+  if (loading && restaurants.length === 0) {
+    return <div className="loading-container"><div className="loading-spinner"></div></div>;
   }
 
   return (
-    <div>
-      <h2>Your Menu Items</h2>
-
-  <div style={{display:'flex', gap:12, alignItems:'center', marginBottom:12}}>
-        <label style={{margin:0}}>
-          Restaurant
-          <select value={selected} onChange={e => setSelected(e.target.value)} style={{marginLeft:8}}>
-            <option value="">-- select --</option>
-            {restaurants.map(r => <option key={r._id} value={r._id}>{r.name}</option>)}
-          </select>
-        </label>
-        <div style={{marginLeft:'auto', display:'flex', gap:12, alignItems:'center'}}>
-          <button type="button" className="upload-menu-cta" onClick={() => navigate('/upload-menu')}>Upload Menu Item</button>
-          <small className="muted">Select a restaurant, then add menu items via the Upload Menu page</small>
+    <div className="menu-page">
+      <div className="page-header-actions">
+        <div>
+          <h1 className="page-title">Menu Management</h1>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>Curate your restaurant's culinary offerings</p>
         </div>
+        <button
+          className="btn-base btn-primary"
+          onClick={() => navigate('/menu/new')}
+          disabled={!selected}
+          style={{ padding: '0.75rem 1.5rem', fontSize: '1rem' }}
+        >
+          + Add Item
+        </button>
       </div>
 
-      <div className="menu-grid">
-        {items.map(i => (
-          <div key={i._id} className="menu-card">
-            {i.image ? <img src={i.image} alt="item" className="menu-image"/> : null}
-            <div className="menu-body">
-              <strong>{i.name}</strong>
-              <div className="muted">${i.price}</div>
-              <div className="small muted">{i.description}</div>
-              <div className="card-actions">
-                <button className="small-btn">Edit</button>
-                <button className="small-btn danger-btn" onClick={() => handleDelete(i._id)}>Delete</button>
+      {restaurants.length === 0 ? (
+        <div className="empty-state" style={{ textAlign: 'center', padding: '4rem 0' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🍽️</div>
+          <h3>No Restaurants Found</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem' }}>You need to create a restaurant before adding a menu.</p>
+          <button className="btn-base btn-primary" onClick={() => navigate('/restaurant/new')}>Create Restaurant</button>
+        </div>
+      ) : (
+        <>
+          <div className="menu-controls-wrapper">
+            <div className="menu-controls-top">
+              <div className="restaurant-selector-group">
+                <label className="selector-label">Restaurant:</label>
+                <select
+                  className="premium-select"
+                  value={selected}
+                  onChange={e => setSelected(e.target.value)}
+                >
+                  {restaurants.map(r => <option key={r._id} value={r._id}>{r.name}</option>)}
+                </select>
+              </div>
+              <div className="search-bar">
+                <span className="search-icon">🔍</span>
+                <input
+                  type="text"
+                  className="search-input"
+                  placeholder="Search menu items..."
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                />
               </div>
             </div>
+
+            {items.length > 0 && (
+              <div className="category-filters">
+                {categories.map(cat => (
+                  <button
+                    key={cat}
+                    className={`category-pill ${activeCategory === cat ? 'active' : ''}`}
+                    onClick={() => setActiveCategory(cat)}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        ))}
-      </div>
+
+          {filteredItems.length === 0 ? (
+            <div className="empty-state" style={{ textAlign: 'center', padding: '4rem 0', background: 'var(--bg-surface)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '1.1rem' }}>
+                {items.length === 0 ? "No menu items found for this restaurant." : "No items match your search."}
+              </p>
+              {items.length === 0 && (
+                <button
+                  className="btn-base btn-secondary"
+                  style={{ marginTop: '1.5rem' }}
+                  onClick={() => navigate('/menu/new')}
+                >
+                  Add First Item
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="menu-grid">
+              {filteredItems.map(i => (
+                <div key={i._id} className="menu-card">
+                  <div className="menu-image-container">
+                    {i.image ? (
+                      <img src={i.image} alt={i.name} className="menu-image" />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', background: 'var(--bg-body)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-light)' }}>
+                        No Image
+                      </div>
+                    )}
+                    <div className="menu-overlay-actions">
+                      <button className="overlay-btn" title="Edit" onClick={() => alert('Edit feature coming soon')}>✏️</button>
+                      <button className="overlay-btn danger" title="Delete" onClick={() => handleDelete(i._id)}>🗑️</button>
+                    </div>
+                  </div>
+                  <div className="menu-info">
+                    <div className="menu-header">
+                      <h3 className="menu-name">{i.name}</h3>
+                      <span className="menu-price-tag">${i.price}</span>
+                    </div>
+                    <p className="menu-description">{i.description || 'No description available.'}</p>
+                    <div className="menu-tags">
+                      <span className="menu-tag">{i.category || 'Mains'}</span>
+                      {i.isVegetarian && <span className="menu-tag" style={{ color: 'green', borderColor: 'green' }}>Veg</span>}
+                      {i.isSpicy && <span className="menu-tag" style={{ color: 'red', borderColor: 'red' }}>Spicy</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
 
+
 export default MenuList;
+
