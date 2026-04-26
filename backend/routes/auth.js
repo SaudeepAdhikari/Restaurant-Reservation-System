@@ -18,8 +18,8 @@ router.post('/register', async (req, res) => {
     const owner = await Owner.create({ name, email, password: hash });
     const token = generateToken({ ownerId: owner._id, role: 'owner' });
     const refreshToken = generateRefreshToken({ ownerId: owner._id, role: 'owner' });
-    setTokenCookie(res, token);
-    setRefreshTokenCookie(res, refreshToken);
+    setTokenCookie(res, token, 'owner_token');
+    setRefreshTokenCookie(res, refreshToken, 'owner_refreshToken');
     res.json({ token, owner: { id: owner._id, name: owner.name, email: owner.email } });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
@@ -45,8 +45,8 @@ router.post('/login', async (req, res) => {
     logger.info(`Successful login for owner: ${email}`);
     const token = generateToken({ ownerId: owner._id, role: 'owner' });
     const refreshToken = generateRefreshToken({ ownerId: owner._id, role: 'owner' });
-    setTokenCookie(res, token);
-    setRefreshTokenCookie(res, refreshToken);
+    setTokenCookie(res, token, 'owner_token');
+    setRefreshTokenCookie(res, refreshToken, 'owner_refreshToken');
     res.json({ token, owner: { id: owner._id, name: owner.name, email: owner.email } });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
@@ -70,8 +70,8 @@ router.post('/refresh', async (req, res) => {
     const token = generateToken({ ownerId: owner._id, role: 'owner' });
     const rotatedRefresh = generateRefreshToken({ ownerId: owner._id, role: 'owner' });
 
-    setTokenCookie(res, token);
-    setRefreshTokenCookie(res, rotatedRefresh);
+    setTokenCookie(res, token, 'owner_token');
+    setRefreshTokenCookie(res, rotatedRefresh, 'owner_refreshToken');
 
     res.json({ token, owner: { id: owner._id, name: owner.name, email: owner.email } });
   } catch (err) {
@@ -98,7 +98,7 @@ router.get('/debug-auth', async (req, res) => {
     logger.info('Auth check endpoint called');
     
     // Check if there's a token cookie
-    const hasCookie = !!req.cookies.token;
+    const hasCookie = !!req.cookies.owner_token;
     
     // Try to verify the token but catch any errors
     let tokenValid = false;
@@ -111,7 +111,7 @@ router.get('/debug-auth', async (req, res) => {
           ? 'missing-production-secret' 
           : 'restaurant-reservation-system-dev-secret-key');
         
-        decoded = jwt.verify(req.cookies.token, secret);
+        decoded = jwt.verify(req.cookies.owner_token, secret);
         tokenValid = true;
       } catch (err) {
         verificationError = err.message;

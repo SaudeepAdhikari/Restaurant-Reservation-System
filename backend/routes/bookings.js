@@ -75,7 +75,7 @@ router.post('/', verifyToken, async (req, res) => {
           time,
           guests: Number(guests || 1),
           table: selectedTableId ? String(selectedTableId) : null,
-          status: 'confirmed'
+          status: 'pending' // Default to pending for owner approval
         };
 
         const booking = await Booking.create([bookingData], { session });
@@ -94,18 +94,9 @@ router.post('/', verifyToken, async (req, res) => {
         .populate('restaurantId')
         .populate('customerId');
 
-      if (populated?.customerId?.email) {
-        sendBookingConfirmationEmail({
-          email: populated.customerId.email,
-          name: populated.customerId.name,
-          restaurantName: populated.restaurantId?.name || 'Restaurant',
-          date: populated.date,
-          time: populated.time,
-          guests: populated.guests
-        }).catch(() => null);
-      }
-
-      emitEvent('booking:created', { booking: populated, restaurantId, ownerId: String(rest.ownerId) }, `owner:${String(rest.ownerId)}`);
+      // Do NOT send confirmation email here. It will be sent when owner accepts.
+      
+      emitEvent('booking:new_request', { booking: populated, restaurantId, ownerId: String(rest.ownerId) }, `owner:${String(rest.ownerId)}`);
       emitEvent('booking:created', { booking: populated, restaurantId, ownerId: String(rest.ownerId) }, 'admins');
       emitEvent('booking:created', { booking: populated, restaurantId, ownerId: String(rest.ownerId) }, `restaurant:${String(restaurantId)}`);
 

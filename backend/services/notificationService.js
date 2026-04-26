@@ -74,6 +74,19 @@ export function sendBookingCancellationEmail({ email, name, restaurantName, date
   });
 }
 
+export function sendBookingDeclinedEmail({ email, name, restaurantName, date, time }) {
+  return sendMail({
+    to: email,
+    subject: `Booking request for ${restaurantName}`,
+    html: `
+      <h2>Booking Request Declined</h2>
+      <p>Hi ${name || 'Guest'},</p>
+      <p>Unfortunately, your reservation request at <strong>${restaurantName}</strong> for ${date} at ${time} could not be accepted at this time.</p>
+      <p>Please try another time or restaurant.</p>
+    `
+  });
+}
+
 export function sendOfferNotificationEmail({ email, name, restaurantName, offerTitle, promoCode }) {
   return sendMail({
     to: email,

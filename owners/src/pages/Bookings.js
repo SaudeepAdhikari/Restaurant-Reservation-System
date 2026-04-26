@@ -31,7 +31,7 @@ function Bookings() {
 
     setList((prev) => {
       const exists = prev.some((item) => item._id === booking._id);
-      if (eventType === 'created' && !exists) {
+      if ((eventType === 'created' || eventType === 'new_request') && !exists) {
         return [booking, ...prev];
       }
       if (exists) {

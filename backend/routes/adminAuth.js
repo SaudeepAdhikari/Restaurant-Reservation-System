@@ -17,8 +17,8 @@ router.post('/register', async (req, res) => {
     const admin = await Admin.create({ name, email, password: hash });
     const token = generateToken({ adminId: admin._id, role: 'admin' });
     const refreshToken = generateRefreshToken({ adminId: admin._id, role: 'admin' });
-    setTokenCookie(res, token);
-    setRefreshTokenCookie(res, refreshToken);
+    setTokenCookie(res, token, 'admin_token');
+    setRefreshTokenCookie(res, refreshToken, 'admin_refreshToken');
     res.json({ token, admin: { id: admin._id, name: admin.name, email: admin.email } });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
@@ -44,8 +44,8 @@ router.post('/login', async (req, res) => {
     logger.info(`Successful login for admin: ${email}`);
     const token = generateToken({ adminId: admin._id, role: 'admin' });
     const refreshToken = generateRefreshToken({ adminId: admin._id, role: 'admin' });
-    setTokenCookie(res, token);
-    setRefreshTokenCookie(res, refreshToken);
+    setTokenCookie(res, token, 'admin_token');
+    setRefreshTokenCookie(res, refreshToken, 'admin_refreshToken');
     res.json({ token, admin: { id: admin._id, name: admin.name, email: admin.email } });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
@@ -69,8 +69,8 @@ router.post('/refresh', async (req, res) => {
     const token = generateToken({ adminId: admin._id, role: 'admin' });
     const rotatedRefresh = generateRefreshToken({ adminId: admin._id, role: 'admin' });
 
-    setTokenCookie(res, token);
-    setRefreshTokenCookie(res, rotatedRefresh);
+    setTokenCookie(res, token, 'admin_token');
+    setRefreshTokenCookie(res, rotatedRefresh, 'admin_refreshToken');
 
     res.json({ token, admin: { id: admin._id, name: admin.name, email: admin.email } });
   } catch (err) {

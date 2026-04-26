@@ -8,8 +8,9 @@ const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'producti
   : 'restaurant-reservation-system-dev-secret-key');
 
 // Set token expiration based on environment
-const TOKEN_EXPIRY = process.env.NODE_ENV === 'production' ? '1d' : '7d';
-const REFRESH_TOKEN_EXPIRY = process.env.NODE_ENV === 'production' ? '14d' : '30d';
+// Set token expiration to 24 hours for all environments as requested
+const TOKEN_EXPIRY = '24h';
+const REFRESH_TOKEN_EXPIRY = '30d';
 
 /**
  * Generate a JWT token with improved security
@@ -53,61 +54,49 @@ export const generateRefreshToken = (payload) => {
  * Set secure cookie with the token
  * @param {Object} res - Express response object
  * @param {String} token - JWT token
+ * @param {String} [name='token'] - Cookie name
  */
-export const setTokenCookie = (res, token) => {
+export const setTokenCookie = (res, token, name = 'token') => {
   // Parse token expiry for cookie max age
   const tokenData = jwt.decode(token);
   const expiresIn = tokenData.exp - tokenData.iat;
   
-  // Configure cookie settings for better cross-origin compatibility
-  // In development, use permissive settings
-  // In production, use strict settings
+  const isProduction = process.env.NODE_ENV === 'production';
+
   const cookieOptions = {
     httpOnly: true,
     maxAge: expiresIn * 1000, // convert to milliseconds
     path: '/',
+    sameSite: isProduction ? 'strict' : 'lax',
+    secure: isProduction, 
   };
   
-  // For development (localhost or cross-origin testing)
-  if (process.env.NODE_ENV !== 'production') {
-    cookieOptions.sameSite = 'none';
-    cookieOptions.secure = true; // Required for sameSite=none even in development
-  } else {
-    // For production
-    cookieOptions.sameSite = 'strict';
-    cookieOptions.secure = true;
-  }
+  res.cookie(name, token, cookieOptions);
   
-  res.cookie('token', token, cookieOptions);
-  
-  // Log cookie settings for debugging
-  logger.debug(`Setting auth cookie: maxAge=${expiresIn * 1000}, sameSite=${process.env.NODE_ENV === 'production' ? 'strict' : 'none'}, secure=${process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development'}`);
+  logger.debug(`Setting auth cookie [${name}]: maxAge=${expiresIn * 1000}, sameSite=${cookieOptions.sameSite}, secure=${cookieOptions.secure}`);
 };
 
 /**
  * Set secure cookie with refresh token.
  * @param {Object} res - Express response object
  * @param {String} token - Refresh token
+ * @param {String} [name='refreshToken'] - Cookie name
  */
-export const setRefreshTokenCookie = (res, token) => {
+export const setRefreshTokenCookie = (res, token, name = 'refreshToken') => {
   const tokenData = jwt.decode(token);
   const expiresIn = tokenData.exp - tokenData.iat;
+
+  const isProduction = process.env.NODE_ENV === 'production';
 
   const cookieOptions = {
     httpOnly: true,
     maxAge: expiresIn * 1000,
     path: '/',
+    sameSite: isProduction ? 'strict' : 'lax',
+    secure: isProduction,
   };
 
-  if (process.env.NODE_ENV !== 'production') {
-    cookieOptions.sameSite = 'none';
-    cookieOptions.secure = true;
-  } else {
-    cookieOptions.sameSite = 'strict';
-    cookieOptions.secure = true;
-  }
-
-  res.cookie('refreshToken', token, cookieOptions);
+  res.cookie(name, token, cookieOptions);
 };
 
 /**
@@ -122,22 +111,10 @@ export const extractTokenFromRequest = (req) => {
     return auth.split(' ')[1];
   } 
   
-  // Try cookie
-  if (req.cookies && req.cookies.token) {
-    return req.cookies.token;
-  }
+  // Try role-specific cookies in order of specificity
+  if (!req.cookies) return null;
   
-  // Fallback manual cookie parsing
-  if (req.headers.cookie) {
-    const parts = req.headers.cookie.split(';').map(p => p.trim());
-    for (const p of parts) {
-      if (p.startsWith('token=')) {
-        return decodeURIComponent(p.split('=')[1]);
-      }
-    }
-  }
-  
-  return null;
+  return req.cookies.admin_token || req.cookies.owner_token || req.cookies.token || null;
 };
 
 /**

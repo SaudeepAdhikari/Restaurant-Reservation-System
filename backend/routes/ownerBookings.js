@@ -3,7 +3,7 @@ import Booking from '../models/Booking.js';
 import Table from '../models/Table.js';
 import { verifyToken, ownerOnly } from '../middleware/authMiddleware.js';
 import { getBookingWindow } from '../services/tableAllocator.js';
-import { sendBookingCancellationEmail } from '../services/notificationService.js';
+import { sendBookingCancellationEmail, sendBookingConfirmationEmail, sendBookingDeclinedEmail } from '../services/notificationService.js';
 import { emitEvent } from '../utils/socket.js';
 
 const router = express.Router();
@@ -44,21 +44,33 @@ router.get('/', verifyToken, ownerOnly, async (req, res) => {
 router.put('/:id/status', verifyToken, ownerOnly, async (req, res) => {
   try {
     const ownerId = req.user.ownerId;
-    const { status } = req.body;
+    const { status } = req.body; // 'confirmed' or 'cancelled' (declined)
+    
     const b = await Booking.findOneAndUpdate({ _id: req.params.id, ownerId }, { status }, { new: true })
       .populate('restaurantId customerId');
     if (!b) return res.status(404).json({ message: 'Booking not found' });
 
+    // Handle table cleanup for cancelled/declined bookings
     if (status === 'cancelled' && b.table) {
       const { start, end } = getBookingWindow(b.date, b.time);
       await Table.updateOne(
         { _id: b.table },
-        { $pull: { bookings: { start: { $gte: start }, end: { $lte: end } } } }
+        { $pull: { bookings: { bookingId: b._id } } }
       );
     }
 
-    if (status === 'cancelled') {
-      sendBookingCancellationEmail({
+    // Send appropriate emails
+    if (status === 'confirmed') {
+      sendBookingConfirmationEmail({
+        email: b.customerId?.email,
+        name: b.customerId?.name,
+        restaurantName: b.restaurantId?.name || 'Restaurant',
+        date: b.date,
+        time: b.time,
+        guests: b.guests
+      }).catch(() => null);
+    } else if (status === 'cancelled') {
+      sendBookingDeclinedEmail({
         email: b.customerId?.email,
         name: b.customerId?.name,
         restaurantName: b.restaurantId?.name || 'Restaurant',
