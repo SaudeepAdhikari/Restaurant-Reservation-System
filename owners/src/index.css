@@ -34,8 +34,13 @@ h1, h2, h3, h4, h5, h6 {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Prevent flex overflow */
-  transition: padding var(--transition-normal);
+  min-width: 0;
+  padding-left: 260px; /* Sidebar width when open */
+  transition: padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.owner-main-stage.is-expanded {
+  padding-left: 80px; /* Sidebar width when collapsed */
 }
 
 .owner-content-area {

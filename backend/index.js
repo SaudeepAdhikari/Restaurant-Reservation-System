@@ -116,10 +116,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use('/api/debug', debugAuthRoutes);
 }
 
-// serve uploads directory
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// All media is now handled by Cloudinary
 app.use('/api/uploads', uploadsRoutes);
 
 const server = http.createServer(app);

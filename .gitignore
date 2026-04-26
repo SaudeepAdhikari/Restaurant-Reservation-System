@@ -35,6 +35,3 @@ Thumbs.db
 # Temporary files
 tmp/
 temp/
-# But keep backend/uploads if needed, or ignore its contents
-backend/uploads/*
-!backend/uploads/.gitkeep

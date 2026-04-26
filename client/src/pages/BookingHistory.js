@@ -24,7 +24,10 @@ function BookingHistory() {
           if (!rel.ok) throw new Error(`HTTP ${rel.status}`);
           return rel.json();
         }
-        if (res.status === 401) { navigate('/login'); throw new Error('Unauthorized'); }
+        if (res.status === 401 || res.status === 403) { 
+          navigate('/login'); 
+          throw new Error(res.status === 401 ? 'Unauthorized' : 'Access Denied: Please login as a customer'); 
+        }
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })

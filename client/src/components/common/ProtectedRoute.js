@@ -11,7 +11,7 @@ function ProtectedRoute({ children }) {
     fetch(`${base}/api/customers/me`, { credentials: 'include' })
       .then(res => {
         if (!mounted) return;
-        if (!res.ok) {
+        if (!res.ok || res.status === 403) {
           setAuthed(false);
         } else {
           setAuthed(true);

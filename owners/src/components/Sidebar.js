@@ -13,7 +13,7 @@ import {
   Settings,
   HelpCircle
 } from 'lucide-react';
-import './Sidebar.css';
+import '../styles/Sidebar.css';
 
 const Sidebar = ({ isOpen, toggle }) => {
   const menuItems = [
@@ -80,12 +80,12 @@ const Sidebar = ({ isOpen, toggle }) => {
         </div>
       </div>
 
-      <div className="sidebar-user-section">
-        <div className="user-avatar-mini">JD</div>
+      <div className="sidebar-footer-credit">
+        <div className="developer-avatar">SA</div>
         {isOpen && (
-          <div className="user-info-mini">
-            <span className="user-name-mini">John Doe</span>
-            <span className="user-role-mini">Administrator</span>
+          <div className="developer-info">
+            <span className="dev-name">Saudeep Adhikari</span>
+            <span className="dev-version">Version 1.0.4 Premium</span>
           </div>
         )}
       </div>
