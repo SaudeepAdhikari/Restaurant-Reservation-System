@@ -2,7 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Owner from '../models/Owner.js';
-import { verifyToken, ownerOnly, generateToken, setTokenCookie } from '../middleware/authMiddleware.js';
+import { verifyToken, ownerOnly, generateToken, setTokenCookie, generateRefreshToken, setRefreshTokenCookie, extractRefreshTokenFromRequest, verifyRefreshToken, clearAuthCookies } from '../middleware/authMiddleware.js';
 import logger from '../utils/logger.js';
 
 const router = express.Router();
@@ -17,7 +17,9 @@ router.post('/register', async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
     const owner = await Owner.create({ name, email, password: hash });
     const token = generateToken({ ownerId: owner._id, role: 'owner' });
+    const refreshToken = generateRefreshToken({ ownerId: owner._id, role: 'owner' });
     setTokenCookie(res, token);
+    setRefreshTokenCookie(res, refreshToken);
     res.json({ token, owner: { id: owner._id, name: owner.name, email: owner.email } });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
@@ -42,10 +44,39 @@ router.post('/login', async (req, res) => {
     
     logger.info(`Successful login for owner: ${email}`);
     const token = generateToken({ ownerId: owner._id, role: 'owner' });
+    const refreshToken = generateRefreshToken({ ownerId: owner._id, role: 'owner' });
     setTokenCookie(res, token);
+    setRefreshTokenCookie(res, refreshToken);
     res.json({ token, owner: { id: owner._id, name: owner.name, email: owner.email } });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// Refresh access token
+router.post('/refresh', async (req, res) => {
+  try {
+    const refreshToken = extractRefreshTokenFromRequest(req);
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Refresh token missing' });
+    }
+
+    const decoded = verifyRefreshToken(refreshToken);
+    const owner = await Owner.findById(decoded.ownerId);
+    if (!owner) {
+      return res.status(401).json({ message: 'Invalid refresh token' });
+    }
+
+    const token = generateToken({ ownerId: owner._id, role: 'owner' });
+    const rotatedRefresh = generateRefreshToken({ ownerId: owner._id, role: 'owner' });
+
+    setTokenCookie(res, token);
+    setRefreshTokenCookie(res, rotatedRefresh);
+
+    res.json({ token, owner: { id: owner._id, name: owner.name, email: owner.email } });
+  } catch (err) {
+    clearAuthCookies(res);
+    res.status(401).json({ message: 'Invalid or expired refresh token' });
   }
 });
 
@@ -138,23 +169,7 @@ router.put('/me', verifyToken, ownerOnly, async (req, res) => {
 
 // Logout - clear the cookie with matching settings
 router.post('/logout', (req, res) => {
-  // Use same cookie clearing options as setTokenCookie for consistency
-  const cookieOptions = {
-    httpOnly: true,
-    path: '/',
-  };
-  
-  // For development (localhost or cross-origin testing)
-  if (process.env.NODE_ENV !== 'production') {
-    cookieOptions.sameSite = 'none';
-    cookieOptions.secure = true; // Required for sameSite=none even in development
-  } else {
-    // For production
-    cookieOptions.sameSite = 'strict';
-    cookieOptions.secure = true;
-  }
-  
-  res.clearCookie('token', cookieOptions);
+  clearAuthCookies(res);
   logger.info('Owner logged out');
   res.json({ message: 'Logged out' });
 });

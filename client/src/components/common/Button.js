@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import './Button.css';
 
 const Button = ({ 
@@ -9,19 +10,29 @@ const Button = ({
   onClick, 
   type = 'button',
   disabled = false,
-  icon
+  icon,
+  isLoading = false
 }) => {
   return (
-    <button
+    <motion.button
+      whileHover={!disabled && !isLoading ? { scale: 1.02, y: -1 } : {}}
+      whileTap={!disabled && !isLoading ? { scale: 0.98 } : {}}
       type={type}
-      className={`btn btn-${variant} btn-${size} ${className}`}
+      className={`btn-root btn-${variant} btn-${size} ${className} ${isLoading ? 'btn-loading' : ''}`}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || isLoading}
     >
-      {icon && <span className="btn-icon">{icon}</span>}
-      {children}
-    </button>
+      {isLoading ? (
+        <span className="btn-spinner" />
+      ) : (
+        <>
+          {icon && <span className="btn-icon">{icon}</span>}
+          <span className="btn-content">{children}</span>
+        </>
+      )}
+    </motion.button>
   );
 };
 
 export default Button;
+

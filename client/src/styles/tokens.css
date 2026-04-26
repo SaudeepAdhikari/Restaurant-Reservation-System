@@ -1,0 +1,52 @@
+:root {
+  /* Colors */
+  --p-50: #EEF2FF; --p-100: #E0E7FF; --p-200: #C7D2FE; --p-300: #A5B4FC;
+  --p-400: #818CF8; --p-500: #6366F1; --p-600: #4F46E5; --p-700: #4338CA;
+  --p-800: #3730A3; --p-900: #312E81;
+
+  --s-50: #FDF2F8; --s-100: #FCE7F3; --s-200: #FBCFE8; --s-300: #F9A8D4;
+  --s-400: #F472B6; --s-500: #EC4899; --s-600: #DB2777; --s-700: #BE185D;
+  --s-800: #9D174D; --s-900: #831843;
+
+  --n-50: #F9FAFB; --n-100: #F3F4F6; --n-200: #E5E7EB; --n-300: #D1D5DB;
+  --n-400: #9CA3AF; --n-500: #6B7280; --n-600: #4B5563; --n-700: #374151;
+  --n-800: #1F2937; --n-900: #111827;
+
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+
+  /* Semantic Colors */
+  --primary: var(--p-600);
+  --primary-hover: var(--p-700);
+  --bg-main: var(--n-50);
+  --bg-surface: #FFFFFF;
+  --text-main: var(--n-900);
+  --text-secondary: var(--n-600);
+  --text-muted: var(--n-400);
+  --border-subtle: var(--n-200);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', var(--font-sans);
+
+  /* Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.03);
+
+  /* Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}

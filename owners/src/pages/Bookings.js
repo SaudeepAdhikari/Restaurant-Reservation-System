@@ -1,26 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import '../styles/Bookings.css';
 import { authFetch } from '../utils/auth';
+import useRealtimeBookings from '../hooks/useRealtimeBookings';
 
 function Bookings() {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [ownerId, setOwnerId] = useState(null);
 
   useEffect(() => {
     setLoading(true);
-    authFetch('/api/owner/bookings')
-      .then(data => setList(data || []))
+    Promise.all([
+      authFetch('/api/owner/bookings'),
+      authFetch('/api/auth/me').catch(() => null)
+    ])
+      .then(([data, profile]) => {
+        setList(data || []);
+        if (profile?.id) {
+          setOwnerId(profile.id);
+        }
+      })
       .catch(err => setError(err.message || String(err)))
       .finally(() => setLoading(false));
   }, []);
 
+  const handleRealtimeEvent = useCallback((eventType, payload) => {
+    const booking = payload?.booking;
+    if (!booking?._id) return;
+
+    setList((prev) => {
+      const exists = prev.some((item) => item._id === booking._id);
+      if (eventType === 'created' && !exists) {
+        return [booking, ...prev];
+      }
+      if (exists) {
+        return prev.map((item) => (item._id === booking._id ? booking : item));
+      }
+      return prev;
+    });
+  }, []);
+
+  useRealtimeBookings(ownerId, handleRealtimeEvent);
+
   const updateStatus = async (id, status) => {
     try {
       const updated = await authFetch(`/api/owner/bookings/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) });
-      setList(list.map(l => l._id === id ? updated : l));
+      setList((prev) => prev.map((l) => (l._id === id ? updated : l)));
     } catch (err) {
-      alert(err.message || 'Failed to update');
+      setError(err.message || 'Failed to update booking status');
     }
   };
 

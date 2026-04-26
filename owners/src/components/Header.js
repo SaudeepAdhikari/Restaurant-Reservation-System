@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Search, Bell, Plus, User, LogOut, Menu } from 'lucide-react';
 import { removeToken, authFetch } from '../utils/auth';
 import '../styles/Header.css';
 
@@ -28,41 +29,60 @@ function Header({ title, onProfile, onLogout, toggleSidebar }) {
   }, []);
 
   return (
-    <header className="owner-topbar">
-      <div className="flex-center" style={{ gap: '1rem' }}>
-        <button className="mobile-toggle-btn" onClick={toggleSidebar}>
-          ☰
+    <header className="premium-header">
+      <div className="header-left">
+        <button className="sidebar-toggle-trigger" onClick={toggleSidebar}>
+          <Menu size={20} />
         </button>
-        <h1 className="page-title">{title}</h1>
+        <h1 className="header-title">{title}</h1>
       </div>
 
-      <div className="owner-header-search">
-        <span className="search-icon">🔍</span>
-        <input type="text" placeholder="Search..." className="header-search-input" />
+      <div className="header-center desktop-only">
+        <div className="header-search-box">
+          <Search size={18} className="search-icon" />
+          <input type="text" placeholder="Search anything..." />
+          <div className="search-shortcut">⌘K</div>
+        </div>
       </div>
 
-      <div className="owner-topbar-actions" ref={ddRef}>
-        <button className="icon-btn-header" title="Notifications">
-          🔔
-          <span className="notification-badge">3</span>
-        </button>
-
-        <button className="btn-base btn-primary" onClick={() => navigate('/restaurant/new')} style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}>
-          + Add Restaurant
-        </button>
-
-        <div className="avatar-wrap">
-          <button className="avatar-btn" onClick={() => setOpen(v => !v)} aria-haspopup="true" aria-expanded={open}>
-            <span className="admin-avatar">{owner && owner.name ? owner.name.charAt(0).toUpperCase() : 'O'}</span>
+      <div className="header-right" ref={ddRef}>
+        <div className="header-actions">
+          <button className="notification-btn" title="Notifications">
+            <Bell size={20} />
+            <span className="bell-dot" />
           </button>
+
+          <button 
+            className="create-btn desktop-only" 
+            onClick={() => navigate('/restaurant/new')}
+          >
+            <Plus size={18} />
+            <span>Add Restaurant</span>
+          </button>
+        </div>
+
+        <div className="user-dropdown-wrapper">
+          <button className="user-trigger" onClick={() => setOpen(v => !v)}>
+            <div className="user-avatar-circle">
+              {owner?.name?.charAt(0) || 'O'}
+            </div>
+          </button>
+          
           {open && (
-            <div className="avatar-dropdown">
-              <div className="dropdown-head">
-                <strong className="dropdown-name">{owner ? owner.name : 'Owner'}</strong>
-                <div className="dropdown-email">{owner ? owner.email : ''}</div>
+            <div className="premium-dropdown">
+              <div className="dropdown-user-header">
+                <span className="user-full-name">{owner?.name || 'Owner'}</span>
+                <span className="user-email-text">{owner?.email || ''}</span>
               </div>
-              <button className="dropdown-item" onClick={() => { setOpen(false); if (onProfile) onProfile(); else navigate('/settings'); }}>Profile</button>
-              <button className="dropdown-item" onClick={() => { setOpen(false); removeToken(); if (onLogout) onLogout(); navigate('/login'); }}>Logout</button>
+              <div className="dropdown-divider" />
+              <button className="dropdown-action" onClick={() => { setOpen(false); if (onProfile) onProfile(); else navigate('/profile'); }}>
+                <User size={16} />
+                Profile Settings
+              </button>
+              <button className="dropdown-action text-error" onClick={() => { setOpen(false); removeToken(); if (onLogout) onLogout(); navigate('/login'); }}>
+                <LogOut size={16} />
+                Sign Out
+              </button>
             </div>
           )}
         </div>
@@ -72,4 +92,5 @@ function Header({ title, onProfile, onLogout, toggleSidebar }) {
 }
 
 export default Header;
+
 

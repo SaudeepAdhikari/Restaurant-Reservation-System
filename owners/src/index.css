@@ -1,10 +1,124 @@
 @import './styles/design.css';
-/* @import './styles/theme-overrides.css'; */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700&display=swap');
+@import './styles/tokens.css';
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 body {
   margin: 0;
-  /* Inter will be used from theme overrides; keep fallback fonts */
-  font-family: 'Inter', 'Segoe UI', 'Roboto', Arial, sans-serif;
-  background: var(--background, #f4f7fa);
-  color: #1a2233;
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-main);
+}
+
+/* Premium Layout Structure */
+.owner-layout-root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-main);
+}
+
+.owner-main-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevent flex overflow */
+  transition: padding var(--transition-normal);
+}
+
+.owner-content-area {
+  padding: 2.5rem;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .owner-content-area {
+    padding: 1.5rem;
+  }
+}
+
+.card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Tables */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  padding: 1rem;
+  background: var(--n-50);
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+tr:hover td {
+  background-color: var(--n-50);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+/* Badges */
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-success { background: var(--p-100); color: var(--p-700); }
+.badge-warning { background: var(--warning); color: white; }

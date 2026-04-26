@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import Admin from '../models/Admin.js';
-import { verifyToken, adminOnly, generateToken, setTokenCookie } from '../middleware/authMiddleware.js';
+import { verifyToken, adminOnly, generateToken, setTokenCookie, generateRefreshToken, setRefreshTokenCookie, extractRefreshTokenFromRequest, verifyRefreshToken, clearAuthCookies } from '../middleware/authMiddleware.js';
 import logger from '../utils/logger.js';
 
 const router = express.Router();
@@ -16,7 +16,9 @@ router.post('/register', async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
     const admin = await Admin.create({ name, email, password: hash });
     const token = generateToken({ adminId: admin._id, role: 'admin' });
+    const refreshToken = generateRefreshToken({ adminId: admin._id, role: 'admin' });
     setTokenCookie(res, token);
+    setRefreshTokenCookie(res, refreshToken);
     res.json({ token, admin: { id: admin._id, name: admin.name, email: admin.email } });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
@@ -41,10 +43,39 @@ router.post('/login', async (req, res) => {
     
     logger.info(`Successful login for admin: ${email}`);
     const token = generateToken({ adminId: admin._id, role: 'admin' });
+    const refreshToken = generateRefreshToken({ adminId: admin._id, role: 'admin' });
     setTokenCookie(res, token);
+    setRefreshTokenCookie(res, refreshToken);
     res.json({ token, admin: { id: admin._id, name: admin.name, email: admin.email } });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// Refresh access token
+router.post('/refresh', async (req, res) => {
+  try {
+    const refreshToken = extractRefreshTokenFromRequest(req);
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Refresh token missing' });
+    }
+
+    const decoded = verifyRefreshToken(refreshToken);
+    const admin = await Admin.findById(decoded.adminId);
+    if (!admin) {
+      return res.status(401).json({ message: 'Invalid refresh token' });
+    }
+
+    const token = generateToken({ adminId: admin._id, role: 'admin' });
+    const rotatedRefresh = generateRefreshToken({ adminId: admin._id, role: 'admin' });
+
+    setTokenCookie(res, token);
+    setRefreshTokenCookie(res, rotatedRefresh);
+
+    res.json({ token, admin: { id: admin._id, name: admin.name, email: admin.email } });
+  } catch (err) {
+    clearAuthCookies(res);
+    res.status(401).json({ message: 'Invalid or expired refresh token' });
   }
 });
 

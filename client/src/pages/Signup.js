@@ -64,32 +64,32 @@ function Signup() {
             <div className="flex-between" style={{ gap: '1rem' }}>
               <div className="form-group" style={{ flex: 1 }}>
                 <label>First Name</label>
-                <input className="form-input" type="text" placeholder="John" value={firstName} onChange={e => setFirstName(e.target.value)} required />
+                <input className="form-input" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required />
               </div>
               <div className="form-group" style={{ flex: 1 }}>
                 <label>Last Name</label>
-                <input className="form-input" type="text" placeholder="Doe" value={lastName} onChange={e => setLastName(e.target.value)} required />
+                <input className="form-input" type="text" value={lastName} onChange={e => setLastName(e.target.value)} required />
               </div>
             </div>
 
             <div className="form-group">
               <label>Phone Number</label>
-              <input className="form-input" type="tel" placeholder="+1 (555) 000-0000" value={phone} onChange={e => setPhone(e.target.value)} />
+              <input className="form-input" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
             </div>
 
             <div className="form-group">
               <label>Email Address</label>
-              <input className="form-input" type="email" placeholder="name@example.com" value={email} onChange={e => setEmail(e.target.value)} required />
+              <input className="form-input" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
             </div>
 
             <div className="form-group">
               <label>Password</label>
-              <input className="form-input" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required />
+              <input className="form-input" type="password" value={password} onChange={e => setPassword(e.target.value)} required />
             </div>
 
             <div className="form-group">
               <label>Confirm Password</label>
-              <input className="form-input" type="password" placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
+              <input className="form-input" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
             </div>
 
             {error && <div className="auth-error">{error}</div>}

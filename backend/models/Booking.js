@@ -12,4 +12,8 @@ const bookingSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+bookingSchema.index({ customerId: 1, createdAt: -1 });
+bookingSchema.index({ ownerId: 1, createdAt: -1 });
+bookingSchema.index({ restaurantId: 1, date: 1, time: 1 });
+
 export default mongoose.model('Booking', bookingSchema);

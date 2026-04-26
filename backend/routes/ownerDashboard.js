@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticateToken, isOwner } from '../middleware/auth.js';
+import { verifyToken, ownerOnly } from '../middleware/authMiddleware.js';
 import Booking from '../models/Booking.js';
 import Restaurant from '../models/Restaurant.js';
 import MenuItem from '../models/MenuItem.js';
@@ -8,9 +8,9 @@ import Customer from '../models/Customer.js'; // Ensure Customer is imported for
 const router = express.Router();
 
 // GET /api/owner/dashboard/stats
-router.get('/stats', authenticateToken, isOwner, async (req, res) => {
+router.get('/stats', verifyToken, ownerOnly, async (req, res) => {
     try {
-        const ownerId = req.user.userId;
+        const ownerId = req.user.ownerId;
 
         // 1. Total Bookings
         const totalBookings = await Booking.countDocuments({ ownerId });
@@ -40,9 +40,9 @@ router.get('/stats', authenticateToken, isOwner, async (req, res) => {
 });
 
 // GET /api/owner/dashboard/activity
-router.get('/activity', authenticateToken, isOwner, async (req, res) => {
+router.get('/activity', verifyToken, ownerOnly, async (req, res) => {
     try {
-        const ownerId = req.user.userId;
+        const ownerId = req.user.ownerId;
 
         // Fetch recent bookings
         const recentBookings = await Booking.find({ ownerId })

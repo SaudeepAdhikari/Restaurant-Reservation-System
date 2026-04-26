@@ -9,6 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'producti
 
 // Set token expiration based on environment
 const TOKEN_EXPIRY = process.env.NODE_ENV === 'production' ? '1d' : '7d';
+const REFRESH_TOKEN_EXPIRY = process.env.NODE_ENV === 'production' ? '14d' : '30d';
 
 /**
  * Generate a JWT token with improved security
@@ -26,6 +27,25 @@ export const generateToken = (payload) => {
   return jwt.sign(tokenPayload, JWT_SECRET, { 
     expiresIn: TOKEN_EXPIRY,
     algorithm: 'HS256' // explicitly set algorithm
+  });
+};
+
+/**
+ * Generate a refresh token with longer expiry.
+ * @param {Object} payload - Data to include in the token
+ * @returns {String} - JWT refresh token
+ */
+export const generateRefreshToken = (payload) => {
+  const tokenPayload = {
+    ...payload,
+    iat: Math.floor(Date.now() / 1000),
+    jti: crypto.randomBytes(24).toString('hex'),
+    tokenType: 'refresh'
+  };
+
+  return jwt.sign(tokenPayload, JWT_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRY,
+    algorithm: 'HS256'
   });
 };
 
@@ -65,6 +85,32 @@ export const setTokenCookie = (res, token) => {
 };
 
 /**
+ * Set secure cookie with refresh token.
+ * @param {Object} res - Express response object
+ * @param {String} token - Refresh token
+ */
+export const setRefreshTokenCookie = (res, token) => {
+  const tokenData = jwt.decode(token);
+  const expiresIn = tokenData.exp - tokenData.iat;
+
+  const cookieOptions = {
+    httpOnly: true,
+    maxAge: expiresIn * 1000,
+    path: '/',
+  };
+
+  if (process.env.NODE_ENV !== 'production') {
+    cookieOptions.sameSite = 'none';
+    cookieOptions.secure = true;
+  } else {
+    cookieOptions.sameSite = 'strict';
+    cookieOptions.secure = true;
+  }
+
+  res.cookie('refreshToken', token, cookieOptions);
+};
+
+/**
  * Extract token from request
  * @param {Object} req - Express request object
  * @returns {String|null} - Token or null if not found
@@ -92,6 +138,63 @@ export const extractTokenFromRequest = (req) => {
   }
   
   return null;
+};
+
+/**
+ * Extract refresh token from request.
+ * @param {Object} req - Express request object
+ * @returns {String|null} - Refresh token or null
+ */
+export const extractRefreshTokenFromRequest = (req) => {
+  if (req.cookies && req.cookies.refreshToken) {
+    return req.cookies.refreshToken;
+  }
+
+  if (req.headers.cookie) {
+    const parts = req.headers.cookie.split(';').map((p) => p.trim());
+    for (const p of parts) {
+      if (p.startsWith('refreshToken=')) {
+        return decodeURIComponent(p.split('=')[1]);
+      }
+    }
+  }
+
+  return null;
+};
+
+/**
+ * Verify refresh token and return decoded payload.
+ * @param {String} token - Refresh token
+ * @returns {Object} decoded JWT payload
+ */
+export const verifyRefreshToken = (token) => {
+  const decoded = jwt.verify(token, JWT_SECRET);
+  if (decoded.tokenType !== 'refresh') {
+    throw new Error('Invalid refresh token type');
+  }
+  return decoded;
+};
+
+/**
+ * Clear authentication cookies.
+ * @param {Object} res - Express response
+ */
+export const clearAuthCookies = (res) => {
+  const cookieOptions = {
+    httpOnly: true,
+    path: '/'
+  };
+
+  if (process.env.NODE_ENV !== 'production') {
+    cookieOptions.sameSite = 'none';
+    cookieOptions.secure = true;
+  } else {
+    cookieOptions.sameSite = 'strict';
+    cookieOptions.secure = true;
+  }
+
+  res.clearCookie('token', cookieOptions);
+  res.clearCookie('refreshToken', cookieOptions);
 };
 
 /**

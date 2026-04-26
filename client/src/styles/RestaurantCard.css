@@ -3,118 +3,140 @@
   /* Override default Card padding */
   overflow: hidden;
   height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
-.card-link {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.premium-restaurant-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition-normal);
+}
+
+.card-anchor {
+  text-decoration: none;
   color: inherit;
+  display: block;
 }
 
-.card-media {
+.image-container {
   position: relative;
   height: 200px;
   overflow: hidden;
 }
 
-.card-image {
+.main-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-normal);
+  transition: transform 0.5s ease;
 }
 
-.restaurant-card:hover .card-image {
+.premium-restaurant-card:hover .main-image {
   transform: scale(1.05);
 }
 
-.like-btn {
+.card-overlay {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.premium-restaurant-card:hover .card-overlay {
+  opacity: 1;
+}
+
+.heart-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   cursor: pointer;
-  font-size: 1.2rem;
-  color: #ccc;
+  z-index: 10;
   transition: all var(--transition-fast);
-  z-index: 2;
 }
 
-.like-btn.liked {
-  color: #e74c3c;
-  transform: scale(1.1);
+.heart-btn:hover {
+  background: white;
 }
 
-.trending-badge {
+.heart-btn.active {
+  background: white;
+}
+
+.trending-tag {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  background: var(--accent);
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  background: var(--primary);
   color: white;
-  padding: 0.25rem 0.75rem;
   border-radius: var(--radius-full);
   font-size: 0.75rem;
-  font-weight: 600;
-  z-index: 2;
-}
-
-.card-content {
-  padding: 1.25rem;
+  font-weight: 700;
   display: flex;
-  flex-direction: column;
-  flex: 1;
+  align-items: center;
+  gap: 4px;
+  box-shadow: var(--shadow-md);
 }
 
-.card-header {
+.details-container {
+  padding: 1.25rem;
+}
+
+.details-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 0.5rem;
 }
 
-.card-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0;
+.restaurant-name {
+  font-size: 1.125rem;
+  font-weight: 700;
   color: var(--text-main);
+  margin: 0;
 }
 
-.card-rating {
+.rating-pill {
   display: flex;
   align-items: center;
-  background: #e0f2f1;
-  color: #00695c;
-  padding: 0.2rem 0.5rem;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--p-50);
+  color: var(--p-700);
   border-radius: var(--radius-sm);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
-.star {
-  margin-right: 2px;
-}
-
-.card-info {
+.cuisine-text {
+  font-size: 0.875rem;
   color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin: 0 0 1rem 0;
+  margin-bottom: 0.75rem;
 }
 
-.card-footer {
-  margin-top: auto;
+.location-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
 }
 
-.book-btn {
+.action-button {
   width: 100%;
+  justify-content: space-between;
 }

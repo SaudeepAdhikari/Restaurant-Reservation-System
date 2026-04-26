@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Analytics.css';
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { authFetch } from '../utils/auth';
 
 function Analytics() {
   const [statusData, setStatusData] = useState([
@@ -8,20 +9,32 @@ function Analytics() {
     { name: 'Pending', value: 0, color: '#f59e0b' },
     { name: 'Cancelled', value: 0, color: '#ef4444' }
   ]);
+  const [stats, setStats] = useState({
+    revenue: 0,
+    bookings: 0,
+    peakHour: 'N/A',
+    peakIndex: 0
+  });
+  const [peakHours, setPeakHours] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const token = localStorage.getItem('admin_token');
-        const res = await fetch((process.env.REACT_APP_API_URL || process.env.REACT_APP_API_BASE || 'http://localhost:5000') + '/api/admin/analytics/status-distribution', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const [distribution, statData, peakData] = await Promise.all([
+          authFetch('/api/admin/analytics/status-distribution'),
+          authFetch('/api/admin/analytics/stats'),
+          authFetch('/api/admin/analytics/peak-hours')
+        ]);
 
-        if (res.ok) {
-          const data = await res.json();
-          setStatusData(data);
-        }
+        setStatusData(Array.isArray(distribution) ? distribution : statusData);
+        setStats({
+          revenue: statData?.revenue || 0,
+          bookings: statData?.bookings || 0,
+          peakHour: statData?.peakHour || 'N/A',
+          peakIndex: statData?.peakIndex || 0
+        });
+        setPeakHours(Array.isArray(peakData?.data) ? peakData.data : []);
       } catch (error) {
         console.error('Error fetching analytics:', error);
       } finally {
@@ -69,24 +82,37 @@ function Analytics() {
           </ResponsiveContainer>
         </div>
 
+        <div className="chart-card">
+          <h3 className="chart-title">Peak Hour Distribution</h3>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={peakHours}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="hour" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="bookings" fill="#6366f1" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
         <div className="stats-summary">
           <h3 className="chart-title">Platform Summary</h3>
           <div className="summary-list">
             <div className="summary-item">
               <span className="summary-label">Total Revenue</span>
-              <span className="summary-value">$18,400</span>
+              <span className="summary-value">${stats.revenue.toLocaleString()}</span>
             </div>
             <div className="summary-item">
-              <span className="summary-label">Avg. Booking Value</span>
-              <span className="summary-value">$85</span>
+              <span className="summary-label">Total Bookings</span>
+              <span className="summary-value">{stats.bookings}</span>
             </div>
             <div className="summary-item">
               <span className="summary-label">Popular Time</span>
-              <span className="summary-value">7:00 PM</span>
+              <span className="summary-value">{stats.peakHour}</span>
             </div>
             <div className="summary-item">
-              <span className="summary-label">Avg. Party Size</span>
-              <span className="summary-value">3.5 guests</span>
+              <span className="summary-label">Peak Index</span>
+              <span className="summary-value">{(stats.peakIndex * 100).toFixed(1)}%</span>
             </div>
           </div>
         </div>

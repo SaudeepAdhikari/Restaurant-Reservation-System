@@ -1,7 +1,6 @@
 .restaurant-detail-page {
-    padding-top: 80px;
     min-height: 100vh;
-    background: var(--bg-body);
+    background: #F8FAFC;
 }
 
 .detail-hero {
@@ -18,14 +17,11 @@
 
 .detail-hero-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7));
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));
     display: flex;
     align-items: flex-end;
-    padding: 2rem;
+    padding: 3rem 2rem;
 }
 
 .detail-hero-content {
@@ -36,94 +32,100 @@
 }
 
 .detail-title {
-    font-size: 3rem;
-    font-weight: 700;
+    font-size: 3.5rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.02em;
 }
 
 .detail-meta {
     display: flex;
+    align-items: center;
     gap: 1.5rem;
-    font-size: 1.1rem;
+    font-weight: 500;
     opacity: 0.9;
 }
 
 .detail-container {
     max-width: 1200px;
-    margin: -60px auto 2rem;
-    padding: 0 1rem;
-    position: relative;
-    z-index: 10;
+    margin: 3rem auto;
+    padding: 0 1.5rem;
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 2rem;
+    gap: 2.5rem;
 }
 
 .detail-main {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 2.5rem;
 }
 
 .detail-sidebar {
-    position: sticky;
-    top: 100px;
     height: fit-content;
 }
 
 .info-card {
-    background: var(--bg-surface);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color);
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .section-title {
     font-size: 1.5rem;
+    font-weight: 700;
     margin-bottom: 1.5rem;
-    color: var(--text-main);
+    color: #0F172A;
+}
+
+.about-text {
+    line-height: 1.8;
+    color: #475569;
 }
 
 .table-list {
     list-style: none;
     padding: 0;
-    margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 1rem;
 }
 
 .table-item {
     padding: 1rem;
-    border-radius: var(--radius-md);
-    background: var(--bg-body);
-    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
     text-align: center;
 }
 
 .table-item.available {
-    border-color: var(--primary-light);
-    background: rgba(99, 102, 241, 0.05);
+    border-color: var(--primary);
+    background: var(--p-50);
 }
 
-.table-item.unavailable {
-    opacity: 0.6;
-    background: #f3f4f6;
+.sticky-sidebar-content {
+    position: sticky;
+    top: 100px;
+    z-index: 10;
+}
+
+@media (max-width: 1024px) {
+    .detail-container {
+        grid-template-columns: 1fr;
+    }
+    .sticky-sidebar-content {
+        position: static;
+    }
 }
 
 @media (max-width: 768px) {
-    .detail-container {
-        grid-template-columns: 1fr;
-        margin-top: 0;
+    .detail-title {
+        font-size: 2.5rem;
     }
-
     .detail-hero {
         height: 300px;
-    }
-
-    .detail-title {
-        font-size: 2rem;
     }
 }

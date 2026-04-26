@@ -82,11 +82,11 @@ function App() {
   }
 
   return (
-    <div className="app-layout">
+    <div className="owner-layout-root">
       <Sidebar isOpen={sidebarOpen} toggle={() => setSidebarOpen(!sidebarOpen)} />
-      <div className={`main-wrapper ${!sidebarOpen ? 'expanded' : ''}`}>
+      <div className={`owner-main-stage ${!sidebarOpen ? 'is-expanded' : ''}`}>
         <AppHeader onLogout={handleLogout} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        <main className="main-content">
+        <main className="owner-content-area">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/restaurants" element={<RestaurantsList />} />
@@ -109,6 +109,7 @@ function App() {
     </div>
   );
 }
+
 
 function AppHeader({ onLogout, toggleSidebar }) {
   const location = useLocation();

@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import Customer from '../models/Customer.js';
-import { verifyToken, generateToken, setTokenCookie } from '../middleware/authMiddleware.js';
+import { verifyToken, generateToken, setTokenCookie, generateRefreshToken, setRefreshTokenCookie, extractRefreshTokenFromRequest, verifyRefreshToken, clearAuthCookies } from '../middleware/authMiddleware.js';
 import logger from '../utils/logger.js';
 import { authLimiter, failedLoginLimiter } from '../middleware/rateLimiter.js';
 import { validatePassword } from '../utils/passwordValidator.js';
@@ -29,8 +29,10 @@ router.post('/register', authLimiter, async (req, res) => {
     const name = `${firstName.trim()} ${lastName.trim()}`;
     const customer = await Customer.create({ firstName, lastName, name, phone, email, password: hash });
     const token = generateToken({ customerId: customer._id, role: 'customer' });
+    const refreshToken = generateRefreshToken({ customerId: customer._id, role: 'customer' });
     // set secure HttpOnly cookie
     setTokenCookie(res, token);
+    setRefreshTokenCookie(res, refreshToken);
     res.json({ customer: { id: customer._id, firstName: customer.firstName, lastName: customer.lastName, phone: customer.phone, name: customer.name, email: customer.email } });
   } catch (err) {
     logger.error(`Registration error: ${err.message}`);
@@ -59,8 +61,10 @@ router.post('/login', authLimiter, failedLoginLimiter, async (req, res) => {
     
     logger.info(`Successful login for customer: ${email}`);
     const token = generateToken({ customerId: customer._id, role: 'customer' });
+    const refreshToken = generateRefreshToken({ customerId: customer._id, role: 'customer' });
     // set secure HttpOnly cookie
     setTokenCookie(res, token);
+    setRefreshTokenCookie(res, refreshToken);
     res.json({ customer: { id: customer._id, name: customer.name, email: customer.email } });
   } catch (err) {
     logger.error(`Login error: ${err.message}`);
@@ -68,9 +72,36 @@ router.post('/login', authLimiter, failedLoginLimiter, async (req, res) => {
   }
 });
 
+// Refresh access token
+router.post('/refresh', async (req, res) => {
+  try {
+    const refreshToken = extractRefreshTokenFromRequest(req);
+    if (!refreshToken) {
+      return res.status(401).json({ message: 'Refresh token missing' });
+    }
+
+    const decoded = verifyRefreshToken(refreshToken);
+    const customer = await Customer.findById(decoded.customerId);
+    if (!customer) {
+      return res.status(401).json({ message: 'Invalid refresh token' });
+    }
+
+    const token = generateToken({ customerId: customer._id, role: 'customer' });
+    const rotatedRefresh = generateRefreshToken({ customerId: customer._id, role: 'customer' });
+
+    setTokenCookie(res, token);
+    setRefreshTokenCookie(res, rotatedRefresh);
+
+    res.json({ customer: { id: customer._id, name: customer.name, email: customer.email } });
+  } catch (err) {
+    clearAuthCookies(res);
+    res.status(401).json({ message: 'Invalid or expired refresh token' });
+  }
+});
+
 // Logout - clear the cookie
 router.post('/logout', (req, res) => {
-  res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
+  clearAuthCookies(res);
   res.json({ message: 'Logged out' });
 });
 

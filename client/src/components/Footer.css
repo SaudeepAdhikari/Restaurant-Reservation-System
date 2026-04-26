@@ -5,6 +5,7 @@
     position: relative;
     overflow: hidden;
     margin-top: auto;
+    z-index: 1;
 }
 
 .site-footer::before {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import './Offers.css';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Tag, Clock, CheckCircle, XCircle, ChevronRight, Gift } from 'lucide-react';
 import Button from './common/Button';
-import Spinner from './common/Spinner';
+import './Offers.css';
 
 function formatRemaining(ms) {
   if (ms <= 0) return 'Expired';
@@ -19,53 +20,62 @@ export default function Offers() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 60000); // Update every minute
+    const t = setInterval(() => setNow(Date.now()), 60000);
     return () => clearInterval(t);
   }, []);
 
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    const base = process.env.REACT_APP_API_BASE || process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    const base = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
     fetch(`${base}/api/offers`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
+      .then(res => res.ok ? res.json() : [])
       .then(data => {
         if (mounted) {
           const arr = Array.isArray(data) ? data : [];
           const normalized = arr.map(o => ({
-            _id: o._id,
-            title: o.title,
-            description: o.description,
-            image: o.image ? (o.image.startsWith('http') ? o.image : `${base}${o.image}`) : '/assets/placeholder.jpg',
+            ...o,
+            image: o.image ? (o.image.startsWith('http') ? o.image : `${base}${o.image}`) : 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800',
             endsAt: o.endDate ? Date.parse(o.endDate) : null,
-            restaurantName: o.restaurantId && o.restaurantId.name ? o.restaurantId.name : '',
-            promoCode: o.promoCode,
-            discountPercent: o.discountPercent
           }));
           setOffers(normalized);
         }
       })
-      .catch(err => { console.debug('Failed to load offers', err); if (mounted) setOffers([]); })
+      .catch(() => { if (mounted) setOffers([]); })
       .finally(() => { if (mounted) setLoading(false); });
     return () => { mounted = false; };
   }, []);
 
-  if (loading) return <div className="flex-center" style={{ padding: '4rem' }}><Spinner size={40} /></div>;
-  if (offers.length === 0) return <div className="empty-state"><h3>No offers available</h3><p>Check back later for exclusive deals.</p></div>;
+  if (loading) return (
+    <div className="offers-skeleton-grid">
+      {[1, 2, 3].map(i => <div key={i} className="offer-skeleton" />)}
+    </div>
+  );
+
+  if (offers.length === 0) return (
+    <div className="empty-offers">
+      <Gift size={48} className="text-muted" />
+      <h3>No Active Offers</h3>
+      <p>Check back later for exclusive dining deals.</p>
+    </div>
+  );
 
   return (
-    <div className="offers-grid">
-      {offers.map(o => (
-        <OfferCard key={o._id} offer={o} now={now} />
-      ))}
+    <div className="offers-container">
+      <div className="section-header">
+        <h2 className="section-title">Exclusive Deals</h2>
+        <p className="section-subtitle">Handpicked offers just for you</p>
+      </div>
+      <div className="offers-premium-grid">
+        {offers.map((o, idx) => (
+          <OfferCard key={o._id} offer={o} now={now} index={idx} />
+        ))}
+      </div>
     </div>
   );
 }
 
-function OfferCard({ offer, now }) {
+function OfferCard({ offer, now, index }) {
   const [code, setCode] = useState('');
   const [applied, setApplied] = useState(null);
 
@@ -79,42 +89,64 @@ function OfferCard({ offer, now }) {
   }
 
   return (
-    <div className="offer-card">
-      <div className="offer-image-wrapper">
-        <img className="offer-image" src={offer.image} alt={offer.title} />
+    <motion.div 
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="premium-offer-card"
+    >
+      <div className="offer-visual">
+        <img src={offer.image} alt={offer.title} />
+        <div className="offer-gradient-overlay" />
         {offer.endsAt && (
-          <div className="offer-badge">
+          <div className="time-badge">
+            <Clock size={12} />
             {formatRemaining(offer.endsAt - now)}
           </div>
         )}
+        <div className="discount-floating">
+          {offer.discountPercent}% OFF
+        </div>
       </div>
 
-      <div className="offer-content">
-        <h3 className="offer-title">{offer.title}</h3>
-        <p className="offer-desc">{offer.description}</p>
-
-        <div className="offer-meta">
-          <span>{offer.restaurantName || 'Restaurant'}</span>
-          <span>{offer.discountPercent ? `${offer.discountPercent}% OFF` : 'Special Deal'}</span>
+      <div className="offer-details">
+        <div className="offer-brand">
+          <Tag size={14} className="text-primary" />
+          {offer.restaurantId?.name || 'Gourmet Partner'}
         </div>
+        <h3 className="offer-heading">{offer.title}</h3>
+        <p className="offer-subheading">{offer.description}</p>
 
-        <div className="promo-section">
-          <input
-            className="promo-input"
-            placeholder="Promo code"
-            value={code}
-            onChange={e => setCode(e.target.value)}
-          />
-          <Button size="small" onClick={apply} variant="primary">Apply</Button>
-        </div>
-
-        {applied && (
-          <div className={`promo-status ${applied.valid ? 'promo-success' : 'promo-error'}`}>
-            {applied.valid ? `Success! ${applied.percent}% discount applied.` : 'Invalid promo code.'}
+        <div className="promo-interaction">
+          <div className="promo-input-group">
+            <input
+              placeholder="Enter promo code"
+              value={code}
+              onChange={e => setCode(e.target.value)}
+            />
+            <Button size="small" onClick={apply}>Apply</Button>
           </div>
-        )}
+          
+          <AnimatePresence>
+            {applied && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className={`promo-feedback ${applied.valid ? 'success' : 'error'}`}
+              >
+                {applied.valid ? (
+                  <><CheckCircle size={14} /> Code Applied!</>
+                ) : (
+                  <><XCircle size={14} /> Invalid Code</>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
+
 

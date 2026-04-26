@@ -10,7 +10,10 @@ const offerSchema = new mongoose.Schema({
   image: { type: String }, // URL or uploaded file path
   startDate: { type: Date },
   endDate: { type: Date },
+  status: { type: String, enum: ['draft', 'scheduled', 'active', 'expired'], default: 'active' },
   createdAt: { type: Date, default: Date.now }
 });
+
+offerSchema.index({ restaurantId: 1, startDate: 1, endDate: 1, status: 1 });
 
 export default mongoose.model('Offer', offerSchema);

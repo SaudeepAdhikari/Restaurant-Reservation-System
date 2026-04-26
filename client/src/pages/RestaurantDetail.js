@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import './RestaurantDetail.css';
 import MenuSection from '../components/MenuSection';
 import BookingModal from '../components/BookingModal';
 import Card from '../components/common/Card';
+import './RestaurantDetail.css';
 
 function RestaurantDetail() {
   const { id } = useParams();
@@ -19,25 +19,23 @@ function RestaurantDetail() {
 
     const base = process.env.REACT_APP_API_BASE || process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-    // Fetch restaurant details
     fetch(`${base}/api/restaurants/${id}`)
       .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
-      .then(data => { if (!mounted) return; setRestaurant(data); })
-      .catch(err => { console.error('Failed to fetch restaurant', err); if (mounted) setError(err.message || String(err)); })
+      .then(data => { if (mounted) setRestaurant(data); })
+      .catch(err => { if (mounted) setError(err.message || String(err)); })
       .finally(() => { if (mounted) setLoading(false); });
 
-    // Fetch public tables for this restaurant
     fetch(`${base}/api/tables/restaurant/${id}`)
       .then(res => { if (!res.ok) throw new Error(`HTTP ${res.status}`); return res.json(); })
-      .then(list => { if (!mounted) return; setTables(list || []); })
-      .catch(err => { console.warn('Failed to fetch tables', err); if (mounted) setTables([]); });
+      .then(list => { if (mounted) setTables(list || []); })
+      .catch(() => { if (mounted) setTables([]); });
 
     return () => { mounted = false; };
   }, [id]);
 
-  if (loading) return <div className="restaurant-detail-page flex-center">Loading...</div>;
-  if (error) return <div className="restaurant-detail-page flex-center">Failed to load restaurant: {error}</div>;
-  if (!restaurant) return <div className="restaurant-detail-page flex-center">Restaurant not found.</div>;
+  if (loading) return <div className="flex-center" style={{ padding: '10rem' }}>Loading Restaurant...</div>;
+  if (error) return <div className="flex-center" style={{ padding: '10rem' }}>Error: {error}</div>;
+  if (!restaurant) return <div className="flex-center" style={{ padding: '10rem' }}>Restaurant not found.</div>;
 
   return (
     <div className="restaurant-detail-page">
@@ -59,38 +57,39 @@ function RestaurantDetail() {
 
       <div className="detail-container">
         <div className="detail-main">
-          <Card className="info-card">
+          <div className="info-card">
             <h2 className="section-title">About</h2>
-            <p>{restaurant.description || restaurant.details || 'No description available.'}</p>
-          </Card>
+            <p className="about-text">{restaurant.description || 'No description available.'}</p>
+          </div>
 
-          {restaurant.menu && (
-            <Card className="info-card">
-              <MenuSection menu={restaurant.menu} />
-            </Card>
-          )}
+          <div className="info-card">
+            <MenuSection menu={restaurant.menu} />
+          </div>
 
-          <Card className="info-card">
+          <div className="info-card">
             <h2 className="section-title">Available Tables</h2>
+            <ul className="table-list">
+              {tables.map(t => (
+                <li key={t._id} className={`table-item ${t.available ? 'available' : 'unavailable'}`}>
+                  <strong>{t.name}</strong>
+                  <div>Capacity: {t.capacity}</div>
+                </li>
+              ))}
+            </ul>
             {tables.length === 0 && <p>No table information available.</p>}
-            {tables.length > 0 && (
-              <ul className="table-list">
-                {tables.map(t => (
-                  <li key={t._id} className={`table-item ${t.available ? 'available' : 'unavailable'}`}>
-                    <strong>{t.name}</strong>
-                    <div>Capacity: {t.capacity}</div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Card>
+          </div>
         </div>
 
         <div className="detail-sidebar">
-          <Card className="info-card sticky-card">
-            <h2 className="section-title">Make a Reservation</h2>
-            <BookingModal tables={tables} restaurantId={restaurant._id || restaurant.id} />
-          </Card>
+          <div className="sticky-sidebar-content">
+            <div className="info-card">
+              <h2 className="section-title">Reservation</h2>
+              <p style={{ fontSize: '0.875rem', color: '#64748B', marginBottom: '1.5rem' }}>
+                Select your preferred table and time to secure your booking instantly.
+              </p>
+              <BookingModal tables={tables} restaurantId={restaurant._id || restaurant.id} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -98,4 +97,3 @@ function RestaurantDetail() {
 }
 
 export default RestaurantDetail;
-

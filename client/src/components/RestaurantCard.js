@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/RestaurantCard.css';
-import Card from './common/Card';
+import { motion } from 'framer-motion';
+import { Star, MapPin, Heart, ArrowRight } from 'lucide-react';
 import Button from './common/Button';
+import '../styles/RestaurantCard.css';
 
 function RestaurantCard({ restaurant, image, name, rating, cuisine, location, trending }) {
   const data = restaurant || { image, name, rating, cuisine, location, trending };
@@ -10,39 +11,64 @@ function RestaurantCard({ restaurant, image, name, rating, cuisine, location, tr
   const id = data._id || data.id || '';
 
   return (
-    <Card className={`restaurant-card ${data.trending ? 'trending' : ''}`} hover={true}>
-      <Link to={`/restaurant/${id}`} className="card-link">
-        <div className="card-media">
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -8 }}
+      className={`premium-restaurant-card ${data.trending ? 'is-trending' : ''}`}
+    >
+      <Link to={`/restaurant/${id}`} className="card-anchor">
+        <div className="image-container">
           <img
-            src={(data.images && data.images[0]) || data.image || '/assets/placeholder.jpg'}
+            src={(data.images && data.images[0]) || data.image || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800'}
             alt={data.name}
-            className="card-image"
+            className="main-image"
           />
+          <div className="card-overlay" />
+          
           <button
-            className={`like-btn ${liked ? 'liked' : ''}`}
+            className={`heart-btn ${liked ? 'active' : ''}`}
             onClick={(e) => { e.preventDefault(); setLiked(s => !s); }}
-            aria-label="Save restaurant"
           >
-            ❤
+            <Heart size={20} fill={liked ? "var(--error)" : "none"} stroke={liked ? "var(--error)" : "white"} />
           </button>
-          {data.trending && <span className="trending-badge">Trending</span>}
+          
+          {data.trending && (
+            <div className="trending-tag">
+              <Star size={12} fill="white" />
+              Trending
+            </div>
+          )}
         </div>
-        <div className="card-content">
-          <div className="card-header">
-            <h3 className="card-title">{data.name}</h3>
-            <div className="card-rating">
-              <span className="star">★</span> {data.rating}
+
+        <div className="details-container">
+          <div className="details-header">
+            <h3 className="restaurant-name">{data.name}</h3>
+            <div className="rating-pill">
+              <Star size={14} fill="currentColor" />
+              {data.rating || '4.5'}
             </div>
           </div>
-          <p className="card-info">{data.cuisine} • {data.location}</p>
-          <div className="card-footer">
-            <Button variant="primary" size="small" className="book-btn">Book Table</Button>
+          
+          <p className="cuisine-text">{data.cuisine || 'International'}</p>
+          
+          <div className="location-info">
+            <MapPin size={14} />
+            <span>{data.location || 'Downtown'}</span>
+          </div>
+
+          <div className="card-actions-row">
+            <Button variant="primary" size="small" className="action-button">
+              Book Table
+              <ArrowRight size={16} />
+            </Button>
           </div>
         </div>
       </Link>
-    </Card>
+    </motion.div>
   );
 }
 
 export default RestaurantCard;
+
 

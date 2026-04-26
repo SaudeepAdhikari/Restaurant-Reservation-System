@@ -3,8 +3,12 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 import { apiLimiter } from './middleware/rateLimiter.js';
 import logger from './utils/logger.js';
+import { setSocketServer } from './utils/socket.js';
+import { initCache } from './services/cacheService.js';
 
 import authRoutes from './routes/auth.js';
 import adminAuthRoutes from './routes/adminAuth.js';
@@ -118,6 +122,42 @@ const __dirname = path.dirname(__filename);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/uploads', uploadsRoutes);
 
+const server = http.createServer(app);
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: CLIENT_ORIGINS,
+    credentials: true
+  }
+});
+
+setSocketServer(io);
+
+io.on('connection', (socket) => {
+  logger.info(`Socket connected: ${socket.id}`);
+
+  socket.on('join:owner', (ownerId) => {
+    if (!ownerId) return;
+    socket.join(`owner:${ownerId}`);
+  });
+
+  socket.on('join:admin', () => {
+    socket.join('admins');
+  });
+
+  socket.on('join:restaurant', (restaurantId) => {
+    if (!restaurantId) return;
+    socket.join(`restaurant:${restaurantId}`);
+  });
+
+  socket.on('disconnect', () => {
+    logger.info(`Socket disconnected: ${socket.id}`);
+  });
+});
+
+initCache().catch((error) => {
+  logger.warn(`Cache initialization warning: ${error.message}`);
+});
+
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -134,6 +174,6 @@ app.get('/', (req, res) => {
   res.send('Restaurant Booking Backend API');
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', () => {
   logger.info(`Server running on http://0.0.0.0:${PORT}`);
 });

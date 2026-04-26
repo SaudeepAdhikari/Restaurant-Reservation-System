@@ -32,6 +32,7 @@
   position: relative;
   cursor: pointer;
   transition: transform 0.2s;
+  will-change: transform;
 }
 
 .table-item:hover {
@@ -51,6 +52,7 @@
   font-weight: 700;
   color: var(--text-main);
   transition: all 0.3s;
+  will-change: transform, background-color, border-color;
 }
 
 .table-shape.available {

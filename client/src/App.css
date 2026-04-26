@@ -17,12 +17,7 @@ body,
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem 1rem;
-}
-
-/* Animation for page transitions if needed */
-.page-content {
-  animation: fadeIn 0.5s ease-out;
+  padding: 6rem 1.5rem 4rem; /* Increased top padding */
 }
 
 @keyframes fadeIn {
